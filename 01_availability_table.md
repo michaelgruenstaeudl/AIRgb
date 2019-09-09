@@ -30,12 +30,12 @@ Currently, the code merely obtains the unique identifiers of a record (`-format 
 
 Be aware that the list may contain thousands of records. The parsing of the records should, thus, be conducted one by one, not all simultaneously. It may, thus, be advisable to download a list of unique identifiers first (e.g., `uidlist.txt` in example) and then loop over those identifiers.
 
-The final outcome shall be a table in which each row contains the parsed information of a single record. There mist be as many rows in that table as uids in the master list. There must be nine columns in the table (i.e., the nine items of inromation listed above).
+The final outcome shall be a table in which each row contains the parsed information of a single record. There mist be as many rows in that table as uids in the master list. There must be nine columns in the table (i.e., the nine items of information listed above).
 
 
 ##### Existing code
 
-###### Generating masterlist
+###### Generating uidlist
 ```
 esearch -db nucleotide -query \
 "Magnoliophyta[ORGN] AND \
