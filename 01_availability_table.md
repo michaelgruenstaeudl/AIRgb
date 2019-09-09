@@ -20,6 +20,7 @@ The table shall contain in different columns:
 9. the full citation of the publication (see upper-ost JOURNAL line)
 
 ##### Notes
+* The commands `efetch -h` and `esummary -h` provide excellent background info regarding the available options.
 * The COMMENT line contains the information which other record the reference sequence is identical to.
 * For testing purposes (i.e., to work only on a handful of records), the start sequence length can be increased to 190000 (`00000190000[SLEN]`).
 * Searches in the sequence databases of NCBI (nucleotide, protein, EST, GSS) allow the usage of [these fields](https://www.ncbi.nlm.nih.gov/books/NBK49540/).
