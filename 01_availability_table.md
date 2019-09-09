@@ -21,8 +21,10 @@ The table shall contain in different columns:
 
 ##### Notes
 * The COMMENT line contains the information which other record the reference sequence is identical to.
-* The list is currently restrict to angiosperms (Magnoliophyta).
 * For testing purposes (i.e., to work only on a handful of records), the start sequence length can be increased to 190000 (`00000190000[SLEN]`).
+* Searches in the sequence databases of NCBI (nucleotide, protein, EST, GSS) allow the usage of [these fields](https://www.ncbi.nlm.nih.gov/books/NBK49540/).
+* An example of a plastid genome record on NCBI can be found [here](https://www.ncbi.nlm.nih.gov/nucleotide/NC_031505.1).
+* The list is currently restrict to angiosperms (Magnoliophyta).
 
 ##### Development / To Do
 
