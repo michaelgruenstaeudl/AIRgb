@@ -1,33 +1,19 @@
 **Check IR identity**
 =====================
 
-Author: Michael Gruenstaeudl
-Contact: m.gruenstaeudl@fu-berlin.de
-Version: 2019.08.30
+* Author: Michael Gruenstaeudl
+* Contact: m.gruenstaeudl@fu-berlin.de
+* Version: 2019.09.09
 
 ##### Objective
-Checking if the IRs of a plastid genome in available online via NCBI are truly identical.
-##### Notes
-In file names with variables, don't use underscores. (Why?)
+Obtain accession number for each UID, fetch all sequences by their UID, and check if IRs are labelled
 
-#### STEP 1. Obtain UID list for a search query
-```
-esearch -db nucleotide -query \
-"Magnoliophyta[ORGN] AND \
-00000100000[SLEN] : 00000200000[SLEN] AND \
-chloroplast[TITLE] AND \
-complete genome[TITLE]" | efetch -format uid > masterlist.txt
-```
-#### STEP 2. Obtain accession number for each UID, fetch all sequences by their UID, and check if IRs are labelled
 The result is a list of plastid genomes that have either the term "inverted repeat A" or the term "inverted repeat B".
 
-*Development: Why are the plastid ngenomes save in xml-format and not in regular gb-format?*
+*Development: Why are the plastid genomes saved in xml-format and not in regular gb-format?*
 
 ```
-for i in $(cat masterlist.txt); do
-
-  # Obtaining the accession number for each UID
-  ACCN=$(esummary -db nucleotide -id $i | xmllint --xpath 'string(//Caption)' -);
+for i in $(cat uidlist.txt); do
 
   # Fetch all sequences by their UID; check if IRs are labelled
   # IMPORTANT: Not all cp genomes have IR labelled
@@ -39,6 +25,8 @@ for i in $(cat masterlist.txt); do
 
 done;
 ```
+
+*  *  *  *  *
 
 #### STEP 2. For each accession number, download the record, de-interleave the FASTA-file, extract the IRs, reverse-complement one of the IRs, compare the IRs via application 'mummer' (function 'nucmer'), and generate side-by-side comparison.
 *Development:*
