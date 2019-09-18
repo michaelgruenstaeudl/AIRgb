@@ -1,69 +1,85 @@
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
-    This script generates a table of plastid genome records that are currently available on NCBI. It simultaneously ensures that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records).
-
-    The output is a table in which each row contains the parsed information of a single record. Each row contains nine, tab-separated columns in the following order:
-    1. the unique identifier,
-    2a. the accession number,
-    2b. synonyms of the accession number (i.e., issue about regular vs. RefSeq NC_ records),
-    3. the sequence version number,
-    4. the organism name,
-    5. the sequence length,
-    6. the date the record went online,
-    7. the authors (uppermost AUTHORS line in GB-file),
-    8. the name of the publication (uppermost TITLE line in GB-file), and
-    9. the full citation of the publication (see uppermost JOURNAL line in GB-file)
-
-
+    This script takes a list of GenBank accession numbers and - for each accession number - downloads the record from GenBank, parses it via Biopython, extracts several aspects relevant for subsequent analyses and saves these aspects in separate files.
+    
+    The output shall be a set of files for each GenBank record:
+    (a) the GenBank record in GB format
+    (b) the full plastid genome sequence in FASTA format
+    (c) the sequence of the IRa in FASTA format
+    (d) the reverse-complemented sequence of the IRb in FASTA format
+    
+    The output is the bundled in a single gzip file.
+    
 TO DO:
-
-    * Can you please fix the issue regarding line: "plastid_summary.drop(plastid_summary.index, inplace=True)" See my explanations there.
+    * The inverted repeats (i.e. IRa and IRb) of a plastid genome record may be labelled in different ways, depending on the record. This script shall be flexible enough to identify the different naming conventions, yet always extract only a single IR pair per record.
     
-    * The current script version appears to duplicate the existing data (probably due to the failure in line "plastid_summary.drop(plastid_summary.index, inplace=True)"). You can see this when looking at the output file (e.g., look for duplicates of the first uid). Beware: This issue is not apparent from the log.    
+    * Here is starting code that you can use:
+    ```
+    from Bio import SeqIO
+    from Bio.SeqRecord import SeqRecord
+    import os
+    import tarfile
+
+    # First, download the GenBank record currently under study.
+    # Then, do the following:
+   
+    inFn = # path to, and filename of, the input record
+    inDir = # where the GB record is located (so that the output files are saved right next to them)
+    outFn_fullSeq = # output file containing full sequence in FASTA format
+    outFn_IRa = #
+    outFn_IRbRC = #
+
+    # Make output folder for record
+    outDir = os.path.join(inDir, 'output')
+    if not os.path.exists(outDir):
+        os.makedirs(outDir)
+
+    # PLEASE NOTE: A lot of the code used hereafter is exeplified in the example "Random subsequences" on https://biopython.org/wiki/SeqIO
+
+    # Read record
+    rec = SeqIO.read(inFn, "genbank")
+    accn = rec.id.split('.')[0]
+
+    # Save full sequence as FASTA file
+    with open(outFn_fullSeq, "w") as outHdl_fullSeq:
+        SeqIO.write(rec, outHdl_fullSeq, "fasta") # But sequence must NOT be interleaved! (I know that AlignIO.write can write non-interleaved FASTA files, but I am not sure if SeqIO.write can do that. Another option would be to write the sequence to a string handle and the save the FASTA file via the regular Python write function (see "Writing to a string" in https://biopython.org/wiki/SeqIO).)
     
-    * To better handle the above two isues (and similar issues), we should modify the code so that the uids are processed in a static order (as opposed to the randomness currently experienced). For example, it would be great if the uids are always processed with the olderst one starting first! (For that, the command starting with "efetchargs" should generate a date-sorted output. Is this possible?) In general, the random retrieval/processing of the uids is a weak spot in our script that should be fixed, if possible.
-
-    * The script shall ensure that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If a dual counting is present, the COMMENT line of a GB-file would contain the information which other record the reference sequence is identical to.
-
-    * Upon initialization, print out how many plastid genome entries are on GenBank (e.g., in function getNewUIDs). Then print out how many are already in the masterlist (e.g., in function main after reading in the existing masterlist).
-
-
+    # Identify all IRs and raise exception if not exatcly two IRs detected
+    all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature'] # Note: IRs are not always identified by the feature tpye "misc-feature"; there are other commonly used feature types for IRs. COnversely, there are other elements of a plastid genome that are also called "misc_feature". In short, a better identification of the IRs is necessary here!
+        # Important: Raise exception if not exactly two IRs detected
+    
+    # Extract the IR sequences; reverse completement the IRb
+    IRa_seq = all_misc_features[0].extract(rec).seq
+    IRbRC_seq = all_misc_features[1].extract(rec).seq.reverse_complement()
+    
+    IRa_rec = SeqRecord(IRa_seq, accn+'_IRa', '', '')  # Note: Since SeqIO.write can only write record objects, I am converting the sequence object into a record object here
+    IRbRC_rec = SeqRecord(IRbRC_seq, accn+'_IRb_revComp', '', '')
+    
+    # Save IRa_seq and IRb_seq_revComp as separate, non-interleaved FASTA files to outDir
+    with open(outFn_IRa, "w") as outHdl_IRa, with open(outFn_IRbRC, "w") as outHdl_IRbRC:
+        SeqIO.write(IRa_rec, outHdl_IRa, "fasta")
+        SeqIO.write(IRbRC_rec, outHdl_IRbRC, "fasta")
+        
+    # Gzip outDir (which contains the record and all newly generated files)
+    tar = tarfile.open(inDir+".tar.gz", "w:gz")
+    tar.add(inDir, arcname="TarName")
+    tar.close()
+    ```
+    
 DESIGN:
-
-    There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
-
+    * Like in the other scripts, the evaluation of the records is conducted one by one, not all simultaneously.
+    
+    * The output files of each record shall be bundled together as a record-specific gzip file.
 
 NOTES:
-
-    * For testing purposes (i.e., to work only on a handful of records), the start sequence length can be increased to 190000 (`00000190000[SLEN]`).
-
-    * Searches in the sequence databases of NCBI (nucleotide, protein, EST, GSS) allow the usage of [these fields](https://www.ncbi.nlm.nih.gov/books/NBK49540/).
-
-    * The searches automated here can be done manually in a Linux shell:
-    ### Generating uidlist
-    ```
-    esearch -db nucleotide -query \
-    "Magnoliophyta[ORGN] AND \
-    00000100000[SLEN] : 00000200000[SLEN] AND \
-    complete genome[TITLE] AND\
-    (chloroplast[TITLE] OR plastid[TITLE]) \
-    " | efetch -db nucleotide -format uid > uidlist.txt
-    ```
-
-    ### Parsing accession number for each UID
-    ```
-    for i in $(cat uidlist.txt); do
-      ACCN=$(esummary -db nucleotide -id $i | xmllint --xpath 'string(//Caption)' -);
-      echo "$ACCN"
-    done;
-    ```
+    * Foo bar baz
 '''
 
 #####################
 # IMPORT OPERATIONS #
 #####################
-import xml.etree.ElementTree as ET
+#import xml.etree.ElementTree as ET
 import os.path, subprocess, calendar
 import pandas as pd
 import argparse, sys
@@ -75,15 +91,16 @@ import coloredlogs, logging
 __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
-__info__ = 'Collect summary information on all plastid sequences stored ' \
-           'in NCBI GenBank'
-__version__ = '2018.09.17.1900'
+__info__ = 'Compare IRs for a series of IR FASTA files'
+__version__ = '2018.09.18.1200'
 
 #############
 # DEBUGGING #
 #############
 import ipdb
 # ipdb.set_trace()
+
+"""
 
 #############
 # FUNCTIONS #
@@ -165,6 +182,7 @@ def getEntryInfo(uid):
     fields.append(topReference.find("GBReference_title").text)
     fields.append(topReference.find("GBReference_journal").text)
     return fields
+"""
 
 
 def main(outfn, query):
@@ -181,7 +199,8 @@ def main(outfn, query):
     ch.setFormatter(formatter)
     log.addHandler(ch)
     '''
-
+    
+"""
   # STEP 2. Check if output file already exists
     if not os.path.isfile(outfn):
         with open(outfn, "w") as summaryFile:
@@ -191,12 +210,11 @@ def main(outfn, query):
   
     # Load previously processed data from outfile
     log.info(("Obtaining previously processed data from %s" % (str(outfn))))
-    #plastid_summary = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-    plastid_summary = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8') # Only get title line
+    plastid_summary = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
     
     # Re-initialize outfile (as new outfile)
-    #log.info(("Re-initializing file %s" % (str(outfn))))
-    with open(outfn, "a") as summaryFile: # Note: This is to append, not to write anew!
+    log.info(("Re-initializing file %s" % (str(outfn))))
+    with open(outfn, "a") as summaryFile:
 
         # Write previously processed data to new outfile and then drop it
         log.info(("Writing previously processed data to %s" % (str(outfn))))
@@ -224,6 +242,7 @@ def main(outfn, query):
             #log.info(("Appending summary of UID %s to %s"  % (str(uid), outfn)))
             plastid_summary.to_csv(summaryFile, sep='\t', header=False)
             plastid_summary.drop([uid], inplace=True)
+"""
 
 ########
 # MAIN #
@@ -236,3 +255,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(args.outfn, args.query)
 
+"""

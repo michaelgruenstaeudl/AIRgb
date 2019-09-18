@@ -45,12 +45,7 @@ done
 # IF LOCAL # cat SamePlantFamily.gb | grep -A1 [[:space:]]gene | grep "/gene=" | awk -F '=' '{print $2}'| sed 's/\"//g' | awk 'a !~ $1; {a=$1}' > geneOrder_SamePlantFamily_local.txt
 ```
 
-## EVALUATION 4: Are the inverted repeats of the submission clearly defined?
 
-#### Searching BLASTn output for alignment length ranges
-```
-blastn -db chloroplastGenome.fasta -query chloroplastGenome.fasta -outfmt 7 -strand 'both' | awk '{ if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}'
-```
 
 ## EVALUATION 5: Are there occurrences where matches smaller than x bp on the plus strand and some on the minus strand are commonplace also in archived plastomes of the same plant family?
 

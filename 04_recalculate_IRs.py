@@ -1,69 +1,33 @@
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
-    This script generates a table of plastid genome records that are currently available on NCBI. It simultaneously ensures that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records).
-
-    The output is a table in which each row contains the parsed information of a single record. Each row contains nine, tab-separated columns in the following order:
-    1. the unique identifier,
-    2a. the accession number,
-    2b. synonyms of the accession number (i.e., issue about regular vs. RefSeq NC_ records),
-    3. the sequence version number,
-    4. the organism name,
-    5. the sequence length,
-    6. the date the record went online,
-    7. the authors (uppermost AUTHORS line in GB-file),
-    8. the name of the publication (uppermost TITLE line in GB-file), and
-    9. the full citation of the publication (see uppermost JOURNAL line in GB-file)
-
+    This script takes a complete plastid genome sequence (in FASTA format) and re-calculates (re-infers) the position (and, thus, the length) of the IRs.
+    
+    The output shall be a table of plastid genome records (one record per row) that lists the originally inferred IR length and this newly calculated IR length so that a comparison is possible.
 
 TO DO:
-
-    * Can you please fix the issue regarding line: "plastid_summary.drop(plastid_summary.index, inplace=True)" See my explanations there.
+    * Once the IRs are re-calculated, the originally inferred IR length and the newly calculated IR length shall be compared in order to see if previous studies have - on average - overestimated or underestimated the IR length.
     
-    * The current script version appears to duplicate the existing data (probably due to the failure in line "plastid_summary.drop(plastid_summary.index, inplace=True)"). You can see this when looking at the output file (e.g., look for duplicates of the first uid). Beware: This issue is not apparent from the log.    
+    * If differences between the originally inferred IR length and the newly calculated IR length are discovered, it will be interesting to see on which side of the IRs (the side that faces the LSC or the side that faces the SSC) the original inference was incorrect (i.e., on which side a bias in the original inference happened).
     
-    * To better handle the above two isues (and similar issues), we should modify the code so that the uids are processed in a static order (as opposed to the randomness currently experienced). For example, it would be great if the uids are always processed with the olderst one starting first! (For that, the command starting with "efetchargs" should generate a date-sorted output. Is this possible?) In general, the random retrieval/processing of the uids is a weak spot in our script that should be fixed, if possible.
-
-    * The script shall ensure that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If a dual counting is present, the COMMENT line of a GB-file would contain the information which other record the reference sequence is identical to.
-
-    * Upon initialization, print out how many plastid genome entries are on GenBank (e.g., in function getNewUIDs). Then print out how many are already in the masterlist (e.g., in function main after reading in the existing masterlist).
-
-
+    * The following batch code shall be used to re-calculate the compare the IRs (i.e., the IR file pair) of each record:
+        ```
+        # Self-blasting of the plastid genome sequence in order to infer the IR length
+        blastn -db chloroplastGenome.fasta -query chloroplastGenome.fasta -outfmt 7 -strand 'both' | awk '{ if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}'
+        ```
 DESIGN:
-
-    There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
-
+    * Like in the other scripts, the evaluation of the records is conducted one by one, not all simultaneously.
+    
+    * The plastid genome sequence of each record will be bundled with the GB file of that record in a record-specific gzip file. Hence, before that record is evaluated here, that specific gzip-file must be unpacked; after the evaluation, the gzip-file must be reconstituted.
 
 NOTES:
-
-    * For testing purposes (i.e., to work only on a handful of records), the start sequence length can be increased to 190000 (`00000190000[SLEN]`).
-
-    * Searches in the sequence databases of NCBI (nucleotide, protein, EST, GSS) allow the usage of [these fields](https://www.ncbi.nlm.nih.gov/books/NBK49540/).
-
-    * The searches automated here can be done manually in a Linux shell:
-    ### Generating uidlist
-    ```
-    esearch -db nucleotide -query \
-    "Magnoliophyta[ORGN] AND \
-    00000100000[SLEN] : 00000200000[SLEN] AND \
-    complete genome[TITLE] AND\
-    (chloroplast[TITLE] OR plastid[TITLE]) \
-    " | efetch -db nucleotide -format uid > uidlist.txt
-    ```
-
-    ### Parsing accession number for each UID
-    ```
-    for i in $(cat uidlist.txt); do
-      ACCN=$(esummary -db nucleotide -id $i | xmllint --xpath 'string(//Caption)' -);
-      echo "$ACCN"
-    done;
-    ```
+    * Foo bar baz
 '''
 
 #####################
 # IMPORT OPERATIONS #
 #####################
-import xml.etree.ElementTree as ET
+#import xml.etree.ElementTree as ET
 import os.path, subprocess, calendar
 import pandas as pd
 import argparse, sys
@@ -75,15 +39,17 @@ import coloredlogs, logging
 __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
-__info__ = 'Collect summary information on all plastid sequences stored ' \
-           'in NCBI GenBank'
-__version__ = '2018.09.17.1900'
+__info__ = 'Re-calculates the position and length of the IRs for each '\
+           'plastid genome record'
+__version__ = '2018.09.18.1200'
 
 #############
 # DEBUGGING #
 #############
 import ipdb
 # ipdb.set_trace()
+
+"""
 
 #############
 # FUNCTIONS #
@@ -165,6 +131,7 @@ def getEntryInfo(uid):
     fields.append(topReference.find("GBReference_title").text)
     fields.append(topReference.find("GBReference_journal").text)
     return fields
+"""
 
 
 def main(outfn, query):
@@ -182,6 +149,7 @@ def main(outfn, query):
     log.addHandler(ch)
     '''
 
+"""
   # STEP 2. Check if output file already exists
     if not os.path.isfile(outfn):
         with open(outfn, "w") as summaryFile:
@@ -191,12 +159,11 @@ def main(outfn, query):
   
     # Load previously processed data from outfile
     log.info(("Obtaining previously processed data from %s" % (str(outfn))))
-    #plastid_summary = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-    plastid_summary = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8') # Only get title line
+    plastid_summary = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
     
     # Re-initialize outfile (as new outfile)
-    #log.info(("Re-initializing file %s" % (str(outfn))))
-    with open(outfn, "a") as summaryFile: # Note: This is to append, not to write anew!
+    log.info(("Re-initializing file %s" % (str(outfn))))
+    with open(outfn, "a") as summaryFile:
 
         # Write previously processed data to new outfile and then drop it
         log.info(("Writing previously processed data to %s" % (str(outfn))))
@@ -224,6 +191,7 @@ def main(outfn, query):
             #log.info(("Appending summary of UID %s to %s"  % (str(uid), outfn)))
             plastid_summary.to_csv(summaryFile, sep='\t', header=False)
             plastid_summary.drop([uid], inplace=True)
+"""
 
 ########
 # MAIN #
@@ -236,3 +204,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(args.outfn, args.query)
 
+"""

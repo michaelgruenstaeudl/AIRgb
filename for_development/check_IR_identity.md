@@ -3,10 +3,10 @@
 
 * Author: Michael Gruenstaeudl
 * Contact: m.gruenstaeudl@fu-berlin.de
-* Version: 2019.09.09
+* Version: 2019.09.18
 
 ##### Objective
-Obtain accession number for each UID, fetch all sequences by their UID, and check if IRs are labelled
+The objective of
 
 The result is a list of plastid genomes that have either the term "inverted repeat A" or the term "inverted repeat B".
 
@@ -75,22 +75,7 @@ for j in $(cat filtered_list.txt); do
   echo $IRB >> $ACCN.IRb.fas;
   # OPTIONAL # echo $IRB >> "$ACCN"_IRb.2.fas;
 
-  # Comparison of IR FASTAs via application 'mummer', function 'nucmer'
-  nucmer -maxmatch -c 100 -p $ACCN $ACCN.IRa.fas $ACCN.IRb.fas
-  show-coords -r -c -l $ACCN.delta > $ACCN.coords
-  show-snps $ACCN.delta > $ACCN.snps
-  show-tiling $ACCN.delta > $ACCN.tiling
 
-  # Generate side-by-side comparison
-  show-aligns $ACCN.delta "$ACCN"_IRa "$ACCN"_IRb > $ACCN.alignviz
-  # OPTIONAL # cat "$ACCN"_IR*.fas > tmp;
-  # OPTIONAL # clustalo -i tmp > "$ACCN"_clustalo.fas;
-  # OPTIONAL # # Deinterleaving alignment
-  # OPTIONAL # perl -MBio::SeqIO -e 'my $seqin = Bio::SeqIO->new(-fh => \*STDIN, -format => 'fasta'); while (my $seq = $seqin->next_seq) { print ">",$seq->id,"\n",$seq->seq,"\n"; }' < "$ACCN"_clustalo.fas > "$ACCN"_clustalo_deint.fas
-  # OPTIONAL # # Comparison via command 'cmp'
-  # OPTIONAL # IRA_ALN=$(sed -n '2p' "$ACCN"_clustalo_deint.fas);
-  # OPTIONAL # IRB_ALN=$(sed -n '4p' "$ACCN"_clustalo_deint.fas);
-  # OPTIONAL # cmp -bl <(echo $IRA_ALN) <(echo $IRB_ALN) | awk '{print $1,$3,$5}';
 
   # File hygiene
   rm $ACCN.deint.fas;

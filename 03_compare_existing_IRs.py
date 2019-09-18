@@ -1,69 +1,55 @@
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
-    This script generates a table of plastid genome records that are currently available on NCBI. It simultaneously ensures that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records).
-
-    The output is a table in which each row contains the parsed information of a single record. Each row contains nine, tab-separated columns in the following order:
-    1. the unique identifier,
-    2a. the accession number,
-    2b. synonyms of the accession number (i.e., issue about regular vs. RefSeq NC_ records),
-    3. the sequence version number,
-    4. the organism name,
-    5. the sequence length,
-    6. the date the record went online,
-    7. the authors (uppermost AUTHORS line in GB-file),
-    8. the name of the publication (uppermost TITLE line in GB-file), and
-    9. the full citation of the publication (see uppermost JOURNAL line in GB-file)
-
+    This script takes a set of IR file pairs (in FASTA format) and - for each pair - compares the IRs via application 'mummer' (function 'nucmer') and generates numerical indices for the sequence similarlity.
+    
+    The output shall be a table of plastid genome records (one record per row) that lists numerically if the inverted repeats in that record are identical.
 
 TO DO:
-
-    * Can you please fix the issue regarding line: "plastid_summary.drop(plastid_summary.index, inplace=True)" See my explanations there.
+    * A visual comparison of the IRs is not desired. Instead, the similarity of the IRs shall be inferred in a numerical fashion.
     
-    * The current script version appears to duplicate the existing data (probably due to the failure in line "plastid_summary.drop(plastid_summary.index, inplace=True)"). You can see this when looking at the output file (e.g., look for duplicates of the first uid). Beware: This issue is not apparent from the log.    
+    * The numerical comparison shall indicate in separate columns: (a) if and how many SNPs exist between the two IRs, and (b) if length differences exist between the IRs and what length difference there is.
     
-    * To better handle the above two isues (and similar issues), we should modify the code so that the uids are processed in a static order (as opposed to the randomness currently experienced). For example, it would be great if the uids are always processed with the olderst one starting first! (For that, the command starting with "efetchargs" should generate a date-sorted output. Is this possible?) In general, the random retrieval/processing of the uids is a weak spot in our script that should be fixed, if possible.
+    * The following batch code shall be used to compare the IRs (i.e., the IR file pair) of each record:
+        ```
+        # Define which record to work on
+        ACCN=#Define here
 
-    * The script shall ensure that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If a dual counting is present, the COMMENT line of a GB-file would contain the information which other record the reference sequence is identical to.
+        # Comparison of IR FASTAs via application 'mummer', function 'nucmer'
+        nucmer -maxmatch -c 100 -p $ACCN $ACCN.IRa.fas $ACCN.IRb.fas
+        show-coords -r -c -l $ACCN.delta > $ACCN.coords
+        show-snps $ACCN.delta > $ACCN.snps
+        show-tiling $ACCN.delta > $ACCN.tiling
 
-    * Upon initialization, print out how many plastid genome entries are on GenBank (e.g., in function getNewUIDs). Then print out how many are already in the masterlist (e.g., in function main after reading in the existing masterlist).
+        # Generate side-by-side comparison
+        show-aligns $ACCN.delta "$ACCN"_IRa "$ACCN"_IRb > $ACCN.alignviz
 
+        # Align the IRs
+        cat "$ACCN"_IR*.fas > tmp;
+        clustalo -i tmp > "$ACCN"_clustalo.fas;
 
+        # Deinterleaving alignment (if necessary)
+        # perl -MBio::SeqIO -e 'my $seqin = Bio::SeqIO->new(-fh => \*STDIN, -format => 'fasta'); while (my $seq = $seqin->next_seq) { print ">",$seq->id,"\n",$seq->seq,"\n"; }' < "$ACCN"_clustalo.fas > "$ACCN"_clustalo_deint.fas
+
+        # Numerical comparison via command 'cmp'
+        IRA_ALN=$(sed -n '2p' "$ACCN"_clustalo_deint.fas);
+        IRB_ALN=$(sed -n '4p' "$ACCN"_clustalo_deint.fas);
+        cmp -bl <(echo $IRA_ALN) <(echo $IRB_ALN) | awk '{print $1,$3,$5}';
+        ```
+        
 DESIGN:
-
-    There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
-
+    * Like in the other scripts, the evaluation of the records is conducted one by one, not all simultaneously.
+    
+    * The IR file pair of each record will be bundled with the GB file of that record in a record-specific gzip file. Hence, before that record is evaluated here, that specific gzip-file must be unpacked; after the evaluation, the gzip-file must be reconstituted.
 
 NOTES:
-
-    * For testing purposes (i.e., to work only on a handful of records), the start sequence length can be increased to 190000 (`00000190000[SLEN]`).
-
-    * Searches in the sequence databases of NCBI (nucleotide, protein, EST, GSS) allow the usage of [these fields](https://www.ncbi.nlm.nih.gov/books/NBK49540/).
-
-    * The searches automated here can be done manually in a Linux shell:
-    ### Generating uidlist
-    ```
-    esearch -db nucleotide -query \
-    "Magnoliophyta[ORGN] AND \
-    00000100000[SLEN] : 00000200000[SLEN] AND \
-    complete genome[TITLE] AND\
-    (chloroplast[TITLE] OR plastid[TITLE]) \
-    " | efetch -db nucleotide -format uid > uidlist.txt
-    ```
-
-    ### Parsing accession number for each UID
-    ```
-    for i in $(cat uidlist.txt); do
-      ACCN=$(esummary -db nucleotide -id $i | xmllint --xpath 'string(//Caption)' -);
-      echo "$ACCN"
-    done;
-    ```
+    * Foo bar baz
 '''
 
 #####################
 # IMPORT OPERATIONS #
 #####################
-import xml.etree.ElementTree as ET
+#import xml.etree.ElementTree as ET
 import os.path, subprocess, calendar
 import pandas as pd
 import argparse, sys
@@ -75,15 +61,16 @@ import coloredlogs, logging
 __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
-__info__ = 'Collect summary information on all plastid sequences stored ' \
-           'in NCBI GenBank'
-__version__ = '2018.09.17.1900'
+__info__ = 'Compare IRs for a series of IR FASTA files'
+__version__ = '2018.09.18.1200'
 
 #############
 # DEBUGGING #
 #############
 import ipdb
 # ipdb.set_trace()
+
+"""
 
 #############
 # FUNCTIONS #
@@ -165,6 +152,7 @@ def getEntryInfo(uid):
     fields.append(topReference.find("GBReference_title").text)
     fields.append(topReference.find("GBReference_journal").text)
     return fields
+"""
 
 
 def main(outfn, query):
@@ -182,6 +170,7 @@ def main(outfn, query):
     log.addHandler(ch)
     '''
 
+"""
   # STEP 2. Check if output file already exists
     if not os.path.isfile(outfn):
         with open(outfn, "w") as summaryFile:
@@ -191,12 +180,11 @@ def main(outfn, query):
   
     # Load previously processed data from outfile
     log.info(("Obtaining previously processed data from %s" % (str(outfn))))
-    #plastid_summary = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-    plastid_summary = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8') # Only get title line
+    plastid_summary = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
     
     # Re-initialize outfile (as new outfile)
-    #log.info(("Re-initializing file %s" % (str(outfn))))
-    with open(outfn, "a") as summaryFile: # Note: This is to append, not to write anew!
+    log.info(("Re-initializing file %s" % (str(outfn))))
+    with open(outfn, "a") as summaryFile:
 
         # Write previously processed data to new outfile and then drop it
         log.info(("Writing previously processed data to %s" % (str(outfn))))
@@ -224,6 +212,7 @@ def main(outfn, query):
             #log.info(("Appending summary of UID %s to %s"  % (str(uid), outfn)))
             plastid_summary.to_csv(summaryFile, sep='\t', header=False)
             plastid_summary.drop([uid], inplace=True)
+"""
 
 ########
 # MAIN #
@@ -236,3 +225,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(args.outfn, args.query)
 
+"""
