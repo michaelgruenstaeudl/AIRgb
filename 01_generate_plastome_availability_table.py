@@ -155,15 +155,24 @@ def getEntryInfo(uid):
     create_date = seqDaten.find("GBSeq_create-date").text.split('-')
     fields.append(create_date[2] + "-" + month_map[create_date[1]] + "-" + create_date[0])
     # Parse all info related to the authors and the publication
-    topReference = seqDaten.find("GBSeq_references").find("GBReference")
-    authors = topReference.find("GBReference_authors").findall("GBAuthor")
+    references = seqDaten.find("GBSeq_references").findall("GBReference")
     authstring = ""
-    for author in authors:
-        authstring = authstring + author.text + ", "
-    authstring = authstring[:-2]
+    title = ""
+    citation = ""
+    for ref in references:
+        # Look for a reference that has authors (not all entries have a reference with authors)
+        authors = references.find("GBReference_authors")
+        if authors:
+            title = ref.find("GBReference_title").text
+            citation = ref.find("GBReference_journal").text
+            authors = references.find("GBReference_authors").findall("GBAuthor")
+            for author in authors:
+                authstring = authstring + author.text + ", "
+                authstring = authstring[:-2]
+            break
     fields.append(authstring)
-    fields.append(topReference.find("GBReference_title").text)
-    fields.append(topReference.find("GBReference_journal").text)
+    fields.append(title)
+    fields.append(citation)
     return fields
 
 
