@@ -19,9 +19,9 @@ OBJECTIVE:
 TO DO:
 
     * Can you please fix the issue regarding line: "plastid_summary.drop(plastid_summary.index, inplace=True)" See my explanations there.
-    
-    * The current script version appears to duplicate the existing data (probably due to the failure in line "plastid_summary.drop(plastid_summary.index, inplace=True)"). You can see this when looking at the output file (e.g., look for duplicates of the first uid). Beware: This issue is not apparent from the log.    
-    
+
+    * The current script version appears to duplicate the existing data (probably due to the failure in line "plastid_summary.drop(plastid_summary.index, inplace=True)"). You can see this when looking at the output file (e.g., look for duplicates of the first uid). Beware: This issue is not apparent from the log.
+
     * To better handle the above two isues (and similar issues), we should modify the code so that the uids are processed in a static order (as opposed to the randomness currently experienced). For example, it would be great if the uids are always processed with the olderst one starting first! (For that, the command starting with "efetchargs" should generate a date-sorted output. Is this possible?) In general, the random retrieval/processing of the uids is a weak spot in our script that should be fixed, if possible.
 
     * The script shall ensure that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If a dual counting is present, the COMMENT line of a GB-file would contain the information which other record the reference sequence is identical to.
@@ -92,11 +92,11 @@ import ipdb
 def getNewUIDs(query, outfn):
     '''
     Gets a list of all UIDs found by the search query via ESearch and EFetch.
-    
+
     Args:
         query (str): a string that specifies the query term for NCBI
         outfn (str): name of the output file
-    
+
     Returns:
         A set of UIDs that aren't yet included in the output file.
     '''
@@ -121,10 +121,10 @@ def getNewUIDs(query, outfn):
 def getEntryInfo(uid):
     '''
     Gets the GenBank flatfile for given UID in XML-format, then parses XML content for relevant data and returns it as a list.
-    
+
     Args:
         uid (str): A unique identifier (actually a long integer that only has relevance in NCBI internally)
-    
+
     Returns:
         - accession number
         - sequence version number
@@ -188,34 +188,13 @@ def main(outfn, query):
             summaryFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\n")
 
   # STEP 3. Get new UIDs, parse out relevant info and save as lines in output file.
-  
-    # Load previously processed data from outfile
-    log.info(("Obtaining previously processed data from %s" % (str(outfn))))
-    #plastid_summary = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-    plastid_summary = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8') # Only get title line
-    
+
+    # Load headers from outfile
+    plastid_summary = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
+
     # Re-initialize outfile (as new outfile)
     #log.info(("Re-initializing file %s" % (str(outfn))))
     with open(outfn, "a") as summaryFile: # Note: This is to append, not to write anew!
-
-        # Write previously processed data to new outfile and then drop it
-        log.info(("Writing previously processed data to %s" % (str(outfn))))
-        plastid_summary.to_csv(summaryFile, sep='\t', header=False)
-        plastid_summary.drop(plastid_summary.index, inplace=True)
-
-        '''
-        TODO:
-        When a large masterlist already exists, sometimes the following exception is thrown. This exception is not trown when no masterlist is present.
-
-        Traceback (most recent call last):
-          File "01_generate_plastome_availability_table.py", line 169, in <module>
-            main(args.outfn, args.query)
-          File "01_generate_plastome_availability_table.py", line 140, in main
-            plastid_summary.drop(plastid_summary.index, inplace=True)
-          File "/home/michael_science/.local/lib/python2.7/site-packages/pandas/core/generic.py", line 1417, in drop
-            indexer = -axis.isin(labels)
-        TypeError: The numpy boolean negative, the `-` operator, is not supported, use the `~` operator or the logical_not function instead.
-        '''
 
         # Iteratively write new data to new outfile
         for uid in getNewUIDs(query, outfn):
@@ -235,4 +214,3 @@ if __name__ == "__main__":
     parser.add_argument("--query", "-q", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])", help="(Optional) Entrez query that will replace the standard query")
     args = parser.parse_args()
     main(args.outfn, args.query)
-
