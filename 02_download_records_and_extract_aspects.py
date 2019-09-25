@@ -91,7 +91,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2019.09.23.1700'
+__version__ = '2019.09.25.1630'
 
 #############
 # DEBUGGING #
@@ -243,6 +243,4 @@ if __name__ == "__main__":
     inputType.add_argument("--list", "-l", type=str, nargs='+', help="List of NCBI nucleotide accession numbers")
     parser.add_argument("--outdir", "-o", type=str, required=True, help="path to output directory")
     args = parser.parse_args()
-    #rec = SeqIO.read("/home/tilmanmehl/Documents/plastid_summary/getIRtest/KX832333/KX832333.gb", "genbank")
-    #print(rec.id)
     main(args)
