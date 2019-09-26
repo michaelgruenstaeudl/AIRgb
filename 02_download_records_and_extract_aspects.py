@@ -132,7 +132,7 @@ def getInvertedRepeats(rec):
     all_repeats = [feature for feature in rec.features if feature.type=='repeat_region']
     for repeat in all_repeats:
         if "rpt_type" in repeat.qualifiers:
-            if repeat.qualifiers["rpt_type"].lower() == "inverted":
+            if repeat.qualifiers["rpt_type"][0].lower() == "inverted":
                 if "note" in repeat.qualifiers:
                     if "ira" in repeat.qualifiers["note"][0].lower() or "inverted repeat a" in repeat.qualifiers["note"][0].lower():
                         IRa = repeat.extract(rec)
@@ -168,7 +168,10 @@ def getInvertedRepeats(rec):
                 elif IRb is None:
                     IRb = misc_feature.extract(rec)
 
-    return IRa, IRb.reverse_complement()
+    # Biopython automatically seems to extract IRb in a reverse complement fashion
+    # This was true for a record (NC_043815) that had two "repeat_region" features with "rpt_type=inverted", one of which had its sequence marked "complement"
+    # Will have to test if the behaviour changes for misc_feature records or records where rpt_type=inverted is omitted
+    return IRa, IRb
 
 
 
@@ -200,7 +203,7 @@ def main(args):
         log.info("Writing sequence as FASTA for accession " + str(accession))
         with open(os.path.join(outputFolder, accession + ".fasta"),"w") as fastaOut:
             fastaOut.write(">" + str(rec.id) + " " + str(rec.description) + "\n")
-            fastaOut.write(str(rec.seq))
+            fastaOut.write(str(rec.seq) + "\n")
         # STEP 3.3. Extract inverted repeat sequences from full sequence and write them in FASTA format
         IRa_seq = None
         IRbRC_seq = None
@@ -209,26 +212,26 @@ def main(args):
             log.info("Found both inverted repeats for accession " + str(accession))
             with open(os.path.join(outputFolder, accession + "_IRa.fasta"),"w") as IRa_fasta:
                 IRa_fasta.write(">" + str(accession) + "_IRa\n")
-                IRa_fasta.write(str(IRa_seq.seq))
+                IRa_fasta.write(str(IRa_seq.seq) + "\n")
             with open(os.path.join(outputFolder, accession + "_IRb_revComp.fasta"),"w") as IRb_fasta:
                 IRb_fasta.write(">" + str(accession) + "_IRb_revComp\n")
-                IRb_fasta.write(str(IRbRC_seq.seq))
+                IRb_fasta.write(str(IRbRC_seq.seq) + "\n")
         elif not IRa_seq is None and IRbRC_seq is None:
             log.info("Only one inverted repeat found for accession " + str(accession))
             with open(os.path.join(outputFolder, accession + "_IRa.fasta"),"w") as IRa_fasta:
                 IRa_fasta.write(">" + str(accession) + "_IRa\n")
-                IRa_fasta.write(str(IRa_seq.seq))
+                IRa_fasta.write(str(IRa_seq.seq) + "\n")
         elif IRa_seq is None and not IRbRC_seq is None:
             log.info("Only one inverted repeat found for accession " + str(accession))
             IRbRC_rec = SeqRecord(IRbRC_seq, str(accession) +'_IRb_revComp', '', '')
             with open(os.path.join(outputFolder, accession + "_IRb_revComp.fasta"),"w") as IRb_fasta:
                 IRb_fasta.write(">" + str(accession) + "_IRb_revComp\n")
-                IRb_fasta.write(str(IRbRC_seq.seq))
+                IRb_fasta.write(str(IRbRC_seq.seq) + "\n")
         else:
             log.info("No inverted repeats found for accession " + str(accession))
         # STEP 3.4. Bundle and compress accession data
         tar = tarfile.open(outputFolder + ".tar.gz", "w:gz")
-        tar.add(outputFolder)
+        tar.add(outputFolder, os.path.basename(outputFolder))
         tar.close()
 
 
