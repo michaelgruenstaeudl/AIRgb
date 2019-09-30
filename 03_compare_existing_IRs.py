@@ -124,8 +124,34 @@ def main(args):
             clustalo = subprocess.Popen(clustargs,stdout=clust_file)
             clustalo.wait()
 
+        # Deinterleave created alignment FASTA file
+        linenum = 0
+        with open(accession + "_clustalo_deint.fasta", "w") as outfile:
+          with open(accession + "_clustalo.fasta", "r") as infile:
+              outfile.write(infile.readline())
+              for line in infile:
+                  line = line.strip()
+                  if(len(line) > 0):
+                      if line[0] == '>':
+                          if linenum == 0:
+                              outfile.write(line + "\n")
+                              linenum += 1
+                          else:
+                              outfile.write("\n" + line + "\n")
+                      else:
+                          outfile.write(line)
 
-
+        # Numerical comparison via command 'cmp'
+        ira_aln = subprocess.Popen(["sed","-n","2p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
+        ira_aln.wait()
+        ira_out, ira_err = ira_aln.communicate()
+        irb_aln = subprocess.Popen(["sed","-n","4p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
+        irb_aln.wait()
+        irb_out, irb_err = irb_aln.communicate()
+        with open(accession + "_compare.txt","w") as comparefile:
+            #cmp_awk = subprocess.Popen("cmp -bl < " + str(ira_out) + " < " + str(irb_out) + " | awk '{print $1,$3,$5}'", shell=True, stdout=comparefile)
+            cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_clustalo_deint.fasta) <(sed -n '2p' " + accession + "_clustalo_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
+            cmp_awk.wait()
 
 ########
 # MAIN #
