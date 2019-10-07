@@ -160,17 +160,14 @@ def getEntryInfo(uid):
     authstring = ""
     title = ""
     citation = ""
-    
+
     for ref in references:
         # Look for a reference that has authors (not all entries have a reference with authors)
-
-        #ipdb.set_trace()  ## ISSUE IN THE FOLLOWING LINE !
-
-        authors = references.find("GBReference_authors")
+        authors = ref.find("GBReference_authors")
         if authors:
             title = ref.find("GBReference_title").text
             citation = ref.find("GBReference_journal").text
-            authors = references.find("GBReference_authors").findall("GBAuthor")
+            authors = ref.find("GBReference_authors").findall("GBAuthor")
             for author in authors:
                 authstring = authstring + author.text + ", "
                 authstring = authstring[:-2]
