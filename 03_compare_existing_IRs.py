@@ -82,16 +82,19 @@ def main(args):
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
   # STEP 2. Loop though provided archives
-    for archive in args.input:
+    archives = [os.path.abspath(x) for x in args.input]
+    main_dir = os.getcwd()
+    for archive in archives:
         accession = os.path.basename(archive).split('.')[0]
         # Extract sequence file from archive
         tar = tarfile.open(archive, "r:gz")
         tar.extractall()
         tar.close()
+        acc_path = os.path.abspath(accession)
         # Change to directory containing sequence files
-        os.chdir(accession)
+        os.chdir(acc_path)
         # Check if two IRs exist for this accession
-        if os.path.isfile(accession + "_IRa.fasta") and os.path.isfile(accession + "_IRb_revComp.fasta")
+        if os.path.isfile(accession + "_IRa.fasta") and os.path.isfile(accession + "_IRb_revComp.fasta"):
             log.info("Found both IRs for accession " + accession)
             # Process IRs with mummer
             log.info("Comparing IR FASTAs using mummer's nucmer function.")
@@ -118,7 +121,7 @@ def main(args):
                 show_aligns.wait()
 
             # Align the IRs
-            log.info("Performing alignment of IR FASTAs."")
+            log.info("Performing alignment of IR FASTAs.")
             ir_filenames = [accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
             with open("tmp","w") as tmp_file:
                 for fname in ir_filenames:
@@ -146,7 +149,8 @@ def main(args):
                                   outfile.write("\n" + line + "\n")
                           else:
                               outfile.write(line)
-            # Remove interleaved file
+            # Remove interleaved and tmp file
+            os.remove("tmp")
             os.remove(accession + "_clustalo.fasta")
 
             # Numerical comparison via command 'cmp'
@@ -158,23 +162,17 @@ def main(args):
             irb_aln.wait()
             irb_out, irb_err = irb_aln.communicate()
             with open(accession + ".compare","w") as comparefile:
-                #cmp_awk = subprocess.Popen("cmp -bl < " + str(ira_out) + " < " + str(irb_out) + " | awk '{print $1,$3,$5}'", shell=True, stdout=comparefile)
                 cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_clustalo_deint.fasta) <(sed -n '2p' " + accession + "_clustalo_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
                 cmp_awk.wait()
 
             # Append created files to archive
             log.info("Archiving generated files.")
-            shutil.move(accession + ".coords", os.path.join(accession, accession + ".coords"))
-            shutil.move(accession + ".snps", os.path.join(accession, accession + ".snps"))
-            shutil.move(accession + ".tiling", os.path.join(accession, accession + ".tiling"))
-            shutil.move(accession + ".alignviz", os.path.join(accession, accession + ".alignviz"))
-            shutil.move(accession + "._clustalo_deint.fasta", os.path.join(accession, accession + "._clustalo_deint.fasta"))
-            shutil.move(accession + ".compare", os.path.join(accession, accession + ".compare"))
             tar = tarfile.open(archive, "w:gz")
-            tar.add(accession, os.path.basename(accession))
+            tar.add(acc_path, accession)
             tar.close()
         else:
             log.info("Missing IR(s) for accession " + accession + "! Skipping comparison.")
+        os.chdir(main_dir)
 
 
 ########
@@ -183,7 +181,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-    parser.add_argument("--input", "-i", type=str, required=True, nargs=+, help="List of archive file names containing inverted repeat FASTA files")
+    parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of archive file names containing inverted repeat FASTA files")
     #parser.add_argument("-outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
     args = parser.parse_args()
     main(args)
