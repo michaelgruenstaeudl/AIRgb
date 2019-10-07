@@ -141,6 +141,8 @@ def main(args):
                               outfile.write("\n" + line + "\n")
                       else:
                           outfile.write(line)
+        # Remove interleaved file
+        os.remove(accession + "_clustalo.fasta")
 
         # Numerical comparison via command 'cmp'
         ira_aln = subprocess.Popen(["sed","-n","2p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
