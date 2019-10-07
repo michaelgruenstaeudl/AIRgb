@@ -153,18 +153,18 @@ def main(args):
             #cmp_awk = subprocess.Popen("cmp -bl < " + str(ira_out) + " < " + str(irb_out) + " | awk '{print $1,$3,$5}'", shell=True, stdout=comparefile)
             cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_clustalo_deint.fasta) <(sed -n '2p' " + accession + "_clustalo_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
             cmp_awk.wait()
-			
-		# Append created files to archive
-		shutil.move(accession + ".coords", os.path.join(accession, accession + ".coords"))
-		shutil.move(accession + ".snps", os.path.join(accession, accession + ".snps"))
-		shutil.move(accession + ".tiling", os.path.join(accession, accession + ".tiling"))
-		shutil.move(accession + ".alignviz", os.path.join(accession, accession + ".alignviz"))
-		shutil.move(accession + "._clustalo_deint.fasta", os.path.join(accession, accession + "._clustalo_deint.fasta"))
-		shutil.move(accession + ".compare", os.path.join(accession, accession + ".compare"))
-		tar = tarfile.open(archive, "w:gz")
-		tar.add(accession, os.path.basename(accession))
-		tar.close()
-		
+
+        # Append created files to archive
+        shutil.move(accession + ".coords", os.path.join(accession, accession + ".coords"))
+        shutil.move(accession + ".snps", os.path.join(accession, accession + ".snps"))
+        shutil.move(accession + ".tiling", os.path.join(accession, accession + ".tiling"))
+        shutil.move(accession + ".alignviz", os.path.join(accession, accession + ".alignviz"))
+        shutil.move(accession + "._clustalo_deint.fasta", os.path.join(accession, accession + "._clustalo_deint.fasta"))
+        shutil.move(accession + ".compare", os.path.join(accession, accession + ".compare"))
+        tar = tarfile.open(archive, "w:gz")
+        tar.add(accession, os.path.basename(accession))
+        tar.close()
+
 
 ########
 # MAIN #
