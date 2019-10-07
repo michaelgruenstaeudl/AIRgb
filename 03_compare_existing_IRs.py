@@ -154,10 +154,10 @@ def main(args):
             # Numerical comparison via command 'cmp'
             log.info("Comparing differences between IR sequences using generated alignment.")
             ira_aln = subprocess.Popen(["sed","-n","2p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
-            ira_aln.wait()
+            #ira_aln.wait()
             ira_out, ira_err = ira_aln.communicate()
             irb_aln = subprocess.Popen(["sed","-n","4p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
-            irb_aln.wait()
+            #irb_aln.wait()
             irb_out, irb_err = irb_aln.communicate()
             with open(accession + ".compare","w") as comparefile:
                 cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_clustalo_deint.fasta) <(sed -n '2p' " + accession + "_clustalo_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
