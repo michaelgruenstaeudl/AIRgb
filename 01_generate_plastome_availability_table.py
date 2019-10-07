@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
@@ -77,7 +78,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
            'in NCBI GenBank'
-__version__ = '2018.09.17.1900'
+__version__ = '2018.10.07.1300'
 
 #############
 # DEBUGGING #
@@ -159,8 +160,12 @@ def getEntryInfo(uid):
     authstring = ""
     title = ""
     citation = ""
+    
     for ref in references:
         # Look for a reference that has authors (not all entries have a reference with authors)
+
+        #ipdb.set_trace()  ## ISSUE IN THE FOLLOWING LINE !
+
         authors = references.find("GBReference_authors")
         if authors:
             title = ref.find("GBReference_title").text
@@ -219,7 +224,7 @@ def main(outfn, query):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-    parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file")
-    parser.add_argument("--query", "-q", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])", help="(Optional) Entrez query that will replace the standard query")
+    parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
+    parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])", help="(Optional) Entrez query that will replace the standard query")
     args = parser.parse_args()
     main(args.outfn, args.query)
