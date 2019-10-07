@@ -134,7 +134,6 @@ def main(args):
                 clustalo.wait()
 
             # Deinterleave created alignment FASTA file
-            linenum = 0
             with open(accession + "_clustalo_deint.fasta", "w") as outfile:
               with open(accession + "_clustalo.fasta", "r") as infile:
                   outfile.write(infile.readline())
@@ -142,9 +141,8 @@ def main(args):
                       line = line.strip()
                       if(len(line) > 0):
                           if line[0] == '>':
-                              if linenum == 0:
-                                  outfile.write(line + "\n")
-                                  linenum += 1
+                              if "IRa" in line:
+                                  outfile.write(line + "\n")                                  
                               else:
                                   outfile.write("\n" + line + "\n")
                           else:
