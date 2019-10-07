@@ -90,82 +90,91 @@ def main(args):
         tar.close()
         # Change to directory containing sequence files
         os.chdir(accession)
-        # Process IRs with mummer
-        nucmerargs = ["nucmer", "--maxmatch", "-c", "100", "-p", accession, accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
-        nucmer = subprocess.Popen(nucmerargs)
-        nucmer.wait()
-        coordargs = ["show-coords", "-r", "-c", "-l", accession + ".delta"]
-        with open(accession + ".coords", "w") as accession_coords:
-            show_coords = subprocess.Popen(coordargs, stdout=accession_coords)
-            show_coords.wait()
-        snpsargs = ["show-snps", accession + ".delta"]
-        with open(accession + ".snps", "w") as accession_snps:
-            show_snps = subprocess.Popen(snpsargs, stdout=accession_snps)
-            show_snps.wait()
-        tilingargs = ["show-tiling", accession + ".delta"]
-        with open(accession + ".tiling", "w") as accession_tiling:
-            show_tiling = subprocess.Popen(snpsargs, stdout=accession_tiling)
-            show_tiling.wait()
+        # Check if two IRs exist for this accession
+        if os.path.isfile(accession + "_IRa.fasta") and os.path.isfile(accession + "_IRb_revComp.fasta")
+            log.info("Found both IRs for accession " + accession)
+            # Process IRs with mummer
+            log.info("Comparing IR FASTAs using mummer's nucmer function.")
+            nucmerargs = ["nucmer", "--maxmatch", "-c", "100", "-p", accession, accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
+            nucmer = subprocess.Popen(nucmerargs)
+            nucmer.wait()
+            coordargs = ["show-coords", "-r", "-c", "-l", accession + ".delta"]
+            with open(accession + ".coords", "w") as accession_coords:
+                show_coords = subprocess.Popen(coordargs, stdout=accession_coords)
+                show_coords.wait()
+            snpsargs = ["show-snps", accession + ".delta"]
+            with open(accession + ".snps", "w") as accession_snps:
+                show_snps = subprocess.Popen(snpsargs, stdout=accession_snps)
+                show_snps.wait()
+            tilingargs = ["show-tiling", accession + ".delta"]
+            with open(accession + ".tiling", "w") as accession_tiling:
+                show_tiling = subprocess.Popen(snpsargs, stdout=accession_tiling)
+                show_tiling.wait()
 
-        # Generate side-by-side comparison
-        alignsargs = ["show-aligns", accession + ".delta", accession + "_IRa", accession + "_IRb_revComp"]
-        with open(accession + ".alignviz","w") as accession_aligns:
-            show_aligns = subprocess.Popen(alignsargs, stdout=accession_aligns)
-            show_aligns.wait()
+            # Generate side-by-side comparison
+            alignsargs = ["show-aligns", accession + ".delta", accession + "_IRa", accession + "_IRb_revComp"]
+            with open(accession + ".alignviz","w") as accession_aligns:
+                show_aligns = subprocess.Popen(alignsargs, stdout=accession_aligns)
+                show_aligns.wait()
 
-        # Align the IRs
-        ir_filenames = [accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
-        with open("tmp","w") as tmp_file:
-            for fname in ir_filenames:
-                with open(fname,"r") as infile:
-                    for line in infile:
-                        tmp_file.write(line)
-        clustargs = ["clustalo", "-i", "tmp"]
-        with open(accession + "_clustalo.fasta", "w") as clust_file:
-            clustalo = subprocess.Popen(clustargs,stdout=clust_file)
-            clustalo.wait()
+            # Align the IRs
+            log.info("Performing alignment of IR FASTAs."")
+            ir_filenames = [accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
+            with open("tmp","w") as tmp_file:
+                for fname in ir_filenames:
+                    with open(fname,"r") as infile:
+                        for line in infile:
+                            tmp_file.write(line)
+            clustargs = ["clustalo", "-i", "tmp"]
+            with open(accession + "_clustalo.fasta", "w") as clust_file:
+                clustalo = subprocess.Popen(clustargs,stdout=clust_file)
+                clustalo.wait()
 
-        # Deinterleave created alignment FASTA file
-        linenum = 0
-        with open(accession + "_clustalo_deint.fasta", "w") as outfile:
-          with open(accession + "_clustalo.fasta", "r") as infile:
-              outfile.write(infile.readline())
-              for line in infile:
-                  line = line.strip()
-                  if(len(line) > 0):
-                      if line[0] == '>':
-                          if linenum == 0:
-                              outfile.write(line + "\n")
-                              linenum += 1
+            # Deinterleave created alignment FASTA file
+            linenum = 0
+            with open(accession + "_clustalo_deint.fasta", "w") as outfile:
+              with open(accession + "_clustalo.fasta", "r") as infile:
+                  outfile.write(infile.readline())
+                  for line in infile:
+                      line = line.strip()
+                      if(len(line) > 0):
+                          if line[0] == '>':
+                              if linenum == 0:
+                                  outfile.write(line + "\n")
+                                  linenum += 1
+                              else:
+                                  outfile.write("\n" + line + "\n")
                           else:
-                              outfile.write("\n" + line + "\n")
-                      else:
-                          outfile.write(line)
-        # Remove interleaved file
-        os.remove(accession + "_clustalo.fasta")
+                              outfile.write(line)
+            # Remove interleaved file
+            os.remove(accession + "_clustalo.fasta")
 
-        # Numerical comparison via command 'cmp'
-        ira_aln = subprocess.Popen(["sed","-n","2p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
-        ira_aln.wait()
-        ira_out, ira_err = ira_aln.communicate()
-        irb_aln = subprocess.Popen(["sed","-n","4p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
-        irb_aln.wait()
-        irb_out, irb_err = irb_aln.communicate()
-        with open(accession + ".compare","w") as comparefile:
-            #cmp_awk = subprocess.Popen("cmp -bl < " + str(ira_out) + " < " + str(irb_out) + " | awk '{print $1,$3,$5}'", shell=True, stdout=comparefile)
-            cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_clustalo_deint.fasta) <(sed -n '2p' " + accession + "_clustalo_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
-            cmp_awk.wait()
+            # Numerical comparison via command 'cmp'
+            log.info("Comparing differences between IR sequences using generated alignment.")
+            ira_aln = subprocess.Popen(["sed","-n","2p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
+            ira_aln.wait()
+            ira_out, ira_err = ira_aln.communicate()
+            irb_aln = subprocess.Popen(["sed","-n","4p",accession + "_clustalo_deint.fasta"], stdout=subprocess.PIPE)
+            irb_aln.wait()
+            irb_out, irb_err = irb_aln.communicate()
+            with open(accession + ".compare","w") as comparefile:
+                #cmp_awk = subprocess.Popen("cmp -bl < " + str(ira_out) + " < " + str(irb_out) + " | awk '{print $1,$3,$5}'", shell=True, stdout=comparefile)
+                cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_clustalo_deint.fasta) <(sed -n '2p' " + accession + "_clustalo_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
+                cmp_awk.wait()
 
-        # Append created files to archive
-        shutil.move(accession + ".coords", os.path.join(accession, accession + ".coords"))
-        shutil.move(accession + ".snps", os.path.join(accession, accession + ".snps"))
-        shutil.move(accession + ".tiling", os.path.join(accession, accession + ".tiling"))
-        shutil.move(accession + ".alignviz", os.path.join(accession, accession + ".alignviz"))
-        shutil.move(accession + "._clustalo_deint.fasta", os.path.join(accession, accession + "._clustalo_deint.fasta"))
-        shutil.move(accession + ".compare", os.path.join(accession, accession + ".compare"))
-        tar = tarfile.open(archive, "w:gz")
-        tar.add(accession, os.path.basename(accession))
-        tar.close()
+            # Append created files to archive
+            log.info("Archiving generated files.")
+            shutil.move(accession + ".coords", os.path.join(accession, accession + ".coords"))
+            shutil.move(accession + ".snps", os.path.join(accession, accession + ".snps"))
+            shutil.move(accession + ".tiling", os.path.join(accession, accession + ".tiling"))
+            shutil.move(accession + ".alignviz", os.path.join(accession, accession + ".alignviz"))
+            shutil.move(accession + "._clustalo_deint.fasta", os.path.join(accession, accession + "._clustalo_deint.fasta"))
+            shutil.move(accession + ".compare", os.path.join(accession, accession + ".compare"))
+            tar = tarfile.open(archive, "w:gz")
+            tar.add(accession, os.path.basename(accession))
+            tar.close()
+        else:
+            log.info("Missing IR(s) for accession " + accession + "! Skipping comparison.")
 
 
 ########
@@ -175,6 +184,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("--input", "-i", type=str, required=True, nargs=+, help="List of archive file names containing inverted repeat FASTA files")
-    parser.add_argument("-outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
+    #parser.add_argument("-outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
     args = parser.parse_args()
     main(args)
