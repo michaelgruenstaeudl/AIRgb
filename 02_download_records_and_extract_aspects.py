@@ -186,7 +186,7 @@ def main(args):
     accNumbers = []
     if args.infile:
         with open(args.infile,"r") as infile:
-            accNumbers = infile.readlines()
+            accNumbers = infile.read().splitlines()
     else:
         accNumbers = args.list
 
