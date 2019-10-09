@@ -5,30 +5,26 @@ OBJECTIVE:
     This script generates a table of plastid genome records that are currently available on NCBI. It simultaneously ensures that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records).
 
     The output is a table in which each row contains the parsed information of a single record. Each row contains nine, tab-separated columns in the following order:
-    1. the unique identifier,
-    2a. the accession number,
-    2b. synonyms of the accession number (i.e., issue about regular vs. RefSeq NC_ records),
-    3. the sequence version number,
-    4. the organism name,
-    5. the sequence length,
-    6. the date the record went online,
-    7. the authors (uppermost AUTHORS line in GB-file),
-    8. the name of the publication (uppermost TITLE line in GB-file), and
-    9. the full citation of the publication (see uppermost JOURNAL line in GB-file)
+    01. the unique identifier,
+    02a. the accession number,
+    02b. synonyms of the accession number (i.e., issue about regular vs. RefSeq NC_ records),
+    03. the sequence version number,
+    04. the organism name,
+    05. the sequence length,
+    06. the date the record went online,
+    07. the authors (uppermost AUTHORS line in GB-file),
+    08. the name of the publication (uppermost TITLE line in GB-file), and
+    09. the full citation of the publication (see uppermost JOURNAL line in GB-file)
+    
+    ! Still to do: !
+    10. Any note if a REFSEQ accession number exists and to which regular accession number it is equal to.
 
 
 TO DO:
 
-    * Can you please fix the issue regarding line: "plastid_summary.drop(plastid_summary.index, inplace=True)" See my explanations there.
-
-    * The current script version appears to duplicate the existing data (probably due to the failure in line "plastid_summary.drop(plastid_summary.index, inplace=True)"). You can see this when looking at the output file (e.g., look for duplicates of the first uid). Beware: This issue is not apparent from the log.
-
-    * To better handle the above two isues (and similar issues), we should modify the code so that the uids are processed in a static order (as opposed to the randomness currently experienced). For example, it would be great if the uids are always processed with the olderst one starting first! (For that, the command starting with "efetchargs" should generate a date-sorted output. Is this possible?) In general, the random retrieval/processing of the uids is a weak spot in our script that should be fixed, if possible.
-
     * The script shall ensure that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If a dual counting is present, the COMMENT line of a GB-file would contain the information which other record the reference sequence is identical to.
-
-    * Upon initialization, print out how many plastid genome entries are on GenBank (e.g., in function getNewUIDs). Then print out how many are already in the masterlist (e.g., in function main after reading in the existing masterlist).
-
+    
+    * Once the script works well, let us parse the date of the oldest existing UID (from the already existing output file) and limit the esearch to searching NCBI for records only after that date (use esearch option "-mindate"; see "esearch -h" for more info).
 
 DESIGN:
 
@@ -78,7 +74,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
            'in NCBI GenBank'
-__version__ = '2018.10.07.1300'
+__version__ = '2019.10.09.1330'
 
 #############
 # DEBUGGING #
@@ -103,12 +99,20 @@ def getNewUIDs(query, outfn):
     '''
 
   # STEP 1. Get list of UIDs
-    esearchargs = ["esearch", "-db", "nucleotide", "-query", query] # Diesen Aufruf evtl durch Entrezpy ersetzen? Damit bekäme ich ja sofort alle UIDs. ## MG: That's a minor issue. Don't bother with it for the moment.
+    esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-query', query]
     esearch = subprocess.Popen(esearchargs, stdout=subprocess.PIPE)
+
+    ### TO DO: Due to the date sorting in the esearchargs, the UIDs are sorted with the newest first. However, we want the oldest first. This could be done after esearch or after efetch, but may have different effects!
+
     efetchargs = ["efetch", "-db", "nucleotide", "-format", "uid"]
     efetch = subprocess.Popen(efetchargs, stdin=esearch.stdout, stdout=subprocess.PIPE)
     out, err = efetch.communicate()
+    
+    ### TO DO: Maybe I can just reverse the out list? Does that mess things up?
+    ### return out.splitlines().reverse()
 
+
+  ## TO DO: Please move STEP2 to main()
   # STEP 2. Exclude all previously processed UIDs (i.e., those already in outfile) from input.
     uids = set(map(int,out.splitlines()))
     plastidTable = pd.read_csv(outfn, sep="\t")
@@ -151,16 +155,19 @@ def getEntryInfo(uid):
     fields.append((seqDaten.find("GBSeq_accession-version").text).split('.')[1])
     fields.append(seqDaten.find("GBSeq_organism").text)
     fields.append(seqDaten.find("GBSeq_length").text)
+
     # Parse and format the date that the record was first online
     month_map = {"JAN":"01", "FEB":"02", "MAR":"03", "APR":"04", "MAY":"05", "JUN":"06", "JUL":"07", "AUG":"08", "SEP":"09", "OCT":"10", "NOV":"11", "DEC":"12"}
     create_date = seqDaten.find("GBSeq_create-date").text.split('-')
     fields.append(create_date[2] + "-" + month_map[create_date[1]] + "-" + create_date[0])
+
     # Parse all info related to the authors and the publication
     references = seqDaten.find("GBSeq_references").findall("GBReference")
     authstring = ""
     title = ""
     citation = ""
 
+    # Properly format the author output
     for ref in references:
         # Look for a reference that has authors (not all entries have a reference with authors)
         authors = ref.find("GBReference_authors")
@@ -169,12 +176,25 @@ def getEntryInfo(uid):
             citation = ref.find("GBReference_journal").text
             authors = ref.find("GBReference_authors").findall("GBAuthor")
             for author in authors:
-                authstring = authstring + author.text + ", "
-                authstring = authstring[:-2]
+                authstring = authstring + author.text.replace(","," ") + ", "
+                #authstring = authstring[:-2]
             break
     fields.append(authstring)
     fields.append(title)
     fields.append(citation)
+
+    ### TO DO: Please also parse out the field "COMMENT" and check if there is the following information:
+    '''
+    LOCUS       NC_027250             195251 bp    DNA     circular PLN 18-JUN-2015
+    DEFINITION  Carex siderosticta plastid, complete genome.
+    ...
+    COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+                NCBI review. The reference sequence is identical to KP751906.
+    '''
+    ### If a REFSEQ (accession number always starts with "NC_") has been created, then the regular accession (here: KP751906) is a duplicate and must be removed from the output list. To generate a safe removal mechanism, please save both the REFSEQ accession number (here: NC_027250) and the regular accession (here: KP751906) as a tuple and return to main(). In main, we must collect these tuples in a blacklist and remove any duplicates.
+    
+    ### TO DO: If a case of REFSEQ/regular accession number exists, this shall be written to fields as a note (fields.append(note)) with the following language: "The reference sequence NC_027250 is identical to record KP751906."
+
     return fields
 
 
@@ -183,37 +203,46 @@ def main(outfn, query):
   # STEP 1. Set up logger
     log = logging.getLogger(__name__)
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
-    ''' # Reactivate the following lines if coloredlogs turns out to be disadvantageous.
-    log = logging.getLogger()
-    log.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("[%(levelname)s] - %(message)s - %(asctime)s", "%Y-%m-%d %H:%M:%S")
-    ch.setFormatter(formatter)
-    log.addHandler(ch)
-    '''
 
-  # STEP 2. Check if output file already exists
+  # STEP 2. Check if output file already exists, read existing UIDs
+    if os.path.isfile(outfn):
+        with open(outfn, "r") as outputFile:
+            pass
+            ### TO DO: Parse out the UIDs of the outputFile, save to list `UIDs_alreadyProcessed`
+            ### log.info(("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed)))))
+
     if not os.path.isfile(outfn):
-        with open(outfn, "w") as summaryFile:
-            summaryFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\n")
+        with open(outfn, "w") as outputFile:
+            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\n")
+            log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
+            UIDs_alreadyProcessed = []
 
-  # STEP 3. Get new UIDs, parse out relevant info and save as lines in output file.
+  # STEP 3. Get all existing UIDs and calculate which to be processed
+    UIDs_allExisting = getNewUIDs(query, outfn)
+    log.info(("Number of unique UIDs corrently on NCBI: `%s`" % (str(len(UIDs_allExisting)))))
 
-    # Load headers from outfile
-    plastid_summary = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
-
-    # Re-initialize outfile (as new outfile)
-    #log.info(("Re-initializing file %s" % (str(outfn))))
-    with open(outfn, "a") as summaryFile: # Note: This is to append, not to write anew!
-
-        # Iteratively write new data to new outfile
-        for uid in getNewUIDs(query, outfn):
+    ### TO DO: Move here from getNewUIDs(). Specifically, remove the entries of UIDs_alreadyProcessed from the list UIDs_allExisting, saving the remainder as list `UIDs_notYetProcessed`
+    ### log.info(("Number of UIDs to be processed: `%s`" % (str(len(UIDs_notYetProcessed)))))
+    
+  # STEP 4. Obtain info from new UIDs and save as lines in output file.
+    # Load format of the summary file
+    outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
+    # Append to outfile
+    with open(outfn, "a") as outputFile:
+        blacklist = []
+        for uid in UIDs_notYetProcessed:
             log.info(("Reading and parsing UID %s, writing to %s" % (str(uid), str(outfn))))
-            plastid_summary.loc[uid] = getEntryInfo(uid)
-            #log.info(("Appending summary of UID %s to %s"  % (str(uid), outfn)))
-            plastid_summary.to_csv(summaryFile, sep='\t', header=False)
-            plastid_summary.drop([uid], inplace=True)
+            outputHandle.loc[uid] = getEntryInfo(uid)  # Note: This is where the heavy-lifting is done!
+
+            ### TO DO: Next to the full UID info, we may (not always) also receive a tuple per UID to be saved in a blacklist. This blacklist should be appended to after every new UID being processed. This blacklist is used later in step 5.
+            ### blacklist.append(getEntryInfo(uid)[2]) # Or something like that!
+
+            outputHandle.to_csv(outputFile, sep='\t', header=False)
+            outputHandle.drop([uid], inplace=True)
+
+  # STEP 5. Go through entire list and remove REFSEQ/regular duplicates
+    ### TO DO: Read in the entire outputFile again and loop through the blacklist tuples. For every tuple, see if both (!) the REFSEQ accession number as well as the regular accession number are in the outFile. If yes, remove the line of the the regular accession number because it is a duplicate of the REFSEQ accession number line.
+
 
 ########
 # MAIN #
@@ -222,6 +251,6 @@ def main(outfn, query):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
-    parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])", help="(Optional) Entrez query that will replace the standard query")
+    parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000180000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])", help="(Optional) Entrez query that will replace the standard query")
     args = parser.parse_args()
     main(args.outfn, args.query)
