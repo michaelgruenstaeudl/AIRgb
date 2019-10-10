@@ -15,7 +15,7 @@ OBJECTIVE:
     07. the authors (uppermost AUTHORS line in GB-file),
     08. the name of the publication (uppermost TITLE line in GB-file), and
     09. the full citation of the publication (see uppermost JOURNAL line in GB-file)
-    
+
     ! Still to do: !
     10. Any note if a REFSEQ accession number exists and to which regular accession number it is equal to.
 
@@ -23,7 +23,7 @@ OBJECTIVE:
 TO DO:
 
     * The script shall ensure that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If a dual counting is present, the COMMENT line of a GB-file would contain the information which other record the reference sequence is identical to.
-    
+
     * Once the script works well, let us parse the date of the oldest existing UID (from the already existing output file) and limit the esearch to searching NCBI for records only after that date (use esearch option "-mindate"; see "esearch -h" for more info).
 
 DESIGN:
@@ -86,16 +86,15 @@ import ipdb
 # FUNCTIONS #
 #############
 
-def getNewUIDs(query, outfn):
+def getQueriedUIDs(query, outfn):
     '''
     Gets a list of all UIDs found by the search query via ESearch and EFetch.
 
     Args:
         query (str): a string that specifies the query term for NCBI
-        outfn (str): name of the output file
 
     Returns:
-        A set of UIDs that aren't yet included in the output file.
+        A list of UIDs as integers that is returned by the query.
     '''
 
   # STEP 1. Get list of UIDs
@@ -107,21 +106,8 @@ def getNewUIDs(query, outfn):
     efetchargs = ["efetch", "-db", "nucleotide", "-format", "uid"]
     efetch = subprocess.Popen(efetchargs, stdin=esearch.stdout, stdout=subprocess.PIPE)
     out, err = efetch.communicate()
-    
-    ### TO DO: Maybe I can just reverse the out list? Does that mess things up?
-    ### return out.splitlines().reverse()
 
-
-  ## TO DO: Please move STEP2 to main()
-  # STEP 2. Exclude all previously processed UIDs (i.e., those already in outfile) from input.
-    uids = set(map(int,out.splitlines()))
-    plastidTable = pd.read_csv(outfn, sep="\t")
-    try:
-        complement_set = uids - set(plastidTable['UID'])
-    except Exception as e:
-        log.info(("Calculation of complement set not successful:\n%s" % (e.message)))
-    return complement_set
-
+    return map(int, out.splitlines().reverse())
 
 def getEntryInfo(uid):
     '''
@@ -151,7 +137,8 @@ def getEntryInfo(uid):
     root = ET.fromstring(out)
     seqDaten = root.find("GBSeq")
     fields = []
-    fields.append(seqDaten.find("GBSeq_primary-accession").text)
+    accession = seqDaten.find("GBSeq_primary-accession").text
+    fields.append(accession)
     fields.append((seqDaten.find("GBSeq_accession-version").text).split('.')[1])
     fields.append(seqDaten.find("GBSeq_organism").text)
     fields.append(seqDaten.find("GBSeq_length").text)
@@ -176,27 +163,37 @@ def getEntryInfo(uid):
             citation = ref.find("GBReference_journal").text
             authors = ref.find("GBReference_authors").findall("GBAuthor")
             for author in authors:
-                authstring = authstring + author.text.replace(","," ") + ", "
+                authstring = authstring + author.text.replace(","," ") + ", " #Not sure if this does what it is supposed to do? -> Testing
                 #authstring = authstring[:-2]
             break
     fields.append(authstring)
     fields.append(title)
     fields.append(citation)
 
-    ### TO DO: Please also parse out the field "COMMENT" and check if there is the following information:
-    '''
-    LOCUS       NC_027250             195251 bp    DNA     circular PLN 18-JUN-2015
-    DEFINITION  Carex siderosticta plastid, complete genome.
-    ...
-    COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
-                NCBI review. The reference sequence is identical to KP751906.
-    '''
-    ### If a REFSEQ (accession number always starts with "NC_") has been created, then the regular accession (here: KP751906) is a duplicate and must be removed from the output list. To generate a safe removal mechanism, please save both the REFSEQ accession number (here: NC_027250) and the regular accession (here: KP751906) as a tuple and return to main(). In main, we must collect these tuples in a blacklist and remove any duplicates.
-    
-    ### TO DO: If a case of REFSEQ/regular accession number exists, this shall be written to fields as a note (fields.append(note)) with the following language: "The reference sequence NC_027250 is identical to record KP751906."
+    # Parse comment field for RefSeq
+    note = ""
+    origseq = None
+    if accession[:3] = "NC_":
+        comments = root.find("GBSeq_comment").text
+        for comment in comments.split(";"):
+            if "PROVISIONAL REFSEQ: This record has not yet been subject to final NCBI review" in comment:
+                origseq = comment.split(" ")[-1][:-1]
+                note = "The reference sequence %s is identical to record %s." % (accession, origseq)
 
-    return fields
+    return fields, origseq
 
+def constructBlacklist(df):
+    '''
+        returns a set of sequence accessions for which a RefSeq exists
+
+        Args:
+            df (pandas data frame): a table containing plastid summaries
+    '''
+    blacklist = set()
+    for note in df['NOTE']:
+        if "The reference sequence NC_" in note:
+            blacklist.add(note.split(" ")[-1][:-1])
+    return blacklist
 
 def main(outfn, query):
 
@@ -205,43 +202,61 @@ def main(outfn, query):
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
   # STEP 2. Check if output file already exists, read existing UIDs
+    UIDs_alreadyProcessed = set()
     if os.path.isfile(outfn):
         with open(outfn, "r") as outputFile:
-            pass
-            ### TO DO: Parse out the UIDs of the outputFile, save to list `UIDs_alreadyProcessed`
-            ### log.info(("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed)))))
-
-    if not os.path.isfile(outfn):
+            UIDs_alreadyProcessed = set(map(int, [row.split('\t')[0] for row in outputFile]))
+            log.info(("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed)))))
+    else:
         with open(outfn, "w") as outputFile:
-            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\n")
+            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\nNOTE\n")
             log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
-            UIDs_alreadyProcessed = []
 
   # STEP 3. Get all existing UIDs and calculate which to be processed
-    UIDs_allExisting = getNewUIDs(query, outfn)
-    log.info(("Number of unique UIDs corrently on NCBI: `%s`" % (str(len(UIDs_allExisting)))))
+    UIDs_allExisting = getQueriedUIDs(query)
+    log.info(("Number of unique UIDs currently on NCBI: `%s`" % (str(len(UIDs_allExisting)))))
 
-    ### TO DO: Move here from getNewUIDs(). Specifically, remove the entries of UIDs_alreadyProcessed from the list UIDs_allExisting, saving the remainder as list `UIDs_notYetProcessed`
-    ### log.info(("Number of UIDs to be processed: `%s`" % (str(len(UIDs_notYetProcessed)))))
-    
+    UIDs_notYetProcessed = set()
+    if len(UIDs_alreadyProcessed) > 0:
+        plastidTable = pd.read_csv(outfn, sep="\t")
+        try:
+            UIDs_notYetProcessed = UIDs_allExisting - UIDs_alreadyProcessed
+        except Exception as e:
+            log.info(("Calculation of complement set not successful:\n%s" % (e.message)))
+
+    log.info(("Number of UIDs to be processed: `%s`" % (str(len(UIDs_notYetProcessed)))))
+
   # STEP 4. Obtain info from new UIDs and save as lines in output file.
-    # Load format of the summary file
-    outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
-    # Append to outfile
-    with open(outfn, "a") as outputFile:
-        blacklist = []
-        for uid in UIDs_notYetProcessed:
-            log.info(("Reading and parsing UID %s, writing to %s" % (str(uid), str(outfn))))
-            outputHandle.loc[uid] = getEntryInfo(uid)  # Note: This is where the heavy-lifting is done!
+    if len(UIDs_notYetProcessed) > 0:
+      # Load format of the summary file
+        outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
+      # Append to outfile
+        blacklist = set()
+        with open(outfn, "a") as outputFile:
+            for uid in UIDs_notYetProcessed:
+                log.info(("Reading and parsing UID %s, writing to %s" % (str(uid), str(outfn))))
 
-            ### TO DO: Next to the full UID info, we may (not always) also receive a tuple per UID to be saved in a blacklist. This blacklist should be appended to after every new UID being processed. This blacklist is used later in step 5.
-            ### blacklist.append(getEntryInfo(uid)[2]) # Or something like that!
-
-            outputHandle.to_csv(outputFile, sep='\t', header=False)
-            outputHandle.drop([uid], inplace=True)
+                entry, origseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
+                if origseq:
+                    blacklist.add(origseq)
+                outputHandle.loc[uid] = entry
+                outputHandle.to_csv(outputFile, sep='\t', header=False)
+                outputHandle.drop([uid], inplace=True)
 
   # STEP 5. Go through entire list and remove REFSEQ/regular duplicates
-    ### TO DO: Read in the entire outputFile again and loop through the blacklist tuples. For every tuple, see if both (!) the REFSEQ accession number as well as the regular accession number are in the outFile. If yes, remove the line of the the regular accession number because it is a duplicate of the REFSEQ accession number line.
+  ### TO DO: Read in the entire outputFile again and loop through the blacklist tuples. For every tuple, see if both (!) the REFSEQ accession number as well as the regular accession number are in the outFile. If yes, remove the line of the the regular accession number because it is a duplicate of the REFSEQ accession number line.
+    # -> don't need to check if both numbers are in outFile. blacklist will only contain the regular accession number if the RefSeq accession was just processed (i.e. both numbers are in the outFile)
+    # -> in case the regular number is NOT in the outFile, nothing needs to be done.
+        outputHandle = pd.read_csv(outfn, sep='\t', index_col=1, encoding='utf-8') # Using ACCESSION column as index to make accessing it more efficient
+        for entry in blacklist:
+            # Attempting to drop regular duplicate. If the duplicate doesn't exist, nothing happens (except for a log message)
+            try:
+                outputHandle.drop([entry], inplace=True)
+            except:
+                log.info("Could not find accession %s when trying to remove it." % str(entry))
+        with open(outfn, "w") as outputFile:
+            # Replace existing outputFile content with updated list
+            outputHandle.to_csv(outputFile, sep='\t', header=True)
 
 
 ########
