@@ -63,8 +63,9 @@ NOTES:
 import xml.etree.ElementTree as ET
 import os.path, subprocess, calendar
 import pandas as pd
-import argparse, sys, datetime
+import argparse, sys
 import coloredlogs, logging
+from datetime import date, datetime
 
 ###############
 # AUTHOR INFO #
@@ -210,10 +211,11 @@ def main(outfn, query):
     if os.path.isfile(outfn):
         with open(outfn, "r") as outputFile:
             UIDs_alreadyProcessed = [row.split('\t')[0] for row in outputFile] # Read UID column
-            UIDs_alreadyProcessed = map(int, UIDs_alreadyProcessed[1:]) # Discard header and convert UIDs to integer values
+            UIDs_alreadyProcessed = list(map(int, UIDs_alreadyProcessed[1:])) # Discard header and convert UIDs to integer values
             log.info("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed))))
             # Trying to set creation date of newest record as starting date for search query - if the file exists but there are no records in it (just the headers), it will skip
             try:
+                outputFile.seek(0) # Return to beginning of file. Otherwise the next line will always throw an exception
                 mindate = datetime.strptime(outputFile.readlines()[-1].split('\t')[5], '%Y-%m-%d')
             except:
                 log.info("Could not read newest date from existing data.")
