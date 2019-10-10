@@ -134,7 +134,7 @@ def getEntryInfo(uid):
     out, err = esummary.communicate()
 
   # STEP 2. Parse out the relevant info from XML-formatted record summary
-    # No need to add UID as a separate field here since it will be added by pandas later
+    # No need to add UID as a separate field here since it will be added by pandas as an index later
     root = ET.fromstring(out)
     seqDaten = root.find("GBSeq")
     fields = []
@@ -191,27 +191,26 @@ def main(outfn, query):
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
   # STEP 2. Check if output file already exists, read existing UIDs
+    UIDs_alreadyProcessed = []
     if os.path.isfile(outfn):
-        UIDs_alreadyProcessed = []
         with open(outfn, "r") as outputFile:
             UIDs_alreadyProcessed = [row.split('\t')[0] for row in outputFile] # Read UID column
-            UIDs_alreadyProcessed = set(map(int, UIDs_alreadyProcessed[1:])) # Discard header and convert UIDs to integer values
+            UIDs_alreadyProcessed = map(int, UIDs_alreadyProcessed[1:]) # Discard header and convert UIDs to integer values
             log.info(("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed)))))
     else:
-        UIDs_alreadyProcessed = set()
         with open(outfn, "w") as outputFile:
             outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\n")
             log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
 
   # STEP 3. Get all existing UIDs and calculate which to be processed
-    UIDs_allExisting = set(getQueriedUIDs(query))
+    UIDs_allExisting = getQueriedUIDs(query)
     log.info(("Number of unique UIDs currently on NCBI: `%s`" % (str(len(UIDs_allExisting)))))
 
-    UIDs_notYetProcessed = set()
+    UIDs_notYetProcessed = []
     if len(UIDs_alreadyProcessed) > 0:
         plastidTable = pd.read_csv(outfn, sep="\t")
         try:
-            UIDs_notYetProcessed = UIDs_allExisting - UIDs_alreadyProcessed
+            UIDs_notYetProcessed = [uid for uid in UIDs_allExisting if uid not in UIDs_alreadyProcessed]
         except Exception as e:
             log.info(("Calculation of complement set not successful:\n%s" % (e.message)))
     else:
@@ -224,14 +223,14 @@ def main(outfn, query):
       # Load format of the summary file
         outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
       # Append to outfile
-        blacklist = set()
+        blacklist = []
         with open(outfn, "a") as outputFile:
             for uid in UIDs_notYetProcessed:
                 log.info(("Reading and parsing UID %s, writing to %s" % (str(uid), str(outfn))))
 
                 entry, origseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
                 if origseq:
-                    blacklist.add(origseq)
+                    blacklist.append(origseq)
                 outputHandle.loc[uid] = entry
                 outputHandle.to_csv(outputFile, sep='\t', header=False)
                 outputHandle.drop([uid], inplace=True)
@@ -240,17 +239,18 @@ def main(outfn, query):
   ### TO DO: Read in the entire outputFile again and loop through the blacklist tuples. For every tuple, see if both (!) the REFSEQ accession number as well as the regular accession number are in the outFile. If yes, remove the line of the the regular accession number because it is a duplicate of the REFSEQ accession number line.
     # -> don't need to check if both numbers are in outFile. blacklist will only contain the regular accession number if the RefSeq accession was just processed (i.e. both numbers are in the outFile)
     # -> in case the regular number is NOT in the outFile, nothing needs to be done.
-        outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-        for entry in blacklist:
-            # Attempting to drop regular duplicate. If the duplicate doesn't exist, nothing happens (except for a log message)
-            try:
-                outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == entry].index, inplace=True)
-                log.info("Removed duplicate %s." % entry)
-            except:
-                log.info("Could not find accession %s when trying to remove it." % str(entry))
-        with open(outfn, "w") as outputFile:
-            # Replace existing outputFile content with updated list
-            outputHandle.to_csv(outputFile, sep='\t', header=True)
+        if blacklist:
+            outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
+            for entry in blacklist:
+                # Attempting to drop regular duplicate. If the duplicate doesn't exist, nothing happens (except for a log message)
+                try:
+                    outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == entry].index, inplace=True)
+                    log.info("Removed duplicate %s." % entry)
+                except:
+                    log.info("Could not find accession %s when trying to remove it." % str(entry))
+            with open(outfn, "w") as outputFile:
+                # Replace existing outputFile content with updated list
+                outputHandle.to_csv(outputFile, sep='\t', header=True)
 
 
 ########
