@@ -63,7 +63,7 @@ NOTES:
 import xml.etree.ElementTree as ET
 import os.path, subprocess, calendar
 import pandas as pd
-import argparse, sys
+import argparse, sys, datetime
 import coloredlogs, logging
 
 ###############
@@ -86,22 +86,36 @@ import ipdb
 # FUNCTIONS #
 #############
 
-def getQueriedUIDs(query):
+def getQueriedUIDs(query, mindate):
     '''
     Gets a list of all UIDs found by the search query via ESearch and EFetch.
 
     Args:
         query (str): a string that specifies the query term for NCBI
-
+        mindate (date): a date that specifies the beginning of the date range from which to fetch records
     Returns:
         A list of UIDs as integers that is returned by the query.
     '''
 
   # STEP 1. Get list of UIDs
-    esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-query', query]
-    esearch = subprocess.Popen(esearchargs, stdout=subprocess.PIPE)
+    if mindate:
+        # TO DO: resolve issue around choice of mindate/maxdate:
+        # Assuming maxdate = date.now() (date at which the script is run):
+        # if mindate = newest_date (in table) it will fetch records that already exist in the table
+            # -> since there is a very slight chance that refseq and original were both created on the same day it will add the original on the next run but won't remove it since the refseq that adds the original to the blacklist won't be processed
+        # if mindate = newest_date+1 (day after newest date) it will skip records that were created on newest_date but after the script ran.
+        # Possible solutions:
+            # Rewrite blacklist creation so it parses ALL existing records in the table for refseqs (not just the ones that are added by the current script run), then removes the originals
+                # -> decreases performance (maybe negligible?)
+            # Set maxdate = date.now()-1 (day before the script is run) and mindate = newest_date+1 (day after newest_date)
+                # -> no risk of getting existing entries or skipping entries
+                # -> script does not fetch the very newest records that were added at the date of execution (is working with 1 day old data detrimental?)
 
-    ### TO DO: Due to the date sorting in the esearchargs, the UIDs are sorted with the newest first. However, we want the oldest first. This could be done after esearch or after efetch, but may have different effects!
+        esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-mindate', mindate.strftime("%Y/%m/%d"), '-maxdate', date.today().strftime("%Y/%m/%d"), '-query', query]
+    else:
+        esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-query', query]
+
+    esearch = subprocess.Popen(esearchargs, stdout=subprocess.PIPE)
 
     efetchargs = ["efetch", "-db", "nucleotide", "-format", "uid"]
     efetch = subprocess.Popen(efetchargs, stdin=esearch.stdout, stdout=subprocess.PIPE)
@@ -192,18 +206,24 @@ def main(outfn, query):
 
   # STEP 2. Check if output file already exists, read existing UIDs
     UIDs_alreadyProcessed = []
+    mindate = None
     if os.path.isfile(outfn):
         with open(outfn, "r") as outputFile:
             UIDs_alreadyProcessed = [row.split('\t')[0] for row in outputFile] # Read UID column
             UIDs_alreadyProcessed = map(int, UIDs_alreadyProcessed[1:]) # Discard header and convert UIDs to integer values
-            log.info(("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed)))))
+            log.info("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed))))
+            # Trying to set creation date of newest record as starting date for search query - if the file exists but there are no records in it (just the headers), it will skip
+            try:
+                mindate = datetime.strptime(outputFile.readlines()[-1].split('\t')[5], '%Y-%m-%d')
+            except:
+                log.info("Could not read newest date from existing data.")
     else:
         with open(outfn, "w") as outputFile:
             outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\n")
             log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
 
   # STEP 3. Get all existing UIDs and calculate which to be processed
-    UIDs_allExisting = getQueriedUIDs(query)
+    UIDs_allExisting = getQueriedUIDs(query, mindate)
     log.info(("Number of unique UIDs currently on NCBI: `%s`" % (str(len(UIDs_allExisting)))))
 
     UIDs_notYetProcessed = []
