@@ -179,8 +179,8 @@ def getEntryInfo(uid):
             citation = ref.find("GBReference_journal").text
             authors = ref.find("GBReference_authors").findall("GBAuthor")
             for author in authors:
-                authstring = authstring + author.text.replace(","," ") + ", " #Not sure if this does what it is supposed to do? -> Testing
-                #authstring = authstring[:-2]
+                authstring = authstring + author.text + ","
+            authstring = authstring[:-2]
             break
     fields.append(authstring)
     fields.append(title)
