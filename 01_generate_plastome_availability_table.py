@@ -214,8 +214,10 @@ def main(outfn, query):
   # STEP 4. Set up output handle, obtain info from new UIDs, and save them as lines in output file.
     if len(UIDs_notYetProcessed) > 0:
       # Load format of the summary file
-        ipdb.set_trace()
-        outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
+        try:
+            outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
+        except:
+            outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
       # Append to outfile, but also save duplicate ones to blacklist
         blacklist = []
         with open(outfn, "a") as outputFile:
