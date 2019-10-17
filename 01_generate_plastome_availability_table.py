@@ -19,6 +19,8 @@ OBJECTIVE:
 
 TO DO:
 
+    * Please make the blacklist an actual output file (instead of a list only in memory) to which the tuples (refseq, duplseq) are appended as indivdual lines as they are identified by getEntryInfo(). Hence, a cumulative blacklist file would be generated next to the actual output file. In short, this cumulative blacklist would contain the information which refseq accession number corresponds to which duplicate accession number. Step 5 of main() shall then read the entire blacklist from file, iterate over all lines, and drop the duplseqs from outputHandle. This will be somewhat redundant for many blacklist entires in a repeated script execution, but has several advantanges. For example, it is unlikely that duplseqs will ever remain in the outputHandle (even if the script crashes) because the blacklist can no longer be lost during a script crash. See lines 217, 230, 240 for TO DO markers.
+
     * Once the script works well, let us parse the date of the oldest existing UID (from the already existing output file) and limit the esearch to searching NCBI for records only after that date (use esearch option "-mindate"; see "esearch -h" for more info).
 
 DESIGN:
@@ -44,7 +46,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
            'in NCBI GenBank'
-__version__ = '2019.10.17.1400'
+__version__ = '2019.10.17.1800'
 
 #############
 # DEBUGGING #
@@ -80,6 +82,10 @@ def getQueriedUIDs(query, mindate):
             # Set maxdate = date.now()-1 (day before the script is run) and mindate = newest_date+1 (day after newest_date)
                 # -> no risk of getting existing entries or skipping entries
                 # -> script does not fetch the very newest records that were added at the date of execution (is working with 1 day old data detrimental?)
+
+
+        # Answer by MG: You are making a very good point! I would rather err on the side of poor performance and have a cumulative blacklist output file that is evaluated in its entirety every time the script is executed. That way we don't have to deal with a maxdate, which would only make things more complicated.
+        
 
         esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-mindate', mindate.strftime("%Y/%m/%d"), '-maxdate', date.today().strftime("%Y/%m/%d"), '-query', query]
     else:
@@ -212,6 +218,7 @@ def main(outfn, query):
 
 
   # STEP 4. Set up output handle, obtain info from new UIDs, and save them as lines in output file.
+    blacklist = [] ## TO DO: Please make its output file via "with open"
     if len(UIDs_notYetProcessed) > 0:
       # Load format of the summary file
         try:
@@ -219,30 +226,31 @@ def main(outfn, query):
         except:
             outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
       # Append to outfile, but also save duplicate ones to blacklist
-        blacklist = []
         with open(outfn, "a") as outputFile:
             for uid in UIDs_notYetProcessed:
                 log.info(("Reading and parsing UID `%s`, writing to `%s`." % (str(uid), str(outfn))))
                 parsedUIDdata, refseq, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
                 if duplseq:
-                    blacklist.append((refseq, duplseq))
+                    blacklist.append((refseq, duplseq)) ## TO DO: Please append to blacklist output file
                 outputHandle.loc[uid] = parsedUIDdata
                 outputHandle.to_csv(outputFile, sep='\t', header=False)
                 outputHandle.drop([uid], inplace=True)
+    else:
+        continue
 
 
   # STEP 5. Go through entire list and remove accession numbers that are duplicates of REFSEQs
     # There is no need to check if both the regular accession and the REFSEQ accession are in outFile, because blacklist only contains regular accession numbers if the RefSeq accession was just processed
-        if blacklist:
-            outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-            for (refseq, duplseq) in blacklist:
-                try: # Attempting to drop regular accession duplicate.
-                    outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == duplseq].index, inplace=True)
-                    log.info("Removed accession `%s` from `%s` because it is a duplicate of REFSEQ `%s`." % (duplseq, str(outfn), refseq))
-                except: # If the duplicate doesn't exist, nothing happens (except for a log message)
-                    log.warning("Could not find accession `%s` when trying to remove it." % str(duplseq))
-            with open(outfn, "w") as outputFile:
-                outputHandle.to_csv(outputFile, sep='\t', header=True) # Replace existing outputFile content with updated list
+    if blacklist: ## TO DO: if os.path.isfile(blacklistfn) and sum(1 for line in open(blacklistfn) if line.rstrip())
+        outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
+        for (refseq, duplseq) in blacklist:
+            try: # Attempting to drop regular accession duplicate.
+                outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == duplseq].index, inplace=True)
+                log.info("Removed accession `%s` from `%s` because it is a duplicate of REFSEQ `%s`." % (duplseq, str(outfn), refseq))
+            except: # If the duplicate doesn't exist, nothing happens (except for a log message)
+                log.warning("Could not find accession `%s` when trying to remove it." % str(duplseq))
+        with open(outfn, "w") as outputFile:
+            outputHandle.to_csv(outputFile, sep='\t', header=True) # Replace existing outputFile content with updated list
 
 
 ########
