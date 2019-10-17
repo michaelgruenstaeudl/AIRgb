@@ -15,46 +15,15 @@ OBJECTIVE:
     07. the authors (uppermost AUTHORS line in GB-file),
     08. the name of the publication (uppermost TITLE line in GB-file), and
     09. the full citation of the publication (see uppermost JOURNAL line in GB-file)
-
-    ! Still to do: !
     10. Any note if a REFSEQ accession number exists and to which regular accession number it is equal to.
 
-
 TO DO:
-
-    * The script shall ensure that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If a dual counting is present, the COMMENT line of a GB-file would contain the information which other record the reference sequence is identical to.
 
     * Once the script works well, let us parse the date of the oldest existing UID (from the already existing output file) and limit the esearch to searching NCBI for records only after that date (use esearch option "-mindate"; see "esearch -h" for more info).
 
 DESIGN:
 
     There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
-
-
-NOTES:
-
-    * For testing purposes (i.e., to work only on a handful of records), the start sequence length can be increased to 190000 (`00000190000[SLEN]`).
-
-    * Searches in the sequence databases of NCBI (nucleotide, protein, EST, GSS) allow the usage of [these fields](https://www.ncbi.nlm.nih.gov/books/NBK49540/).
-
-    * The searches automated here can be done manually in a Linux shell:
-    ### Generating uidlist
-    ```
-    esearch -db nucleotide -query \
-    "Magnoliophyta[ORGN] AND \
-    00000100000[SLEN] : 00000200000[SLEN] AND \
-    complete genome[TITLE] AND\
-    (chloroplast[TITLE] OR plastid[TITLE]) \
-    " | efetch -db nucleotide -format uid > uidlist.txt
-    ```
-
-    ### Parsing accession number for each UID
-    ```
-    for i in $(cat uidlist.txt); do
-      ACCN=$(esummary -db nucleotide -id $i | xmllint --xpath 'string(//Caption)' -);
-      echo "$ACCN"
-    done;
-    ```
 '''
 
 #####################
@@ -75,7 +44,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
            'in NCBI GenBank'
-__version__ = '2019.10.09.1330'
+__version__ = '2019.10.17.1400'
 
 #############
 # DEBUGGING #
@@ -115,14 +84,12 @@ def getQueriedUIDs(query, mindate):
         esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-mindate', mindate.strftime("%Y/%m/%d"), '-maxdate', date.today().strftime("%Y/%m/%d"), '-query', query]
     else:
         esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-query', query]
-
     esearch = subprocess.Popen(esearchargs, stdout=subprocess.PIPE)
-
     efetchargs = ["efetch", "-db", "nucleotide", "-format", "uid"]
     efetch = subprocess.Popen(efetchargs, stdin=esearch.stdout, stdout=subprocess.PIPE)
     out, err = efetch.communicate()
-
     return list(map(int, out.splitlines()))[::-1]
+
 
 def getEntryInfo(uid):
     '''
@@ -151,21 +118,21 @@ def getEntryInfo(uid):
   # STEP 2. Parse out the relevant info from XML-formatted record summary
     # No need to add UID as a separate field here since it will be added by pandas as an index later
     root = ET.fromstring(out)
-    seqDaten = root.find("GBSeq")
+    uidData = root.find("GBSeq")
     fields = []
-    accession = seqDaten.find("GBSeq_primary-accession").text
+    accession = uidData.find("GBSeq_primary-accession").text
     fields.append(accession)
-    fields.append((seqDaten.find("GBSeq_accession-version").text).split('.')[1])
-    fields.append(seqDaten.find("GBSeq_organism").text)
-    fields.append(seqDaten.find("GBSeq_length").text)
+    fields.append((uidData.find("GBSeq_accession-version").text).split('.')[1])
+    fields.append(uidData.find("GBSeq_organism").text)
+    fields.append(uidData.find("GBSeq_length").text)
 
     # Parse and format the date that the record was first online
     month_map = {"JAN":"01", "FEB":"02", "MAR":"03", "APR":"04", "MAY":"05", "JUN":"06", "JUL":"07", "AUG":"08", "SEP":"09", "OCT":"10", "NOV":"11", "DEC":"12"}
-    create_date = seqDaten.find("GBSeq_create-date").text.split('-')
+    create_date = uidData.find("GBSeq_create-date").text.split('-')
     fields.append(create_date[2] + "-" + month_map[create_date[1]] + "-" + create_date[0])
 
     # Parse all info related to the authors and the publication
-    references = seqDaten.find("GBSeq_references").findall("GBReference")
+    references = uidData.find("GBSeq_references").findall("GBReference")
     authstring = ""
     title = ""
     citation = ""
@@ -188,16 +155,19 @@ def getEntryInfo(uid):
 
     # Parse comment field for RefSeq
     note = ""
-    origseq = None
+    duplseq = None
     if accession[:3] == "NC_":
-        comments = seqDaten.find("GBSeq_comment").text
+        comments = uidData.find("GBSeq_comment").text
         for comment in comments.split(";"):
-            if "PROVISIONAL REFSEQ: This record has not yet been subject to final NCBI review" in comment:
-                origseq = comment.split(" ")[-1][:-1]
-                note = "The reference sequence %s is identical to record %s." % (accession, origseq)
+            keyw1 = "PROVISIONAL REFSEQ: This record has not yet been subject to final NCBI review"
+            keyw2 = "The reference sequence is identical to"
+            if keyw1 in comment or keyw2 in comment:
+                duplseq = comment.split(" ")[-1][:-1]
+                note = "The REFSEQ accession `%s` is identical to accession `%s`." % (accession, duplseq)
     fields.append(note)
 
-    return fields, origseq
+    return fields, accession, duplseq
+
 
 def main(outfn, query):
 
@@ -205,74 +175,72 @@ def main(outfn, query):
     log = logging.getLogger(__name__)
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
-  # STEP 2. Check if output file already exists, read existing UIDs
+
+  # STEP 2. Check if output file already exists, read existing UIDs, infer mindate
     UIDs_alreadyProcessed = []
     mindate = None
-    if os.path.isfile(outfn):
+    if os.path.isfile(outfn) and sum(1 for line in open(outfn) if line.rstrip()) > 1: # If outfile exists and if outfile contains more than a single line (i.e., the title line)
         with open(outfn, "r") as outputFile:
             UIDs_alreadyProcessed = [row.split('\t')[0] for row in outputFile] # Read UID column
             UIDs_alreadyProcessed = list(map(int, UIDs_alreadyProcessed[1:])) # Discard header and convert UIDs to integer values
-            log.info("Summary file `%s` already exists. %s UIDs read." % (str(outfn), str(len(UIDs_alreadyProcessed))))
-            # Trying to set creation date of newest record as starting date for search query - if the file exists but there are no records in it (just the headers), it will skip
-            try:
+            log.info("Summary file `%s` already exists. Number of UIDs read: %s" % (str(outfn), str(len(UIDs_alreadyProcessed))))
+            try: # Trying to set creation date of newest record as starting date for search query. If the file exists but there are no records in it (just the headers), it will skip.
                 outputFile.seek(0) # Return to beginning of file. Otherwise the next line will always throw an exception
                 mindate = datetime.strptime(outputFile.readlines()[-1].split('\t')[5], '%Y-%m-%d')
             except:
-                log.info("Could not read newest date from existing data.")
+                log.error("Could not read newest date from existing summary file.")
+                raise Exception
     else:
         with open(outfn, "w") as outputFile:
-            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\n")
             log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
+            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\n")
+
 
   # STEP 3. Get all existing UIDs and calculate which to be processed
     UIDs_allExisting = getQueriedUIDs(query, mindate)
-    log.info(("Number of unique UIDs currently on NCBI: `%s`" % (str(len(UIDs_allExisting)))))
-
+    log.info(("Number of UIDs on NCBI: %s" % (str(len(UIDs_allExisting)))))
     UIDs_notYetProcessed = []
     if len(UIDs_alreadyProcessed) > 0:
-        plastidTable = pd.read_csv(outfn, sep="\t")
         try:
             UIDs_notYetProcessed = [uid for uid in UIDs_allExisting if uid not in UIDs_alreadyProcessed]
         except Exception as e:
-            log.info(("Calculation of complement set not successful:\n%s" % (e.message)))
+            log.error(("Calculation of complement set of UIDs not successful: %s" % (e.message)))
+            raise Exception
     else:
         UIDs_notYetProcessed = UIDs_allExisting
+    log.info(("Number of UIDs to be processed: %s" % (str(len(UIDs_notYetProcessed)))))
 
-    log.info(("Number of UIDs to be processed: `%s`" % (str(len(UIDs_notYetProcessed)))))
 
-  # STEP 4. Obtain info from new UIDs and save as lines in output file.
+  # STEP 4. Set up output handle, obtain info from new UIDs, and save them as lines in output file.
     if len(UIDs_notYetProcessed) > 0:
       # Load format of the summary file
+        ipdb.set_trace()
         outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
-      # Append to outfile
+      # Append to outfile, but also save duplicate ones to blacklist
         blacklist = []
         with open(outfn, "a") as outputFile:
             for uid in UIDs_notYetProcessed:
-                log.info(("Reading and parsing UID %s, writing to %s" % (str(uid), str(outfn))))
-
-                entry, origseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
-                if origseq:
-                    blacklist.append(origseq)
-                outputHandle.loc[uid] = entry
+                log.info(("Reading and parsing UID `%s`, writing to `%s`." % (str(uid), str(outfn))))
+                parsedUIDdata, accid, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
+                if duplseq:
+                    blacklist.append((accid, duplseq))
+                outputHandle.loc[uid] = parsedUIDdata
                 outputHandle.to_csv(outputFile, sep='\t', header=False)
                 outputHandle.drop([uid], inplace=True)
 
-  # STEP 5. Go through entire list and remove REFSEQ/regular duplicates
-  ### TO DO: Read in the entire outputFile again and loop through the blacklist tuples. For every tuple, see if both (!) the REFSEQ accession number as well as the regular accession number are in the outFile. If yes, remove the line of the the regular accession number because it is a duplicate of the REFSEQ accession number line.
-    # -> don't need to check if both numbers are in outFile. blacklist will only contain the regular accession number if the RefSeq accession was just processed (i.e. both numbers are in the outFile)
-    # -> in case the regular number is NOT in the outFile, nothing needs to be done.
+
+  # STEP 5. Go through entire list and remove accession numbers that are duplicates of REFSEQs
+    # There is no need to check if both the regular accession and the REFSEQ accession are in outFile, because blacklist only contains regular accession numbers if the RefSeq accession was just processed
         if blacklist:
             outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-            for entry in blacklist:
-                # Attempting to drop regular duplicate. If the duplicate doesn't exist, nothing happens (except for a log message)
-                try:
-                    outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == entry].index, inplace=True)
-                    log.info("Removed duplicate %s." % entry)
-                except:
-                    log.info("Could not find accession %s when trying to remove it." % str(entry))
+            for (accession, duplseq) in blacklist:
+                try: # Attempting to drop regular accession duplicate.
+                    outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == duplseq].index, inplace=True)
+                    log.info("Removed accession `%s` from `%s` because it is a duplicate of REFSEQ `%s`." % (duplseq, str(outfn), accid))
+                except: # If the duplicate doesn't exist, nothing happens (except for a log message)
+                    log.warning("Could not find accession `%s` when trying to remove it." % str(duplseq))
             with open(outfn, "w") as outputFile:
-                # Replace existing outputFile content with updated list
-                outputHandle.to_csv(outputFile, sep='\t', header=True)
+                outputHandle.to_csv(outputFile, sep='\t', header=True) # Replace existing outputFile content with updated list
 
 
 ########
