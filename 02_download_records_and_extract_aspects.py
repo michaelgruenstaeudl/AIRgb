@@ -1,4 +1,4 @@
-IRa_feat.extract(rec).seq#!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
@@ -176,7 +176,7 @@ def getInvertedRepeats(rec):
 
 # Writes start and end positions of the given SeqFeature objects as well as the sequences' lengths to filename
 def writeIRpositions(filename, ira_feat, irb_feat):
-    with open(filename) as outfile:
+    with open(filename, "w") as outfile:
         if ira_feat:
             outfile.write("A:" + str(int(ira_feat.location.start)) + "\t" + str(int(ira_feat.location.end)) + "\t" + str(abs(int(ira_feat.location.start) - int(ira_feat.location.end))) + "\n")
         if irb_feat:
@@ -217,7 +217,7 @@ def main(args):
         IRa_feat = None
         IRbRC_feat = None
         IRa_feat, IRbRC_feat = getInvertedRepeats(rec)
-        writeIRpositions(os.path.join(outputFolder, str(rec.id) + "_irpos"), IRa_feat, IRbRC_feat)
+        writeIRpositions(os.path.join(outputFolder, str(rec.id).split('.')[0] + "_irpos"), IRa_feat, IRbRC_feat)
         if not (IRa_feat is None or IRbRC_feat is None):
             log.info("Found both inverted repeats for accession " + str(accession))
             with open(os.path.join(outputFolder, accession + "_IRa.fasta"),"w") as IRa_fasta:

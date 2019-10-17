@@ -104,6 +104,7 @@ def main(args):
                     else:
                         raise Exception("Unexpected line in position file.")
         # Calculate IR positions and length
+        # TODO: need to execute makeblastdb before blastn can operate
         blastargs = ["blastn", "-db", str(accession) + ".fasta", "-query", accession + ".fasta", "-outfmt", "7", "-strand", "both"]
         blast_subp = subprocess.Popen(blastargs, stdout=subprocess.PIPE)
         awkargs = ["awk", "{if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}"]
