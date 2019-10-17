@@ -92,7 +92,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2019.09.25.1630'
+__version__ = '2019.10.17.1530'
 
 #############
 # DEBUGGING #
@@ -112,7 +112,7 @@ def fetchGBflatfile(outdir, id):
         efetch.wait()
     return os.path.join(outdir,str(id) + ".gb")
 
-# Identifies and returns IRa and IRb as SeqRecord objects
+# Identifies and returns IRa and IRb as SeqFeature objects
 def getInvertedRepeats(rec):
     # Hierarchy of preference for identifying inverted repeats:
     # 1. feature is of type "repeat_region" AND
@@ -136,23 +136,23 @@ def getInvertedRepeats(rec):
             if repeat.qualifiers["rpt_type"][0].lower() == "inverted":
                 if "note" in repeat.qualifiers:
                     if "ira" in repeat.qualifiers["note"][0].lower() or "inverted repeat a" in repeat.qualifiers["note"][0].lower():
-                        IRa = repeat.extract(rec)
+                        IRa = repeat
                     elif "irb" in repeat.qualifiers["note"][0].lower() or "inverted repeat b" in repeat.qualifiers["note"][0].lower():
-                        IRb = repeat.extract(rec)
+                        IRb = repeat
                 elif IRa is None:
-                    IRa = repeat.extract(rec)
+                    IRa = repeat
                 elif IRb is None:
-                    IRb = repeat.extract(rec)
+                    IRb = repeat
         elif "note" in repeat.qualifiers:
             if "ira" in repeat.qualifiers["note"][0].lower() or "inverted repeat a" in repeat.qualifiers["note"][0].lower():
-                IRa = repeat.extract(rec)
+                IRa = repeat
             elif "irb" in repeat.qualifiers["note"][0].lower() or "inverted repeat b" in repeat.qualifiers["note"][0].lower():
-                IRb = repeat.extract(rec)
+                IRb = repeat
             elif ("inverted" in repeat.qualifiers["note"][0].lower() and "repeat" in repeat.qualifiers["note"][0].lower()) or "IR" in misc_feature.qualifiers["note"][0]:
                 if IRa is None:
-                    IRa = repeat.extract(rec)
+                    IRa = repeat
                 elif IRb is None:
-                    IRb = repeat.extract(rec)
+                    IRb = repeat
 
     # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier
     # If one inverted repeat was tagged as repeat_region, the other probably would have been tagged the same
@@ -160,20 +160,27 @@ def getInvertedRepeats(rec):
         all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature']
         for misc_feature in all_misc_features:
             if "ira" in misc_feature.qualifiers["note"][0].lower() or "inverted repeat a" in misc_feature.qualifiers["note"][0].lower():
-                IRa = misc_feature.extract(rec)
+                IRa = misc_feature
             elif "irb" in misc_feature.qualifiers["note"][0].lower() or "inverted repeat b" in misc_feature.qualifiers["note"][0].lower():
-                IRb = misc_feature.extract(rec)
+                IRb = misc_feature
             elif ("inverted" in misc_feature.qualifiers["note"][0].lower() and "repeat" in misc_feature.qualifiers["note"][0].lower()) or "IR" in misc_feature.qualifiers["note"][0]:
                 if IRa is None:
-                    IRa = misc_feature.extract(rec)
+                    IRa = misc_feature
                 elif IRb is None:
-                    IRb = misc_feature.extract(rec)
+                    IRb = misc_feature
 
     # Biopython automatically seems to extract IRb in a reverse complement fashion
     # This was true for a record (NC_043815) that had two "repeat_region" features with "rpt_type=inverted", one of which had its sequence marked "complement"
     # Will have to test if the behaviour changes for misc_feature records or records where rpt_type=inverted is omitted
     return IRa, IRb
 
+# Writes start and end positions of the given SeqFeature objects as well as the sequences' lengths to filename
+def writeIRpositions(filename, ira_feat, irb_feat):
+    with open(filename, "w") as outfile:
+        if ira_feat:
+            outfile.write("A:" + str(int(ira_feat.location.start)) + "\t" + str(int(ira_feat.location.end)) + "\t" + str(abs(int(ira_feat.location.start) - int(ira_feat.location.end))) + "\n")
+        if irb_feat:
+            outfile.write("B:" + str(int(irb_feat.location.start)) + "\t" + str(int(irb_feat.location.end)) + "\t" + str(abs(int(irb_feat.location.start) - int(irb_feat.location.end))))
 
 
 def main(args):
@@ -206,28 +213,30 @@ def main(args):
             fastaOut.write(">" + str(rec.id) + " " + str(rec.description) + "\n")
             fastaOut.write(str(rec.seq) + "\n")
         # STEP 3.3. Extract inverted repeat sequences from full sequence and write them in FASTA format
-        IRa_seq = None
-        IRbRC_seq = None
-        IRa_seq, IRbRC_seq = getInvertedRepeats(rec)
-        if not (IRa_seq is None or IRbRC_seq is None):
+        #           Additionally, write the position of the inverted repeats if there are any
+        IRa_feat = None
+        IRbRC_feat = None
+        IRa_feat, IRbRC_feat = getInvertedRepeats(rec)
+        writeIRpositions(os.path.join(outputFolder, str(rec.id).split('.')[0] + "_irpos"), IRa_feat, IRbRC_feat)
+        if not (IRa_feat is None or IRbRC_feat is None):
             log.info("Found both inverted repeats for accession " + str(accession))
             with open(os.path.join(outputFolder, accession + "_IRa.fasta"),"w") as IRa_fasta:
                 IRa_fasta.write(">" + str(accession) + "_IRa\n")
-                IRa_fasta.write(str(IRa_seq.seq) + "\n")
+                IRa_fasta.write(str(IRa_feat.extract(rec).seq) + "\n")
             with open(os.path.join(outputFolder, accession + "_IRb_revComp.fasta"),"w") as IRb_fasta:
                 IRb_fasta.write(">" + str(accession) + "_IRb_revComp\n")
-                IRb_fasta.write(str(IRbRC_seq.seq) + "\n")
-        elif not IRa_seq is None and IRbRC_seq is None:
+                IRb_fasta.write(str(IRbRC_feat.extract(rec).seq) + "\n")
+        elif not IRa_feat is None and IRbRC_feat is None:
             log.info("Only one inverted repeat found for accession " + str(accession))
             with open(os.path.join(outputFolder, accession + "_IRa.fasta"),"w") as IRa_fasta:
                 IRa_fasta.write(">" + str(accession) + "_IRa\n")
-                IRa_fasta.write(str(IRa_seq.seq) + "\n")
-        elif IRa_seq is None and not IRbRC_seq is None:
+                IRa_fasta.write(str(IRa_feat.extract(rec).seq) + "\n")
+        elif IRa_feat is None and not IRbRC_feat is None:
             log.info("Only one inverted repeat found for accession " + str(accession))
-            IRbRC_rec = SeqRecord(IRbRC_seq, str(accession) +'_IRb_revComp', '', '')
+            IRbRC_rec = SeqRecord(IRbRC_feat, str(accession) +'_IRb_revComp', '', '')
             with open(os.path.join(outputFolder, accession + "_IRb_revComp.fasta"),"w") as IRb_fasta:
                 IRb_fasta.write(">" + str(accession) + "_IRb_revComp\n")
-                IRb_fasta.write(str(IRbRC_seq.seq) + "\n")
+                IRb_fasta.write(str(IRbRC_feat.extract(rec).seq) + "\n")
         else:
             log.info("No inverted repeats found for accession " + str(accession))
         # STEP 3.4. Bundle and compress accession data

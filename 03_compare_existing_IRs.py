@@ -94,7 +94,10 @@ def main(args):
             if not outfile.readline() == "ACCESSION\tIR_COUNT\tLEN_A\tLEN_B\tLEN_DIFF\tSNP_COUNT\n":
                 raise Exception('Malformed output file!')
 
+    counter = 0
     for archive in archives:
+        counter += 1
+        log.info("Processing accession " + counter + "/" + str(len(archives)))
         # Init values that will be written to table
         accession = os.path.basename(archive).split('.')[0]
         ir_count = 0
@@ -206,6 +209,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of archive file paths containing inverted repeat FASTA files")
-    parser.add_argument("-outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
+    parser.add_argument("--outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
     args = parser.parse_args()
     main(args)
