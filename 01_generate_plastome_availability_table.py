@@ -221,9 +221,9 @@ def main(outfn, query):
         with open(outfn, "a") as outputFile:
             for uid in UIDs_notYetProcessed:
                 log.info(("Reading and parsing UID `%s`, writing to `%s`." % (str(uid), str(outfn))))
-                parsedUIDdata, accid, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
+                parsedUIDdata, refseq, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
                 if duplseq:
-                    blacklist.append((accid, duplseq))
+                    blacklist.append((refseq, duplseq))
                 outputHandle.loc[uid] = parsedUIDdata
                 outputHandle.to_csv(outputFile, sep='\t', header=False)
                 outputHandle.drop([uid], inplace=True)
@@ -233,10 +233,10 @@ def main(outfn, query):
     # There is no need to check if both the regular accession and the REFSEQ accession are in outFile, because blacklist only contains regular accession numbers if the RefSeq accession was just processed
         if blacklist:
             outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-            for (accession, duplseq) in blacklist:
+            for (refseq, duplseq) in blacklist:
                 try: # Attempting to drop regular accession duplicate.
                     outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == duplseq].index, inplace=True)
-                    log.info("Removed accession `%s` from `%s` because it is a duplicate of REFSEQ `%s`." % (duplseq, str(outfn), accid))
+                    log.info("Removed accession `%s` from `%s` because it is a duplicate of REFSEQ `%s`." % (duplseq, str(outfn), refseq))
                 except: # If the duplicate doesn't exist, nothing happens (except for a log message)
                     log.warning("Could not find accession `%s` when trying to remove it." % str(duplseq))
             with open(outfn, "w") as outputFile:
