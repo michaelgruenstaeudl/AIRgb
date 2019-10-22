@@ -85,7 +85,7 @@ def getQueriedUIDs(query, mindate):
 
 
         # Answer by MG: You are making a very good point! I would rather err on the side of poor performance and have a cumulative blacklist output file that is evaluated in its entirety every time the script is executed. That way we don't have to deal with a maxdate, which would only make things more complicated.
-        
+
 
         esearchargs = ['esearch', '-db', 'nucleotide', '-sort', '"Date Released"', '-mindate', mindate.strftime("%Y/%m/%d"), '-maxdate', date.today().strftime("%Y/%m/%d"), '-query', query]
     else:
@@ -218,37 +218,40 @@ def main(outfn, query):
 
 
   # STEP 4. Set up output handle, obtain info from new UIDs, and save them as lines in output file.
-    blacklist = [] ## TO DO: Please make its output file via "with open"
+    blacklistfn = os.path.join(os.path.dirname(outfn),"duplicates_" + os.path.basename(outfn))
     if len(UIDs_notYetProcessed) > 0:
       # Load format of the summary file
-        try:
-            outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
-        except:
-            outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
+      # This only throws an exception for me when outfn exists and is completely empty (i.e. not even headers)
+      # if it has headers but is otherwise empty it should work fine
+        outputHandle = pd.read_csv(outfn, nrows=0, sep='\t', index_col=0, encoding='utf-8')
       # Append to outfile, but also save duplicate ones to blacklist
         with open(outfn, "a") as outputFile:
             for uid in UIDs_notYetProcessed:
                 log.info(("Reading and parsing UID `%s`, writing to `%s`." % (str(uid), str(outfn))))
-                parsedUIDdata, refseq, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
-                if duplseq:
-                    blacklist.append((refseq, duplseq)) ## TO DO: Please append to blacklist output file
+                # Parse data
+                parsedUIDdata, accession, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
+                # Write data to summary file
                 outputHandle.loc[uid] = parsedUIDdata
                 outputHandle.to_csv(outputFile, sep='\t', header=False)
                 outputHandle.drop([uid], inplace=True)
-    else:
-        continue
-
+                # Write refseq and duplseq to blacklist file
+                if duplseq:
+                    with open(blacklistfn, "a") as blfile:
+                        blfile.write("%s\t%s\n" % (str(accession), str(duplseq)))
 
   # STEP 5. Go through entire list and remove accession numbers that are duplicates of REFSEQs
-    # There is no need to check if both the regular accession and the REFSEQ accession are in outFile, because blacklist only contains regular accession numbers if the RefSeq accession was just processed
-    if blacklist: ## TO DO: if os.path.isfile(blacklistfn) and sum(1 for line in open(blacklistfn) if line.rstrip())
+    if os.path.isfile(blacklistfn) and sum(1 for line in open(blacklistfn) if line.rstrip()) > 0:
+        with open(blacklistfn, "r") as blfile:
+            blacklist = [line.split("\t")[1].rstrip() for line in blfile.readlines()]
+            print(blacklist)
         outputHandle = pd.read_csv(outfn, sep='\t', index_col=0, encoding='utf-8')
-        for (refseq, duplseq) in blacklist:
+
+        for duplseq in blacklist:
             try: # Attempting to drop regular accession duplicate.
                 outputHandle.drop(outputHandle.loc[outputHandle['ACCESSION'] == duplseq].index, inplace=True)
-                log.info("Removed accession `%s` from `%s` because it is a duplicate of REFSEQ `%s`." % (duplseq, str(outfn), refseq))
+                log.info("Removed accession `%s` from `%s` because it is a duplicate of REFSEQ `%s`." % (duplseq, str(os.path.basename(outfn)), accession))
             except: # If the duplicate doesn't exist, nothing happens (except for a log message)
-                log.warning("Could not find accession `%s` when trying to remove it." % str(duplseq))
+                log.info("Could not find accession `%s` when trying to remove it." % str(duplseq)) # Reverted this to log level "info" since there is nothing wrong with a duplicate not existing (anymore)
         with open(outfn, "w") as outputFile:
             outputHandle.to_csv(outputFile, sep='\t', header=True) # Replace existing outputFile content with updated list
 
@@ -262,4 +265,4 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
     parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000180000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])", help="(Optional) Entrez query that will replace the standard query")
     args = parser.parse_args()
-    main(args.outfn, args.query)
+    main(os.path.abspath(args.outfn), args.query)
