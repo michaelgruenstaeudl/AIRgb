@@ -85,6 +85,7 @@ from Bio.SeqRecord import SeqRecord
 import xml.etree.ElementTree as ET
 import os, subprocess, argparse
 import tarfile, coloredlogs, logging, time
+
 ###############
 # AUTHOR INFO #
 ###############
@@ -105,6 +106,9 @@ import ipdb
 #############
 
 # Saves fetched GenBank flatfile with accession number "id" to outdir and returns the path and filename of the file
+
+## TO DO: Implement raising an exception if a record is not successfully downloaded
+
 def fetchGBflatfile(outdir, id):
     with open(os.path.join(outdir,str(id) + ".gb"), "w") as gbFile:
         efetchargs = ["efetch", "-db", "nucleotide", "-format", "gb", "-id", str(id)]
@@ -131,6 +135,8 @@ def getInvertedRepeats(rec):
     IRb = None
     # Checking repeat_regions
     all_repeats = [feature for feature in rec.features if feature.type=='repeat_region']
+    ## TO DO: Produce warning via logger if "all_repeats" were empty (very rare but theoretically possible!)
+
     for repeat in all_repeats:
         if "rpt_type" in repeat.qualifiers:
             if repeat.qualifiers["rpt_type"][0].lower() == "inverted":
@@ -174,13 +180,18 @@ def getInvertedRepeats(rec):
     # Will have to test if the behaviour changes for misc_feature records or records where rpt_type=inverted is omitted
     return IRa, IRb
 
-# Writes start and end positions of the given SeqFeature objects as well as the sequences' lengths to filename
-def writeIRpositions(filename, ira_feat, irb_feat):
+# Writes the reported start and end positions of the given SeqFeature objects as well as the sequences' lengths to filename
+def writeReportedIRpos(filename, ira_feat, irb_feat):
     with open(filename, "w") as outfile:
         if ira_feat:
             outfile.write("A:" + str(int(ira_feat.location.start)) + "\t" + str(int(ira_feat.location.end)) + "\t" + str(abs(int(ira_feat.location.start) - int(ira_feat.location.end))) + "\n")
+            
+        ## TO DO: if not ira_feat: write NA (or None?) for each value
+
         if irb_feat:
             outfile.write("B:" + str(int(irb_feat.location.start)) + "\t" + str(int(irb_feat.location.end)) + "\t" + str(abs(int(irb_feat.location.start) - int(irb_feat.location.end))))
+
+        ## TO DO: if not irb_feat: write NA (or None?) for each value
 
 
 def main(args):
@@ -192,7 +203,9 @@ def main(args):
   # STEP 2. Read in accession numbers (if necessary)
     accNumbers = []
     if args.infile:
-        with open(args.infile,"r") as infile:
+        with open(args.infile, "r") as infile:
+            
+            ## TO DO: Parsing needs to be improved! Only the second column of the infile (disregarding the title line) is to be used!
             accNumbers = infile.read().splitlines()
     else:
         accNumbers = args.list
@@ -200,24 +213,41 @@ def main(args):
   # STEP 3. Loop though accession numbers and save the relevant data
     for accession in accNumbers:
         # Create output folder(s) for accession data if it does not exist yet.
-        outputFolder = os.path.join(args.outdir,str(accession))
+        outputFolder = os.path.join(args.outdir, str(accession))
         if not os.path.exists(outputFolder):
             os.makedirs(outputFolder)
+
+
         # STEP 3.1. Fetch GenBank flatfile for accession and save it
         log.info("Saving GenBank flat file for accession " + str(accession))
+
+        ## TO DO: Implement catching an exception from fetchGBflatfile if a record is not successfully downloaded
         gbFn = fetchGBflatfile(outputFolder, accession)
+
+        ## TO DO: Implement catching an exception from SeqIO.read if a record is not successfully read (e.g., because it is malformed)
         rec = SeqIO.read(gbFn, "genbank")
-        # STEP 3.2. Write sequence in FASTA format
+
+
+        # STEP 3.2. Write full sequence in FASTA format
         log.info("Writing sequence as FASTA for accession " + str(accession))
-        with open(os.path.join(outputFolder, accession + ".fasta"),"w") as fastaOut:
-            fastaOut.write(">" + str(rec.id) + " " + str(rec.description) + "\n")
+        with open(os.path.join(outputFolder, accession + ".fasta"), "w") as fastaOut:
+            fastaOut.write(">" + str(rec.id) + " " + str(rec.description) + "\n") ## TO DO: Let's replace all whitespaces in the sequence name with underscores
             fastaOut.write(str(rec.seq) + "\n")
-        # STEP 3.3. Extract inverted repeat sequences from full sequence and write them in FASTA format
-        #           Additionally, write the position of the inverted repeats if there are any
+
+
+        # STEP 3.3. Extract the reported IR positions and sequences; write both to file, if present
+        #           Specifically, write the reported IR positions as a table and write IR sequences in FASTA format
         IRa_feat = None
         IRbRC_feat = None
+
+        # Step 3.3.1. Parse reported IR positions
         IRa_feat, IRbRC_feat = getInvertedRepeats(rec)
-        writeIRpositions(os.path.join(outputFolder, str(rec.id).split('.')[0] + "_irpos"), IRa_feat, IRbRC_feat)
+        
+        # Step 3.3.2. Write the reported IR positions as a table
+        writeReportedIRpos(os.path.join(outputFolder, str(rec.id).split('.')[0] + "_ReportedIRpos"), IRa_feat, IRbRC_feat)
+
+        # Step 3.3.3. Write write IR sequences in FASTA format
+        ## TO DO: Move the following lines into their own function, preferentially names "writeReportedIRseqs"
         if not (IRa_feat is None or IRbRC_feat is None):
             log.info("Found both inverted repeats for accession " + str(accession))
             with open(os.path.join(outputFolder, accession + "_IRa.fasta"),"w") as IRa_fasta:
@@ -239,6 +269,8 @@ def main(args):
                 IRb_fasta.write(str(IRbRC_feat.extract(rec).seq) + "\n")
         else:
             log.info("No inverted repeats found for accession " + str(accession))
+
+
         # STEP 3.4. Bundle and compress accession data
         tar = tarfile.open(outputFolder + ".tar.gz", "w:gz")
         tar.add(outputFolder, os.path.basename(outputFolder))
