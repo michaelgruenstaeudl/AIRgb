@@ -58,8 +58,8 @@ def main(args):
     log = logging.getLogger(__name__)
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
-    # STEP 2. Loop though provided archives
-    archives = [os.path.abspath(x) for x in args.input]
+    # STEP 2. Loop though provided folders
+    folders = [os.path.abspath(x) for x in args.input]
     main_dir = os.getcwd()
     # Check if outfile exists, write headers
     # Raise an error if outfile exists but does not begin with the required headers
@@ -72,9 +72,9 @@ def main(args):
             if not outfile.readline() == "ACCESSION\tSTART_A_ORIG\tSTART_A\tLEN_A_ORIG\tLEN_A\tLEN_A_DIFF\tSTART_B_ORIG\tSTART_B\tLEN_B_ORIG\tLEN_B\tLEN_B_DIFF\n":
                 raise Exception('Malformed output file!')
 
-    for archive in archives:
+    for folder in folders:
         # Init values that will be written to table
-        accession = os.path.basename(archive).split('.')[0]
+        accession = os.path.basename(folder)
         start_a_orig = None
         start_b_orig = None
         len_a_orig = 0
@@ -84,28 +84,37 @@ def main(args):
         start_a = None
         start_b = None
 
-        # Extract sequence file from archive
-        tar = tarfile.open(archive, "r:gz")
-        tar.extractall()
-        tar.close()
-        acc_path = os.path.abspath(accession)
         # Change to directory containing sequence files
-        os.chdir(acc_path)
+        os.chdir(folder)
         # Read in original IR start positions and lengths
-        if os.path.isfile(accession + "_irpos"):
-            with open(accession + "_irpos","r") as posfile:
-                for line in posfile.readlines():
-                    if "A:" in line:
-                        start_a_orig = line.split(':')[1].split('\t')[0]
-                        len_a_orig = line.split(':')[1].split('\t')[2]
-                    elif "B:" in line:
-                        start_b_orig = line.split(':')[1].split('\t')[0]
-                        len_b_orig = line.split(':')[1].split('\t')[2]
+        if os.path.isfile(accession + "_ReportedIRpositions.tsv"):
+            with open(accession + "_ReportedIRpositions.tsv","r") as posfile:
+                for line in posfile.readlines()[1::]:
+                    if "IRa:" in line:
+                        try:
+                            start_a_orig = int(line.split(':')[1].split('\t')[1])
+                        except:
+                            start_a_orig = line.split(':')[1].split('\t')[1]
+                        try:
+                            len_a_orig = int(line.split(':')[1].split('\t')[3])
+                        except:
+                            len_a_orig = 0
+                    elif "IRb:" in line:
+                        try:
+                            start_b_orig = int(line.split(':')[1].split('\t')[1])
+                        except:
+                            start_b_orig = line.split(':')[1].split('\t')[1]
+                        try:
+                            len_b_orig = int(line.split(':')[1].split('\t')[3])
+                        except:
+                            len_b_orig = 0
                     else:
                         raise Exception("Unexpected line in position file.")
         # Calculate IR positions and length
-        # TODO: need to execute makeblastdb before blastn can operate
-        blastargs = ["blastn", "-db", str(accession) + ".fasta", "-query", accession + ".fasta", "-outfmt", "7", "-strand", "both"]
+        mkblastargs = ["makeblastdb", "-in", accession + "_completeSeq.fasta", "-parse_seqids", "-title", accession, "-dbtype", "nucl"]
+        mkblastdb_subp = subprocess.Popen(mkblastargs)
+        mkblastdb_subp.wait()
+        blastargs = ["blastn", "-db", str(accession) + "_completeSeq.fasta", "-query", accession + "_completeSeq.fasta", "-outfmt", "7", "-strand", "both"]
         blast_subp = subprocess.Popen(blastargs, stdout=subprocess.PIPE)
         awkargs = ["awk", "{if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}"]
         awk_subp = subprocess.Popen(awkargs, stdin=blast_subp.stdout, stdout=subprocess.PIPE)
@@ -113,20 +122,21 @@ def main(args):
         if len(out.splitlines()) == 2:
             ira_info = out.splitlines()[0].split()
             irb_info = out.splitlines()[1].split()
-            len_a = ira_info[0]
-            len_b = irb_info[0]
-            start_a = ira_info[1]
-            start_b = irb_info[1]
+            len_a = int(ira_info[0])
+            len_b = int(irb_info[0])
+            start_a = int(ira_info[1])
+            start_b = int(irb_info[1])
         else:
-            raise Exception("Inverted repeat count not == 2")
+            log.warning("Could not calculate IRs for accession " + accession + ".")
+            #raise Exception("Inverted repeat count not == 2")
+            len_a = 0
+            len_b = 0
+            start_a = "not identified"
+            start_b = "not identified"
         # Write data to outfn
         with open(outfn, "a") as outfile:
             outfile.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (str(accession), str(start_a_orig), str(start_a), str(len_a_orig), str(len_a), str(abs(len_a - len_a_orig)), str(start_b_orig), str(start_b), str(len_b_orig), str(len_b), str(abs(len_b - len_b_orig))))
         os.chdir(main_dir)
-        # Bundle and compress data
-        tar = tarfile.open(acc_path + ".tar.gz", "w:gz")
-        tar.add(acc_path, os.path.basename(acc_path))
-        tar.close()
 
 
 ########
@@ -136,6 +146,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file")
-    parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of archive file paths containing FASTA files")
+    parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of folder file paths containing FASTA files")
     args = parser.parse_args()
     main(args)
