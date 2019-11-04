@@ -81,8 +81,8 @@ def main(args):
     log = logging.getLogger(__name__)
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
-  # STEP 2. Loop though provided archives
-    archives = [os.path.abspath(x) for x in args.input]
+  # STEP 2. Loop though provided folders
+    folders = [os.path.abspath(x) for x in args.input]
     main_dir = os.getcwd()
     # Check if outfile exists, write headers
     # Raise an error if outfile exists but does not begin with the required headers
@@ -95,23 +95,18 @@ def main(args):
                 raise Exception('Malformed output file!')
 
     counter = 0
-    for archive in archives:
+    for folder in folders:
         counter += 1
-        log.info("Processing accession " + counter + "/" + str(len(archives)))
+        log.info("Processing accession " + str(counter) + "/" + str(len(folders)))
         # Init values that will be written to table
-        accession = os.path.basename(archive).split('.')[0]
+        accession = os.path.basename(folder)
         ir_count = 0
         len_a = None
         len_b = None
         len_diff = None
         snp_count = None
-        # Extract sequence file from archive
-        tar = tarfile.open(archive, "r:gz")
-        tar.extractall()
-        tar.close()
-        acc_path = os.path.abspath(accession)
         # Change to directory containing sequence files
-        os.chdir(acc_path)
+        os.chdir(folder)
         # Check if two IRs exist for this accession
         if os.path.isfile(accession + "_IRa.fasta") and os.path.isfile(accession + "_IRb_revComp.fasta"):
             log.info("Found both IRs for accession " + accession)
@@ -184,11 +179,11 @@ def main(args):
                 cmp_awk.wait()
             with open(accession + ".compare","r") as comparefile:
                 snp_count = len(comparefile.readlines())
-            # Append created files to archive
-            log.info("Archiving generated files.")
-            tar = tarfile.open(archive, "w:gz")
-            tar.add(acc_path, accession)
-            tar.close()
+            # Append created files to folder
+            #log.info("Archiving generated files.")
+            #tar = tarfile.open(folder, "w:gz")
+            #tar.add(acc_path, accession)
+            #tar.close()
         elif os.path.isfile(accession + "_IRa.fasta") ^ os.path.isfile(accession + "_IRb_revComp.fasta"):
             log.info("Missing one IR for accession " + accession + "! Skipping comparison.")
             ir_count = 1
@@ -208,7 +203,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-    parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of archive file paths containing inverted repeat FASTA files")
+    parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of folder file paths containing inverted repeat FASTA files")
     parser.add_argument("--outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
     args = parser.parse_args()
     main(args)
