@@ -165,14 +165,14 @@ def writeReportedIRpos(filename, IRa_feature, IRb_feature):
     with open(filename, "w") as outfile:
         outfile.write("IR\tStart\tEnd\tLength\n")
         if IRa_feature:
-            outfile.write("Reported IRa:" + "\t" + str(int(IRa_feature.location.start)) + "\t" + str(int(IRa_feature.location.end)) + "\t" + str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end))) + "\n")
+            outfile.write("IRa:" + "\t" + str(int(IRa_feature.location.start)) + "\t" + str(int(IRa_feature.location.end)) + "\t" + str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end))) + "\n")
         else:
-            outfile.write("not identified\tnot identified\tnot identified\tnot identified\n")
+            outfile.write("IRa:\tnot identified\tnot identified\tnot identified\n")
 
         if IRb_feature:
-            outfile.write("Reported IRb:" + "\t" + str(int(IRb_feature.location.start)) + "\t" + str(int(IRb_feature.location.end)) + "\t" + str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end))))
+            outfile.write("IRb:" + "\t" + str(int(IRb_feature.location.start)) + "\t" + str(int(IRb_feature.location.end)) + "\t" + str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end))))
         else:
-            outfile.write("not identified\tnot identified\tnot identified\tnot identified\n")
+            outfile.write("IRb:\tnot identified\tnot identified\tnot identified\n")
 
 def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_feature):
     if not (IRa_feature is None or IRbRC_feature is None):
