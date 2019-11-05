@@ -27,7 +27,7 @@ python 02_download_records_and_extract_IRs.py -i testing/$AVAILTABLE -r testing/
 
 ```
 
-<--
+<!--
 ## FULL USAGE
 ```
 #python3 ../PlastomeIntegrityChecks/01_generate_plastome_availability_table.py -o summaries.csv -q "Magnoliophyta[ORGN] AND 00000180000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])"
