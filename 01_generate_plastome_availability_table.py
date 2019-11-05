@@ -17,13 +17,16 @@ OBJECTIVE:
     09. the full citation of the publication (see uppermost JOURNAL line in GB-file)
     10. Any note if a REFSEQ accession number exists and to which regular accession number it is equal to.
 
-TO DO:
+DESIGN:
+    There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
 
+TO DO:
     * Once the script works well, let us parse the date of the oldest existing UID (from the already existing output file) and limit the esearch to searching NCBI for records only after that date (use esearch option "-mindate"; see "esearch -h" for more info).
 
-DESIGN:
+    
+NOTES:
+    * none for now
 
-    There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
 '''
 
 #####################

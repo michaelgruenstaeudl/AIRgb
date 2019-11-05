@@ -13,12 +13,6 @@ OBJECTIVE:
     The downloaded GB record is gzipped and saved in a folder titled "records".
     The other files generated (i.e., the three FASTA files and the table) are saved in a folder called "data" and, within that, their own subfolder (named with the accession number)
 
-TO DO:
-    # Extract the IR sequences; reverse completement the IRb
-    IRa_seq = all_misc_features[0].extract(rec).seq
-    IRbRC_seq = all_misc_features[1].extract(rec).seq.reverse_complement()
-    # Note: The code regarding reverse complementing (or not) is correct, if str(IRa) == str(IRb) for a typical record. (It's the exceptions to this rule that we are curious about in this research project.)
-
 DESIGN:
     * Like in the other scripts, the processing of the individual records is conducted one by one, not all simultaneously.
 
@@ -26,8 +20,11 @@ DESIGN:
 
     * The output files of each record shall be bundled together as a record-specific gzip file.
 
+TO DO:
+    * nothing for now
+    
 NOTES:
-    * Foo bar baz
+    * none for now
 '''
 
 #####################
@@ -46,7 +43,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2019.10.31.1600'
+__version__ = '2019.11.05.1200'
 
 #############
 # DEBUGGING #
@@ -69,15 +66,15 @@ def fetchGBflatfile(outdir, id, log):
         efetch = subprocess.Popen(efetchargs, stdout=outfile)
         efetch.wait()
     if not os.path.isfile(gbFile):
-        raise Exception("Error retrieving GB file of id " + str(id))
+        raise Exception("Error retrieving GenBank flatfile of accession " + str(id))
     elif os.path.getsize(gbFile) == 0:
-        raise Exception("Error retrieving GB file of id " + str(id))
+        raise Exception("Error retrieving GenBank flatfile of accession " + str(id))
 
     return gbFile
 
 
 def getInvertedRepeats(rec):
-    ''' Identifies the IR regions from a GB record and returns IRa and
+    ''' Identifies the IR regions from a GenBank record and returns IRa and
         IRb as SeqFeature objects '''
     # Hierarchy of preference for identifying inverted repeats:
     # 1. feature is of type "repeat_region" AND
@@ -95,12 +92,8 @@ def getInvertedRepeats(rec):
     IRa = None
     IRb = None
 
-    # Parsing out all repeat_regions of record
+    # STEP 1. Parsing out all repeat_regions, loop through them, and attempt to identify IRs
     all_repeat_features = [feature for feature in rec.features if feature.type=='repeat_region']
-    ## TO DO: Produce info via logger and raise exception if "all_repeat_features" were empty (very rare but theoretically possible!)
-    # TM: I assume you meant if all features are empty, not just the repeat features? Since we're also looking at misc features we would skip that if we raised an exception here
-
-    # Looping through repeat regions and attempting to identify IRs
     for repeat_feature in all_repeat_features:
         if "rpt_type" in repeat_feature.qualifiers:
             if repeat_feature.qualifiers["rpt_type"][0].lower() == "inverted":
@@ -116,9 +109,9 @@ def getInvertedRepeats(rec):
                     elif IRb is None:
                         IRb = repeat_feature
                 # If the "note" qualifier does not exist, assign the repeat feature to one of the variables that hasn't been initialized yet.
-                elif IRa is None:  ## TO DO: Does this line represent "if qualifier note is empty"? TM: Yes, but also checks which of the IR objects hasn't been assigned a feature yet. Since I don't know how to identify whether an IR is a or b without a note qualifier, the script simply tries to assign the identified IR to a first, then b
+                elif IRa is None:  # If a note qualifier does not exist to inform us if an IR is IRa or IRb, then the identified IR is by default assigned to IRa first, and the second one to IRb
                     IRa = repeat_feature
-                elif IRb is None:  ## TO DO: Does this line represent "if qualifier note is empty"?
+                elif IRb is None:
                     IRb = repeat_feature
         elif "note" in repeat_feature.qualifiers:
             if "ira" in repeat_feature.qualifiers["note"][0].lower() or "inverted repeat a" in repeat_feature.qualifiers["note"][0].lower():
@@ -131,14 +124,14 @@ def getInvertedRepeats(rec):
                 elif IRb is None:
                     IRb = repeat_feature
             else:
-                log.info("Found a repeat region without further identifying information. Skipping the feature.")
+                log.info("Found a repeat region without further identifying information. Ignoring this feature.")
 
-    # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier
-    # If one inverted repeat was tagged as repeat_region, the other probably would have been tagged the same
+    # STEP 2. Parsing out all misc_features, loop through them, and attempt to identify IRs
+    # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier; if one inverted repeat was tagged as repeat_region, the other probably would have been tagged the same
     if IRa is None and IRb is None:
         all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature']
         if len(all_repeat_features) == 0 and len(all_misc_features) == 0:
-            raise Exception("Record does not contain any marked features.")
+            raise Exception("Record does not contain any features with which the IR is typically marked (i.e., repeat_region, misc_feature).")
         for misc_feature in all_misc_features:
             if "ira" in misc_feature.qualifiers["note"][0].lower() or "inverted repeat a" in misc_feature.qualifiers["note"][0].lower():
                 IRa = misc_feature
@@ -162,6 +155,8 @@ def writeReportedIRpos(filename, IRa_feature, IRb_feature):
     ''' Writes the reported start and end positions, as well as the
         lengths, of the IRs in a given SeqFeature object as a table '''
 
+    ## TO DO: Please write the start position, end position and the length of both IRa and IRb into the appropriate columns of the output file "args.outfn" (as opposed to this tsv-table we had specified so far). All values of an accession number shall be located in the same row (i.e., there should not be separate rows for IRa and IRb). If no value exists for a cell (e.g., because the IR was not identified in the first place), please write "not identified" as before.
+    
     with open(filename, "w") as outfile:
         outfile.write("IR\tStart\tEnd\tLength\n")
         if IRa_feature:
@@ -173,6 +168,7 @@ def writeReportedIRpos(filename, IRa_feature, IRb_feature):
             outfile.write("IRb:" + "\t" + str(int(IRb_feature.location.start)) + "\t" + str(int(IRb_feature.location.end)) + "\t" + str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end))))
         else:
             outfile.write("IRb:\tnot identified\tnot identified\tnot identified\n")
+
 
 def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_feature):
     if not (IRa_feature is None or IRbRC_feature is None):
@@ -192,6 +188,7 @@ def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_featur
             IRb_fasta.write(">" + str(accession) + "_IRb_revComp\n")
             IRb_fasta.write(str(IRbRC_feature.extract(rec).seq) + "\n")
 
+
 def main(args):
 
   # STEP 1. Set up logger
@@ -200,8 +197,8 @@ def main(args):
 
   # STEP 2. Read in accession numbers to loop over
     accNumbers = []
-    if args.infile:
-        with open(args.infile, "r") as infile:
+    if args.infn:
+        with open(args.infn, "r") as infile:
             accNumbers = [line.split('\t')[1] for line in infile.read().splitlines()[1::]]
     else:
         accNumbers = args.list
@@ -212,87 +209,90 @@ def main(args):
             os.makedirs(args.recordsdir)
         if not os.path.exists(args.datadir):
             os.makedirs(args.datadir)
+        
+        ## TO DO: Set up a table as output file (or load an existing table, if args.outfn already exists). The filename of the table is provided via args.outfn . Add nine columns to the table, with the column names "ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"
 
   # STEP 3. Loop over accession numbers and conduct the parsing
     for accession in accNumbers:
-        # Create accession subfolder
 
-        ## TO DO: The accession folder must not yet exist at this point; if it does, raise a warning and skip that particular accession
-        # TM: which would mean that once the folder is created but one of the next steps fails, no further attempts at gathering information on this accession will be made
+        # STEP 3.1. Create accession subfolder
         accessionFolder = os.path.join(args.datadir, str(accession))
         if not os.path.exists(accessionFolder):
             os.makedirs(accessionFolder)
         else:
-            log.warning("Folder for accession %s already exists. Skipping this accession." % (str(accession)))
+            log.warning("Folder for accession `%s` already exists. Skipping this accession." % (str(accession)))
             continue
 
-        # STEP 3.1. Fetch GenBank flatfile for accession and save it
+        # STEP 3.2. Fetch GenBank flatfile for accession and save it
         log.info("Saving GenBank flat file for accession `%s`." % (str(accession)))
-
         try:
             gbFn = fetchGBflatfile(accessionFolder, accession, log)
         except:
-            log.warning("Error retrieving accession " + str(accession) + ". Skipping this accession.")
+            log.warning("Error retrieving accession `%s`. Skipping this accession."% (str(accession)))
+            os.rmdir(accessionFolder)
             continue
 
         try:
 
+            # STEP 3.3. Parse GenBank flatfile
             try:
                 rec = SeqIO.read(gbFn, "genbank")
             except Exception as err:
-                raise Exception("Error reading record: " + str(err) + "\nSkipping this accession.")
+                raise Exception("Error reading record of accession `%s`: %s. Skipping this accession." % (str(accession), str(err)))
                 continue
 
-            ## TO DO: Check if recordID is identical to str(accession); it should be; if not, raise a warning and skip that particular accession
-            # TM: Why would that ever be the case, unless Genbank provided the wrong record to us?
+            # STEP 3.4. Internal check
             recordID = str(rec.id).split('.')[0]
-            if not recordID == str(accession):
-                log.warning("Accession number mismatch. Expected: %s. Retrieved: %s. Skipping this accession." % (str(accession), recordID))
+            if not recordID == str(accession): ## Note: This internal check ensures that we are actually dealing with the record that was intended to be downloaded via efetch.
+                log.warning("Accession number mismatch. Expected: `%s`. Retrieved: `%s`. Skipping this accession." % (str(accession), recordID))
                 continue
 
-            # STEP 3.2. Write full sequence in FASTA format
+            # STEP 3.5. Write full sequence in FASTA format
             log.info("Writing sequence as FASTA for accession `%s`." % (str(accession)))
             with open(os.path.join(accessionFolder, str(accession)+"_completeSeq.fasta"), "w") as fastaOut:
                 fastaOut.write(">" + str(accession)+"_completeSequence" + "\n")
                 fastaOut.write(str(rec.seq) + "\n")
 
 
-            # STEP 3.3. Extract the reported IR positions and sequences; write both to file, if present
+            # STEP 3.6. Extract the reported IR positions and sequences; write both to file, if present
             #           Specifically, write the reported IR positions as a table and write IR sequences in FASTA format
             IRa_feature = None
             IRbRC_feature = None
-
-
-            # Step 3.3.1. Parse reported IR positions and check if both IRa and IRb are present
             try:
                 IRa_feature, IRbRC_feature = getInvertedRepeats(rec)
                 if not (IRa_feature is None or IRbRC_feature is None):
                     log.info("Both IRs (IRa and IRb) detected in accession `%s`." % (str(accession)))
+                    ## TO DO: Please write "yes" into both columns "IRa_REPORTED" and "IRb_REPORTED" of the output file "args.outfn".
                 elif not IRa_feature is None and IRbRC_feature is None:
                     log.info("Only IRa detected in accession `%s`." % (str(accession)))
+                    ## TO DO: Please write "yes" or "no" (as appropriate) into the "IRx_REPORTED" columns of the output file "args.outfn".
                 elif IRa_feature is None and not IRbRC_feature is None:
                     log.info("Only IRb detected in accession `%s`." % (str(accession)))
+                    ## TO DO: Please write "yes" or "no" (as appropriate) into the "IRx_REPORTED" columns of the output file "args.outfn".
                 else:
                     log.info("No IRs detected in accession `%s`." % (str(accession)))
+                    ## TO DO: Please write "no" into both columns "IRa_REPORTED" and "IRb_REPORTED" of the output file "args.outfn".
             except Exception as err:
-                raise Exception("Error while extracting inverted repeats: " + str(err) + "\nSkipping this accession.")
+               
+                ## TO DO: In case of an exception here, Please write "no" into both columns "IRa_REPORTED" and "IRb_REPORTED" of the output file "args.outfn".
+                raise Exception("Error while extracting IRs for accession `%s`: %s Skipping further processing of this accession." % (str(accession), str(err)))
                 continue
+
+            # STEP 3.7. Write the reported IR positions as a table
+            tableFn = os.path.join(accessionFolder, str(accession)+"_ReportedIRpositions.tsv") ## TO DO: Comment this line upon TO-DO-improvements; line will no longer needed
+            writeReportedIRpos(tableFn, IRa_feature, IRbRC_feature)
+
+            # STEP 3.8. Write write IR sequences in FASTA format
+            writeReportedIRseqs(accessionFolder, rec, accession, IRa_feature, IRbRC_feature)
 
         except Exception as err:
             log.warning(str(err))
+
+        # STEP 3.9. Compress the GenBank flatfile and delete uncompressed flatfile
         finally:
-            # Step 3.3.2. Write the reported IR positions as a table
-            tableFn = os.path.join(accessionFolder, str(accession)+"_ReportedIRpositions.tsv")
-            writeReportedIRpos(tableFn, IRa_feature, IRbRC_feature)
-
-            # Step 3.3.3. Write write IR sequences in FASTA format
-            writeReportedIRseqs(accessionFolder, rec, accession, IRa_feature, IRbRC_feature)
-
-            # STEP 3.4. Compress GB record
             tar = tarfile.open(os.path.join(args.recordsdir, accession + ".tar.gz"), "w:gz")
             tar.add(gbFn, os.path.basename(gbFn))
             tar.close()
-            # Delete uncompressed GB file
             os.remove(gbFn)
 
 
@@ -302,10 +302,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-    inputType = parser.add_mutually_exclusive_group(required=True)
-    inputType.add_argument("--infile", "-i", type=str, help="File with summaries of NCBI nucleotide accessions (tab-delimited, accession numbers in second column)")
-    inputType.add_argument("--list", "-l", type=str, nargs='+', help="List of NCBI nucleotide accession numbers")
+    EitherOr = parser.add_mutually_exclusive_group(required=True)
+    EitherOr.add_argument("--infn", "-i", type=str, help="path to input file; input is a summary table of NCBI accessions (tab-delimited, accession numbers in second column)")
+    EitherOr.add_argument("--inlist", "-l", type=str, nargs='+', help="List of NCBI nucleotide accession numbers")
+    #parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file")  ## TO DO: Un-Comment this line upon TO-DO-improvements;
     parser.add_argument("--recordsdir", "-r", type=str, required=False, default="./records/", help="path to records directory")
-    parser.add_argument("--datadir", "-a", type=str, required=False, default="./data/", help="path to data directory")
+    parser.add_argument("--datadir", "-d", type=str, required=False, default="./data/", help="path to data directory")
     args = parser.parse_args()
     main(args)

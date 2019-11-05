@@ -1,0 +1,39 @@
+2019-11-05 14:26:02 [INFO] Summary file `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv` does not exist; generating new file. Thus, no UIDs read.
+2019-11-05 14:26:03 [INFO] Number of UIDs on NCBI: 24
+2019-11-05 14:26:03 [INFO] Number of UIDs to be processed: 24
+2019-11-05 14:26:03 [INFO] Reading and parsing UID `825715643`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:05 [INFO] Reading and parsing UID `836643244`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:06 [INFO] Reading and parsing UID `1011059239`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:08 [INFO] Reading and parsing UID `743181657`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:09 [INFO] Reading and parsing UID `1070113052`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:10 [INFO] Reading and parsing UID `1041927454`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:12 [INFO] Reading and parsing UID `1043643756`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:13 [INFO] Reading and parsing UID `1267170126`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:15 [INFO] Reading and parsing UID `1267170216`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:17 [INFO] Reading and parsing UID `1267172487`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:18 [INFO] Reading and parsing UID `1267172690`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:20 [INFO] Reading and parsing UID `1267173189`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:21 [INFO] Reading and parsing UID `1267173295`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:23 [INFO] Reading and parsing UID `1343294448`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:25 [INFO] Reading and parsing UID `1369121788`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:27 [INFO] Reading and parsing UID `1477480070`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:29 [INFO] Reading and parsing UID `1511245708`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:30 [INFO] Reading and parsing UID `1248246263`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:32 [INFO] Reading and parsing UID `1248246466`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:33 [INFO] Reading and parsing UID `1248247165`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:35 [INFO] Reading and parsing UID `1248247271`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:36 [INFO] Reading and parsing UID `1593479145`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:38 [INFO] Reading and parsing UID `1610618824`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:39 [INFO] Reading and parsing UID `999812412`, writing to `/home/michael_science/git/michaelgruenstaeudl_PlastomeIntegrityChecks/testing/plastome_availability_table_2019_11_05.csv`.
+2019-11-05 14:26:41 [INFO] Removed accession `KP751906` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_027250`.
+2019-11-05 14:26:41 [INFO] Removed accession `KU168830` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_029770`.
+2019-11-05 14:26:41 [INFO] Removed accession `KM527898` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_031204`.
+2019-11-05 14:26:41 [INFO] Removed accession `KU207098` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_036036`.
+2019-11-05 14:26:41 [INFO] Removed accession `KU238086` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_036037`.
+2019-11-05 14:26:41 [INFO] Removed accession `MF770621` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_036086`.
+2019-11-05 14:26:41 [INFO] Removed accession `MF770623` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_036088`.
+2019-11-05 14:26:41 [INFO] Removed accession `MF770630` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_036093`.
+2019-11-05 14:26:41 [INFO] Removed accession `MF770631` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_036094`.
+2019-11-05 14:26:41 [INFO] Removed accession `MG551543` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_037190`.
+2019-11-05 14:26:41 [INFO] Removed accession `MG873498` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_039756`.
+2019-11-05 14:26:41 [INFO] Removed accession `MH992130` from `plastome_availability_table_2019_11_05.csv` because it is a duplicate of REFSEQ `NC_041442`.
