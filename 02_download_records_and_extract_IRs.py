@@ -22,7 +22,7 @@ DESIGN:
 
 TO DO:
     * nothing for now
-    
+
 NOTES:
     * none for now
 '''
@@ -32,9 +32,9 @@ NOTES:
 #####################
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-import xml.etree.ElementTree as ET
+import pandas as pd
 import os, subprocess, argparse
-import tarfile, coloredlogs, logging, time
+import tarfile, coloredlogs, logging
 
 ###############
 # AUTHOR INFO #
@@ -151,23 +151,31 @@ def getInvertedRepeats(rec):
     return IRa, IRb
 
 
-def writeReportedIRpos(filename, IRa_feature, IRb_feature):
+def writeReportedIRpos(filename, irinfo_table, accession, IRa_feature, IRb_feature):
     ''' Writes the reported start and end positions, as well as the
         lengths, of the IRs in a given SeqFeature object as a table '''
 
-    ## TO DO: Please write the start position, end position and the length of both IRa and IRb into the appropriate columns of the output file "args.outfn" (as opposed to this tsv-table we had specified so far). All values of an accession number shall be located in the same row (i.e., there should not be separate rows for IRa and IRb). If no value exists for a cell (e.g., because the IR was not identified in the first place), please write "not identified" as before.
-    
-    with open(filename, "w") as outfile:
-        outfile.write("IR\tStart\tEnd\tLength\n")
-        if IRa_feature:
-            outfile.write("IRa:" + "\t" + str(int(IRa_feature.location.start)) + "\t" + str(int(IRa_feature.location.end)) + "\t" + str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end))) + "\n")
-        else:
-            outfile.write("IRa:\tnot identified\tnot identified\tnot identified\n")
+    if IRa_feature:
+        irinfo_table.loc[accession]["IRa_REPORTED_START"] = str(int(IRa_feature.location.start))
+        irinfo_table.loc[accession]["IRa_REPORTED_END"] = str(int(IRa_feature.location.end))
+        irinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end)))
+    else:
+        irinfo_table.loc[accession]["IRa_REPORTED_START"] = "not identified"
+        irinfo_table.loc[accession]["IRa_REPORTED_END"] = "not identified"
+        irinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = "not identified"
 
-        if IRb_feature:
-            outfile.write("IRb:" + "\t" + str(int(IRb_feature.location.start)) + "\t" + str(int(IRb_feature.location.end)) + "\t" + str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end))))
-        else:
-            outfile.write("IRb:\tnot identified\tnot identified\tnot identified\n")
+    if IRb_feature:
+        irinfo_table.loc[accession]["IRb_REPORTED_START"] = str(int(IRb_feature.location.start))
+        irinfo_table.loc[accession]["IRb_REPORTED_END"] = str(int(IRb_feature.location.end))
+        irinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end)))
+    else:
+        irinfo_table.loc[accession]["IRb_REPORTED_START"] = "not identified"
+        irinfo_table.loc[accession]["IRb_REPORTED_END"] = "not identified"
+        irinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = "not identified"
+
+    with open(filename, "w") as outfile:
+        irinfo_table.to_csv(outfile, sep='\t', header=True)
+
 
 
 def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_feature):
@@ -209,8 +217,18 @@ def main(args):
             os.makedirs(args.recordsdir)
         if not os.path.exists(args.datadir):
             os.makedirs(args.datadir)
-        
-        ## TO DO: Set up a table as output file (or load an existing table, if args.outfn already exists). The filename of the table is provided via args.outfn . Add nine columns to the table, with the column names "ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"
+
+
+    columns = ["ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"]
+    if os.path.isfile(args.outfn):
+        with open(args.outfn) as outfile:
+            header = outfile.readline()
+            if not header == "\t".join(columns) + "\n":
+                raise Exception("Missing or malformed header in provided output file!")
+        irinfo_table = pd.read_csv(args.outfn, sep='\t', index_col=0, encoding="utf-8")
+    else:
+        irinfo_table = pd.DataFrame(columns=columns[1::]) # "ACCESSION" is omitted as column name, because it will be set as name of the index column
+        irinfo_table.index.name = "ACCESSION"
 
   # STEP 3. Loop over accession numbers and conduct the parsing
     for accession in accNumbers:
@@ -228,7 +246,7 @@ def main(args):
         try:
             gbFn = fetchGBflatfile(accessionFolder, accession, log)
         except:
-            log.warning("Error retrieving accession `%s`. Skipping this accession."% (str(accession)))
+            log.warning("Error retrieving accession `%s`. Skipping this accession." % (str(accession)))
             os.rmdir(accessionFolder)
             continue
 
@@ -258,31 +276,37 @@ def main(args):
             #           Specifically, write the reported IR positions as a table and write IR sequences in FASTA format
             IRa_feature = None
             IRbRC_feature = None
+            if not str(accession) in irinfo_table.index:
+                irinfo_table = irinfo_table.append(pd.Series(name=str(accession)))
             try:
                 IRa_feature, IRbRC_feature = getInvertedRepeats(rec)
                 if not (IRa_feature is None or IRbRC_feature is None):
                     log.info("Both IRs (IRa and IRb) detected in accession `%s`." % (str(accession)))
-                    ## TO DO: Please write "yes" into both columns "IRa_REPORTED" and "IRb_REPORTED" of the output file "args.outfn".
+                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
+                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
                 elif not IRa_feature is None and IRbRC_feature is None:
                     log.info("Only IRa detected in accession `%s`." % (str(accession)))
-                    ## TO DO: Please write "yes" or "no" (as appropriate) into the "IRx_REPORTED" columns of the output file "args.outfn".
+                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
+                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
                 elif IRa_feature is None and not IRbRC_feature is None:
                     log.info("Only IRb detected in accession `%s`." % (str(accession)))
-                    ## TO DO: Please write "yes" or "no" (as appropriate) into the "IRx_REPORTED" columns of the output file "args.outfn".
+                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
+                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
                 else:
                     log.info("No IRs detected in accession `%s`." % (str(accession)))
-                    ## TO DO: Please write "no" into both columns "IRa_REPORTED" and "IRb_REPORTED" of the output file "args.outfn".
+                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
+                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
             except Exception as err:
-               
-                ## TO DO: In case of an exception here, Please write "no" into both columns "IRa_REPORTED" and "IRb_REPORTED" of the output file "args.outfn".
+                irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
+                irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
+                writeReportedIRpos(args.outfn, irinfo_table, str(accession), IRa_feature, IRbRC_feature)
                 raise Exception("Error while extracting IRs for accession `%s`: %s Skipping further processing of this accession." % (str(accession), str(err)))
                 continue
 
             # STEP 3.7. Write the reported IR positions as a table
-            tableFn = os.path.join(accessionFolder, str(accession)+"_ReportedIRpositions.tsv") ## TO DO: Comment this line upon TO-DO-improvements; line will no longer needed
-            writeReportedIRpos(tableFn, IRa_feature, IRbRC_feature)
+            writeReportedIRpos(args.outfn, irinfo_table, str(accession), IRa_feature, IRbRC_feature)
 
-            # STEP 3.8. Write write IR sequences in FASTA format
+            # STEP 3.8. Write IR sequences in FASTA format
             writeReportedIRseqs(accessionFolder, rec, accession, IRa_feature, IRbRC_feature)
 
         except Exception as err:
@@ -305,7 +329,7 @@ if __name__ == "__main__":
     EitherOr = parser.add_mutually_exclusive_group(required=True)
     EitherOr.add_argument("--infn", "-i", type=str, help="path to input file; input is a summary table of NCBI accessions (tab-delimited, accession numbers in second column)")
     EitherOr.add_argument("--inlist", "-l", type=str, nargs='+', help="List of NCBI nucleotide accession numbers")
-    #parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file")  ## TO DO: Un-Comment this line upon TO-DO-improvements;
+    parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file that contains information on IR positions and length")
     parser.add_argument("--recordsdir", "-r", type=str, required=False, default="./records/", help="path to records directory")
     parser.add_argument("--datadir", "-d", type=str, required=False, default="./data/", help="path to data directory")
     args = parser.parse_args()
