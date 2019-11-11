@@ -22,7 +22,7 @@ DESIGN:
     * The plastid genome sequence of each record will be bundled with the GB file of that record in a record-specific gzip file. Hence, before that record is evaluated here, that specific gzip-file must be unpacked; after the evaluation, the gzip-file must be reconstituted.
 
 NOTES:
-    * Foo bar baz
+    * Start positions for IRa and IRb are sometimes switched around (probably because they were improperly recorded in previous scripts due to missing unique identification)
 '''
 
 #####################
@@ -31,6 +31,7 @@ NOTES:
 #import xml.etree.ElementTree as ET
 import os.path, subprocess
 import argparse, tarfile
+import pandas as pd
 import coloredlogs, logging
 
 ###############
@@ -72,6 +73,17 @@ def main(args):
             if not outfile.readline() == "ACCESSION\tSTART_A_ORIG\tSTART_A\tLEN_A_ORIG\tLEN_A\tLEN_A_DIFF\tSTART_B_ORIG\tSTART_B\tLEN_B_ORIG\tLEN_B\tLEN_B_DIFF\n":
                 raise Exception('Malformed output file!')
 
+    reportfile = os.path.abspath(args.repfn)
+    if os.path.isfile(reportfile):
+        with open(reportfile) as rep:
+            header = rep.readline()
+            if not header == "\t".join(["ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"]) + "\n":
+                raise Exception("Missing or malformed header in file " + args.repfn)
+        ir_reported = pd.read_csv(reportfile, sep='\t', index_col=0, encoding="utf-8")
+    else:
+        raise Exception("File not found: " + args.repfn)
+
+
     for folder in folders:
         # Init values that will be written to table
         accession = os.path.basename(folder)
@@ -84,58 +96,66 @@ def main(args):
         start_a = None
         start_b = None
 
+        try:
+            ir_acc = ir_reported.loc[accession]
+        except:
+            log.warning("Could not find any reported IR information for accession " + accession + ". Skipping this accession.")
+            continue
+
+        if not ir_acc is None:
+            try:
+                start_a_orig = int(ir_acc["IRa_REPORTED_START"])
+            except:
+                start_a_orig = ir_acc["IRa_REPORTED_START"]
+            try:
+                len_a_orig = int(ir_acc["IRa_REPORTED_LENGTH"])
+            except:
+                len_a_orig = 0
+            try:
+                start_b_orig = int(ir_acc["IRb_REPORTED_START"])
+            except:
+                start_b_orig = ir_acc["IRb_REPORTED_START"]
+            try:
+                len_b_orig = int(ir_acc["IRb_REPORTED_LENGTH"])
+            except:
+                len_b_orig = 0
         # Change to directory containing sequence files
         os.chdir(folder)
-        # Read in original IR start positions and lengths
-        if os.path.isfile(accession + "_ReportedIRpositions.tsv"):
-            with open(accession + "_ReportedIRpositions.tsv","r") as posfile:
-                for line in posfile.readlines()[1::]:
-                    if "IRa:" in line:
-                        try:
-                            start_a_orig = int(line.split(':')[1].split('\t')[1])
-                        except:
-                            start_a_orig = line.split(':')[1].split('\t')[1]
-                        try:
-                            len_a_orig = int(line.split(':')[1].split('\t')[3])
-                        except:
-                            len_a_orig = 0
-                    elif "IRb:" in line:
-                        try:
-                            start_b_orig = int(line.split(':')[1].split('\t')[1])
-                        except:
-                            start_b_orig = line.split(':')[1].split('\t')[1]
-                        try:
-                            len_b_orig = int(line.split(':')[1].split('\t')[3])
-                        except:
-                            len_b_orig = 0
-                    else:
-                        raise Exception("Unexpected line in position file.")
         # Calculate IR positions and length
-        mkblastargs = ["makeblastdb", "-in", accession + "_completeSeq.fasta", "-parse_seqids", "-title", accession, "-dbtype", "nucl"]
-        mkblastdb_subp = subprocess.Popen(mkblastargs)
-        mkblastdb_subp.wait()
-        blastargs = ["blastn", "-db", str(accession) + "_completeSeq.fasta", "-query", accession + "_completeSeq.fasta", "-outfmt", "7", "-strand", "both"]
-        blast_subp = subprocess.Popen(blastargs, stdout=subprocess.PIPE)
-        awkargs = ["awk", "{if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}"]
-        awk_subp = subprocess.Popen(awkargs, stdin=blast_subp.stdout, stdout=subprocess.PIPE)
-        out, err = awk_subp.communicate()
-        if len(out.splitlines()) == 2:
-            ira_info = out.splitlines()[0].split()
-            irb_info = out.splitlines()[1].split()
-            len_a = int(ira_info[0])
-            len_b = int(irb_info[0])
-            start_a = int(ira_info[1])
-            start_b = int(irb_info[1])
-        else:
-            log.warning("Could not calculate IRs for accession " + accession + ".")
-            #raise Exception("Inverted repeat count not == 2")
-            len_a = 0
-            len_b = 0
-            start_a = "not identified"
-            start_b = "not identified"
+        try:
+            mkblastargs = ["makeblastdb", "-in", accession + "_completeSeq.fasta", "-parse_seqids", "-title", accession, "-dbtype", "nucl"]
+            mkblastdb_subp = subprocess.Popen(mkblastargs)
+            mkblastdb_subp.wait()
+        except Exception as err:
+            log.exception("Error creating blastdb: %s\nSkipping this accession." % (str(err)))
+            continue
+        try:
+            blastargs = ["blastn", "-db", str(accession) + "_completeSeq.fasta", "-query", accession + "_completeSeq.fasta", "-outfmt", "7", "-strand", "both"]
+            blast_subp = subprocess.Popen(blastargs, stdout=subprocess.PIPE)
+            awkargs = ["awk", "{if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}"]
+            awk_subp = subprocess.Popen(awkargs, stdin=blast_subp.stdout, stdout=subprocess.PIPE)
+            out, err = awk_subp.communicate()
+            if len(out.splitlines()) == 2:
+                ira_info = out.splitlines()[1].split()
+                irb_info = out.splitlines()[0].split()
+                len_a = int(ira_info[0])
+                len_b = int(irb_info[0])
+                start_a = int(ira_info[1])
+                start_b = int(irb_info[1])
+            else:
+                log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join(out.splitlines()))
+                len_a = 0
+                len_b = 0
+                start_a = "not identified"
+                start_b = "not identified"
+                #raise Exception("Inverted repeat count not == 2")
+        except Exception as err:
+            log.exception("Error while calculating IRs. %s\n Skipping this accession." % (str(err)))
+            continue
         # Write data to outfn
-        with open(outfn, "a") as outfile:
-            outfile.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (str(accession), str(start_a_orig), str(start_a), str(len_a_orig), str(len_a), str(abs(len_a - len_a_orig)), str(start_b_orig), str(start_b), str(len_b_orig), str(len_b), str(abs(len_b - len_b_orig))))
+        with open(outfn, "w") as outfile:
+            # TODO: Add column for start position difference (reported vs. inferred)
+            outfile.write("\t".join([str(accession), str(start_a_orig), str(start_a), str(len_a_orig), str(len_a), str(abs(len_a - len_a_orig)), str(start_b_orig), str(start_b), str(len_b_orig), str(len_b), str(abs(len_b - len_b_orig))]) + "\n")
         os.chdir(main_dir)
 
 
@@ -145,7 +165,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-    parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file")
+    parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file that contains comparing information on reported vs. inferred IR positions and length")
+    parser.add_argument("--repfn", "-r", type=str, required=True, help="path to file that contains information on reported IR positions and length")
     parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of folder file paths containing FASTA files")
     args = parser.parse_args()
     main(args)
