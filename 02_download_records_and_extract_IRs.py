@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
-    This script takes a list of GenBank accession numbers and - for each accession number - downloads the record from GenBank, parses it via Biopython, extracts the inverted repeat (IR) regions and saves both their reported position as well as their reported sequences to files.
+    This script takes a list of GenBank accession numbers and - for each accession number - downloads the record from GenBank, parses it via Biopython, extracts the inverted repeat (IR) regions and saves both their reported position as well as their reported sequences to files. The IR is hereby identified either explicitly (i.e., via repeat annotations with appropriate keywords) or implicitly (i.e., via annotations of the large and small single copy region and then taking the complement set thereof).
 
     The output shall be a set of files for each GenBank record:
     (a) the GenBank record in GB format
@@ -21,7 +21,10 @@ DESIGN:
     * The output files of each record shall be bundled together as a record-specific gzip file.
 
 TO DO:
-    * nothing for now
+
+    * In function "getInvertedRepeats()", let us please add another step which - if IRa and IRb both remain None after STEP 2 - attempts to infer the position of the IR implicitly via the  large (LSC) and small single copy (SSC) regions. SPecifically, that step shall extract the positions of the LSC and the SSC and calculate the IRs as the complement set of the LSC and the SSC. Details are below in the code.
+
+    * In STEP 3.6. function "main()", let us please add the execution of a function that explicitly checks if the IRb must be reverse complemented or not. Currently, the FASTA output of the IRb is inconsistent, as an explicit reverse complementing of the IRb appears necessary in some but not all records. Maybe this presumably inconsistent behaviour is coupled with the presence of a qualifier named "rpt_type=inverted" in "repeat_region" features (as indicated by Tilman - see lines 165 ff. herein). Details are below in the code.
 
 NOTES:
     * none for now
@@ -43,7 +46,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2019.11.05.1200'
+__version__ = '2019.11.12.1900'
 
 #############
 # DEBUGGING #
@@ -60,7 +63,7 @@ def fetchGBflatfile(outdir, id, log):
     ''' Saves fetched GenBank flatfile with accession number "id" to
         outdir and returns the path and filename of the file '''
 
-    gbFile = os.path.join(outdir,str(id) + ".gb")
+    gbFile = os.path.join(outdir, str(id) + ".gb")
     with open(gbFile, "w") as outfile:
         efetchargs = ["efetch", "-db", "nucleotide", "-format", "gb", "-id", str(id)]
         efetch = subprocess.Popen(efetchargs, stdout=outfile)
@@ -131,7 +134,7 @@ def getInvertedRepeats(rec):
     if IRa is None and IRb is None:
         all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature']
         if len(all_repeat_features) == 0 and len(all_misc_features) == 0:
-            raise Exception("Record does not contain any features with which the IR is typically marked (i.e., repeat_region, misc_feature).")
+            raise Exception("Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature).")
         for misc_feature in all_misc_features:
             if "ira" in misc_feature.qualifiers["note"][0].lower() or "inverted repeat a" in misc_feature.qualifiers["note"][0].lower():
                 IRa = misc_feature
@@ -143,6 +146,22 @@ def getInvertedRepeats(rec):
                 elif IRb is None:
                     IRb = misc_feature
 
+    # STEP 3. Inferring the position of the IR implicitly by extracting the positions of the large (LSC) and small single copy (SSC) regions and calculating the IRs as the complement set thereof.
+    
+    # TO-DO: Please continue here!
+    if IRa is None and IRb is None:
+        all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature']
+        # The large single copy (LSC) region and the small single copy (SSC) region are always coded as a "misc_feature" with the qualifier "note", in which one of the following keywords would be located ["small single copy", "SSC", "large single copy", "LSC"].
+        # To infer the position of an IR, annotations for both the LSC and the SSC must be present. If this condition is satisfied, the IRs are calculated as the two gaps between the LSC and the SSC when taking the circular structure of the plastid genome into account. In essence, the desired code would extract the exact positions of the LSC and the SSC, and then set up new SeqFeatures with the following positions: IRb = (LSC_end..SSC_start) and IRa = (SSC_end..LSC_start).
+        # Example of how to setup a SeqFeature from scratch in Biopython (taken from section 4.3.3 from http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc38):
+        #>>> from Bio.Seq import Seq
+        #>>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        #>>> LSC_end = 12345
+        #>>> SSC_start = 56789
+        #>>> IRb = SeqFeature(FeatureLocation(LSC_end, SSC_start), type="misc_feature", strand=-1)
+        #>>> IRb.qualifiers["note"] = "inverted repeat b"
+        
+
     # Biopython automatically seems to extract IRb in a reverse complement fashion
     # This was true for a record (NC_043815) that had two "repeat_region" features with "rpt_type=inverted", one of which had its sequence marked "complement"
     # Will have to test if the behaviour changes for misc_feature records or records where rpt_type=inverted is omitted
@@ -151,30 +170,30 @@ def getInvertedRepeats(rec):
     return IRa, IRb
 
 
-def writeReportedIRpos(filename, irinfo_table, accession, IRa_feature, IRb_feature):
+def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_feature):
     ''' Writes the reported start and end positions, as well as the
         lengths, of the IRs in a given SeqFeature object as a table '''
 
     if IRa_feature:
-        irinfo_table.loc[accession]["IRa_REPORTED_START"] = str(int(IRa_feature.location.start))
-        irinfo_table.loc[accession]["IRa_REPORTED_END"] = str(int(IRa_feature.location.end))
-        irinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end)))
+        IRinfo_table.loc[accession]["IRa_REPORTED_START"] = str(int(IRa_feature.location.start))
+        IRinfo_table.loc[accession]["IRa_REPORTED_END"] = str(int(IRa_feature.location.end))
+        IRinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end)))
     else:
-        irinfo_table.loc[accession]["IRa_REPORTED_START"] = "not identified"
-        irinfo_table.loc[accession]["IRa_REPORTED_END"] = "not identified"
-        irinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = "not identified"
+        IRinfo_table.loc[accession]["IRa_REPORTED_START"] = "not identified"
+        IRinfo_table.loc[accession]["IRa_REPORTED_END"] = "not identified"
+        IRinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = "not identified"
 
     if IRb_feature:
-        irinfo_table.loc[accession]["IRb_REPORTED_START"] = str(int(IRb_feature.location.start))
-        irinfo_table.loc[accession]["IRb_REPORTED_END"] = str(int(IRb_feature.location.end))
-        irinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end)))
+        IRinfo_table.loc[accession]["IRb_REPORTED_START"] = str(int(IRb_feature.location.start))
+        IRinfo_table.loc[accession]["IRb_REPORTED_END"] = str(int(IRb_feature.location.end))
+        IRinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end)))
     else:
-        irinfo_table.loc[accession]["IRb_REPORTED_START"] = "not identified"
-        irinfo_table.loc[accession]["IRb_REPORTED_END"] = "not identified"
-        irinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = "not identified"
+        IRinfo_table.loc[accession]["IRb_REPORTED_START"] = "not identified"
+        IRinfo_table.loc[accession]["IRb_REPORTED_END"] = "not identified"
+        IRinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = "not identified"
 
     with open(filename, "w") as outfile:
-        irinfo_table.to_csv(outfile, sep='\t', header=True)
+        IRinfo_table.to_csv(outfile, sep='\t', header=True)
 
 
 
@@ -225,10 +244,10 @@ def main(args):
             header = outfile.readline()
             if not header == "\t".join(columns) + "\n":
                 raise Exception("Missing or malformed header in provided output file!")
-        irinfo_table = pd.read_csv(args.outfn, sep='\t', index_col=0, encoding="utf-8")
+        IRinfo_table = pd.read_csv(args.outfn, sep='\t', index_col=0, encoding="utf-8")
     else:
-        irinfo_table = pd.DataFrame(columns=columns[1::]) # "ACCESSION" is omitted as column name, because it will be set as name of the index column
-        irinfo_table.index.name = "ACCESSION"
+        IRinfo_table = pd.DataFrame(columns=columns[1::]) # "ACCESSION" is omitted as column name, because it will be set as name of the index column
+        IRinfo_table.index.name = "ACCESSION"
 
   # STEP 3. Loop over accession numbers and conduct the parsing
     for accession in accNumbers:
@@ -275,36 +294,59 @@ def main(args):
             # STEP 3.6. Extract the reported IR positions and sequences; write both to file, if present
             #           Specifically, write the reported IR positions as a table and write IR sequences in FASTA format
             IRa_feature = None
+            IRb_feature = None
             IRbRC_feature = None
-            if not str(accession) in irinfo_table.index:
-                irinfo_table = irinfo_table.append(pd.Series(name=str(accession)))
+            if not str(accession) in IRinfo_table.index:
+                IRinfo_table = IRinfo_table.append(pd.Series(name=str(accession)))
             try:
-                IRa_feature, IRbRC_feature = getInvertedRepeats(rec)
+                IRa_feature, IRb_feature = getInvertedRepeats(rec)
+                
+                # TO DO: Let us add a function that explicitly checks if the IRb_feature must be reverse complemented or not. The current FASTA output is too inconsistent (i.e., sometimes the reverse-complementing appears to have been done, sometimes not). An explicit check, followed by a reverse-complementing operation (where required) appears indicated. The situation is complicated by the fact that a certain level of non-identity (i.e., up to 10% of all nucleotides) must remain permissible, even if the IRb has been correctly reverse-complemented. Hence, I suggest designing a function that takes the IRa and the IRb as received from function "getInvertedRepeats()" and then conducts an approximate string matching to see if a reverse-complementing is indicated. There are a series of Python libraries for approximate string matching available.
+                
+                # Example code (just an idea!)
+                '''
+                pip install fuzzywuzzy
+                pip install python-Levenshtein  # optional, I think; to make it faster
+
+                from fuzzywuzzy import fuzz
+                
+                score_noRC = fuzz.ratio(IRa_feature.extract(rec).seq, IRb_feature.extract(rec).seq)
+                score_RC = fuzz.ratio(IRa_feature.extract(rec).seq, IRb_feature.extract(rec).seq.reverse_complement())
+                
+                if score_noRC > score_RC:
+                    return IRb_feature.extract(rec).seq
+                else:
+                    return IRb_feature.extract(rec).seq.reverse_complement()
+                '''
+                IRbRC_feature = IRb_feature  # Note: this line is to be deleted upon implementation of better code
+                
+                
+                
                 if not (IRa_feature is None or IRbRC_feature is None):
                     log.info("Both IRs (IRa and IRb) detected in accession `%s`." % (str(accession)))
-                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
-                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
+                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
+                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
                 elif not IRa_feature is None and IRbRC_feature is None:
                     log.info("Only IRa detected in accession `%s`." % (str(accession)))
-                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
-                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
+                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
+                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
                 elif IRa_feature is None and not IRbRC_feature is None:
                     log.info("Only IRb detected in accession `%s`." % (str(accession)))
-                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
-                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
+                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
+                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
                 else:
                     log.info("No IRs detected in accession `%s`." % (str(accession)))
-                    irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
-                    irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
+                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
+                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
             except Exception as err:
-                irinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
-                irinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
-                writeReportedIRpos(args.outfn, irinfo_table, str(accession), IRa_feature, IRbRC_feature)
+                IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
+                IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
+                writeReportedIRpos(args.outfn, IRinfo_table, str(accession), IRa_feature, IRbRC_feature)
                 raise Exception("Error while extracting IRs for accession `%s`: %s Skipping further processing of this accession." % (str(accession), str(err)))
                 continue
 
             # STEP 3.7. Write the reported IR positions as a table
-            writeReportedIRpos(args.outfn, irinfo_table, str(accession), IRa_feature, IRbRC_feature)
+            writeReportedIRpos(args.outfn, IRinfo_table, str(accession), IRa_feature, IRbRC_feature)
 
             # STEP 3.8. Write IR sequences in FASTA format
             writeReportedIRseqs(accessionFolder, rec, accession, IRa_feature, IRbRC_feature)

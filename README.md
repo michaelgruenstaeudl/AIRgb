@@ -6,17 +6,22 @@ Scripts for evaluating plastome integrity across all available plastid genomes o
 ## EXAMPLE USAGE
 #### On Linux / MacOS
 ```
-mkdir -p testing
+TESTFOLDER=testing3
 DATE=$(date '+%Y_%m_%d')
+MYQUERY='Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE]'
 AVAILTABLE=plastome_availability_table_${DATE}.csv
+REPRTDSTAT=reported_IR_stats_table_${DATE}.csv
+
+
+mkdir -p $TESTFOLDER
 
 # SCRIPT 01: Generating plastome availability table
-python 01_generate_plastome_availability_table.py -o testing/$AVAILTABLE 1>testing/Script01_${DATE}.runlog 2>&1
+python 01_generate_plastome_availability_table.py -q "$MYQUERY" -o $TESTFOLDER/$AVAILTABLE 1>>$TESTFOLDER/Script01_${DATE}.runlog 2>&1
 
 # SCRIPT 02: Downloading records and extracting IRs
-mkdir -p testing/records_${DATE}
-mkdir -p testing/data_${DATE}
-python 02_download_records_and_extract_IRs.py -i testing/$AVAILTABLE -r testing/records_${DATE}/ -d testing/data_${DATE}/ 1>testing/Script02_${DATE}.runlog 2>&1
+mkdir -p $TESTFOLDER/records_${DATE}
+mkdir -p $TESTFOLDER/data_${DATE}
+python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TESTFOLDER/records_${DATE}/ -d $TESTFOLDER/data_${DATE}/ -o $TESTFOLDER/$REPRTDSTAT 1>>$TESTFOLDER/Script02_${DATE}.runlog 2>&1
 
 
 

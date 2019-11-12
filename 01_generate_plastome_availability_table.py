@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
-    This script generates a table of plastid genome records that are currently available on NCBI. It simultaneously ensures that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records).
+    This script generates a table of plastid genome records that are currently available on NCBI. It simultaneously ensures that no plastid genome is counted twice (issue about regular vs. RefSeq NC_ records). If an output file already exists, this script will identify the most recent date of any of the processed records and search NCBI only for younger records.
 
     The output is a table in which each row contains the parsed information of a single record. Each row contains nine, tab-separated columns in the following order:
     01. the unique identifier,
@@ -21,7 +21,8 @@ DESIGN:
     There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
 
 TO DO:
-    * Once the script works well, let us parse the date of the oldest existing UID (from the already existing output file) and limit the esearch to searching NCBI for records only after that date (use esearch option "-mindate"; see "esearch -h" for more info).
+
+    * Let us please make the usage of a mindate optional. Specifically, a mindate for GenBank records shall only be applied if an optional commandline parameter to that end is specified. Otherwise, an issue arises when the execution of SCRIPT01 is interrupted (e.g., because of a server-side error), as is currently the case (see log-file of folder "testing2"). The objective is to implement a default behaviour in which the script continues to process all plastid genomes if an output file already exists, unless a commandline parameter (e.g., "--update-only") is specified, in which case the oldest date of the records processed so far is used as the mindate parameter. Thus, only updates are searched for. This optional parameter could, consequently, be named "--update-only".
 
     
 NOTES:
@@ -47,7 +48,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
            'in NCBI GenBank'
-__version__ = '2019.10.30.1130'
+__version__ = '2019.11.12.1900'
 
 #############
 # DEBUGGING #
@@ -192,6 +193,7 @@ def main(outfn, query):
             try: # Trying to set creation date of newest record as starting date for search query. If the file exists but there are no records in it (just the headers), it will skip.
                 outputFile.seek(0) # Return to beginning of file. Otherwise the next line will always throw an exception
                 mindate = datetime.strptime(outputFile.readlines()[-1].split('\t')[5], '%Y-%m-%d')
+                log.info("NOTE: Only records more recent than `%s` are being looked for." % (str(mindate)))
             except:
                 log.error("Could not read newest date from existing summary file.")
                 raise Exception
@@ -261,6 +263,6 @@ def main(outfn, query):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
-    parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000180000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])", help="(Optional) Entrez query that will replace the standard query")
+    parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000170000[SLEN] : 00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE]", help="(Optional) Entrez query that will replace the standard query")
     args = parser.parse_args()
     main(os.path.abspath(args.outfn), args.query)

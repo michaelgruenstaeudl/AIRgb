@@ -1,0 +1,642 @@
+2019-11-12 17:04:10 [INFO] Saving GenBank flat file for accession `NC_008407`.
+2019-11-12 17:04:11 [INFO] Writing sequence as FASTA for accession `NC_008407`.
+2019-11-12 17:04:11 [WARNING] Error while extracting IRs for accession `NC_008407`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:12 [INFO] Saving GenBank flat file for accession `NC_010109`.
+2019-11-12 17:04:13 [INFO] Writing sequence as FASTA for accession `NC_010109`.
+2019-11-12 17:04:13 [INFO] Both IRs (IRa and IRb) detected in accession `NC_010109`.
+2019-11-12 17:04:13 [INFO] Saving GenBank flat file for accession `NC_015894`.
+2019-11-12 17:04:14 [INFO] Writing sequence as FASTA for accession `NC_015894`.
+2019-11-12 17:04:14 [INFO] Both IRs (IRa and IRb) detected in accession `NC_015894`.
+2019-11-12 17:04:14 [INFO] Saving GenBank flat file for accession `NC_015899`.
+2019-11-12 17:04:16 [INFO] Writing sequence as FASTA for accession `NC_015899`.
+2019-11-12 17:04:16 [INFO] Both IRs (IRa and IRb) detected in accession `NC_015899`.
+2019-11-12 17:04:16 [INFO] Saving GenBank flat file for accession `JQ248601`.
+2019-11-12 17:04:17 [INFO] Writing sequence as FASTA for accession `JQ248601`.
+2019-11-12 17:04:17 [WARNING] Error while extracting IRs for accession `JQ248601`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:17 [INFO] Saving GenBank flat file for accession `NC_019616`.
+2019-11-12 17:04:19 [INFO] Writing sequence as FASTA for accession `NC_019616`.
+2019-11-12 17:04:19 [WARNING] Error while extracting IRs for accession `NC_019616`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:19 [INFO] Saving GenBank flat file for accession `HF677508`.
+2019-11-12 17:04:20 [INFO] Writing sequence as FASTA for accession `HF677508`.
+2019-11-12 17:04:20 [WARNING] Error while extracting IRs for accession `HF677508`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:20 [INFO] Saving GenBank flat file for accession `NC_021426`.
+2019-11-12 17:04:21 [INFO] Writing sequence as FASTA for accession `NC_021426`.
+2019-11-12 17:04:21 [INFO] Both IRs (IRa and IRb) detected in accession `NC_021426`.
+2019-11-12 17:04:21 [INFO] Saving GenBank flat file for accession `NC_022927`.
+2019-11-12 17:04:23 [INFO] Writing sequence as FASTA for accession `NC_022927`.
+2019-11-12 17:04:23 [WARNING] Error while extracting IRs for accession `NC_022927`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:23 [INFO] Saving GenBank flat file for accession `NC_023260`.
+2019-11-12 17:04:24 [INFO] Writing sequence as FASTA for accession `NC_023260`.
+2019-11-12 17:04:24 [WARNING] Error while extracting IRs for accession `NC_023260`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:24 [INFO] Saving GenBank flat file for accession `NC_023261`.
+2019-11-12 17:04:26 [INFO] Writing sequence as FASTA for accession `NC_023261`.
+2019-11-12 17:04:26 [WARNING] Error while extracting IRs for accession `NC_023261`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:26 [INFO] Saving GenBank flat file for accession `NC_024732`.
+2019-11-12 17:04:27 [INFO] Writing sequence as FASTA for accession `NC_024732`.
+2019-11-12 17:04:27 [WARNING] Error while extracting IRs for accession `NC_024732`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:27 [INFO] Saving GenBank flat file for accession `NC_015891`.
+2019-11-12 17:04:29 [INFO] Writing sequence as FASTA for accession `NC_015891`.
+2019-11-12 17:04:29 [INFO] Both IRs (IRa and IRb) detected in accession `NC_015891`.
+2019-11-12 17:04:29 [INFO] Saving GenBank flat file for accession `NC_026203`.
+2019-11-12 17:04:30 [INFO] Writing sequence as FASTA for accession `NC_026203`.
+2019-11-12 17:04:30 [WARNING] Error while extracting IRs for accession `NC_026203`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:30 [INFO] Saving GenBank flat file for accession `NC_026772`.
+2019-11-12 17:04:31 [INFO] Writing sequence as FASTA for accession `NC_026772`.
+2019-11-12 17:04:32 [WARNING] Error while extracting IRs for accession `NC_026772`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:32 [INFO] Saving GenBank flat file for accession `NC_026999`.
+2019-11-12 17:04:33 [INFO] Writing sequence as FASTA for accession `NC_026999`.
+2019-11-12 17:04:33 [WARNING] Error while extracting IRs for accession `NC_026999`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:33 [INFO] Saving GenBank flat file for accession `NC_027065`.
+2019-11-12 17:04:34 [INFO] Writing sequence as FASTA for accession `NC_027065`.
+2019-11-12 17:04:34 [WARNING] Error while extracting IRs for accession `NC_027065`: 'note' Skipping further processing of this accession.
+2019-11-12 17:04:34 [INFO] Saving GenBank flat file for accession `NC_027227`.
+2019-11-12 17:04:36 [INFO] Writing sequence as FASTA for accession `NC_027227`.
+2019-11-12 17:04:36 [INFO] Both IRs (IRa and IRb) detected in accession `NC_027227`.
+2019-11-12 17:04:36 [INFO] Saving GenBank flat file for accession `NC_027250`.
+2019-11-12 17:04:37 [INFO] Writing sequence as FASTA for accession `NC_027250`.
+2019-11-12 17:04:37 [WARNING] Error while extracting IRs for accession `NC_027250`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:37 [INFO] Saving GenBank flat file for accession `NC_028051`.
+2019-11-12 17:04:39 [INFO] Writing sequence as FASTA for accession `NC_028051`.
+2019-11-12 17:04:39 [WARNING] Error while extracting IRs for accession `NC_028051`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:39 [INFO] Saving GenBank flat file for accession `NC_028052`.
+2019-11-12 17:04:40 [INFO] Writing sequence as FASTA for accession `NC_028052`.
+2019-11-12 17:04:40 [WARNING] Error while extracting IRs for accession `NC_028052`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:40 [INFO] Saving GenBank flat file for accession `NC_028053`.
+2019-11-12 17:04:41 [INFO] Writing sequence as FASTA for accession `NC_028053`.
+2019-11-12 17:04:41 [WARNING] Error while extracting IRs for accession `NC_028053`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:41 [INFO] Saving GenBank flat file for accession `NC_028439`.
+2019-11-12 17:04:43 [INFO] Writing sequence as FASTA for accession `NC_028439`.
+2019-11-12 17:04:43 [WARNING] Error while extracting IRs for accession `NC_028439`: 'note' Skipping further processing of this accession.
+2019-11-12 17:04:43 [INFO] Saving GenBank flat file for accession `NC_028732`.
+2019-11-12 17:04:44 [INFO] Writing sequence as FASTA for accession `NC_028732`.
+2019-11-12 17:04:44 [INFO] Both IRs (IRa and IRb) detected in accession `NC_028732`.
+2019-11-12 17:04:44 [INFO] Saving GenBank flat file for accession `NC_026134`.
+2019-11-12 17:04:46 [INFO] Writing sequence as FASTA for accession `NC_026134`.
+2019-11-12 17:04:46 [INFO] Both IRs (IRa and IRb) detected in accession `NC_026134`.
+2019-11-12 17:04:46 [INFO] Saving GenBank flat file for accession `NC_029211`.
+2019-11-12 17:04:47 [INFO] Writing sequence as FASTA for accession `NC_029211`.
+2019-11-12 17:04:47 [INFO] Both IRs (IRa and IRb) detected in accession `NC_029211`.
+2019-11-12 17:04:47 [INFO] Saving GenBank flat file for accession `NC_010358`.
+2019-11-12 17:04:48 [INFO] Writing sequence as FASTA for accession `NC_010358`.
+2019-11-12 17:04:48 [INFO] Only IRa detected in accession `NC_010358`.
+2019-11-12 17:04:48 [INFO] Saving GenBank flat file for accession `NC_010360`.
+2019-11-12 17:04:50 [INFO] Writing sequence as FASTA for accession `NC_010360`.
+2019-11-12 17:04:50 [INFO] Both IRs (IRa and IRb) detected in accession `NC_010360`.
+2019-11-12 17:04:50 [INFO] Saving GenBank flat file for accession `NC_029770`.
+2019-11-12 17:04:51 [INFO] Writing sequence as FASTA for accession `NC_029770`.
+2019-11-12 17:04:51 [WARNING] Error while extracting IRs for accession `NC_029770`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:51 [INFO] Saving GenBank flat file for accession `NC_029815`.
+2019-11-12 17:04:53 [INFO] Writing sequence as FASTA for accession `NC_029815`.
+2019-11-12 17:04:53 [WARNING] Error while extracting IRs for accession `NC_029815`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:53 [INFO] Saving GenBank flat file for accession `KM057376`.
+2019-11-12 17:04:54 [INFO] Writing sequence as FASTA for accession `KM057376`.
+2019-11-12 17:04:54 [WARNING] Error while extracting IRs for accession `KM057376`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:54 [INFO] Saving GenBank flat file for accession `KM057377`.
+2019-11-12 17:04:55 [INFO] Writing sequence as FASTA for accession `KM057377`.
+2019-11-12 17:04:55 [WARNING] Error while extracting IRs for accession `KM057377`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:55 [INFO] Saving GenBank flat file for accession `NC_030045`.
+2019-11-12 17:04:57 [INFO] Writing sequence as FASTA for accession `NC_030045`.
+2019-11-12 17:04:57 [WARNING] Error while extracting IRs for accession `NC_030045`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:57 [INFO] Saving GenBank flat file for accession `NC_030062`.
+2019-11-12 17:04:58 [INFO] Writing sequence as FASTA for accession `NC_030062`.
+2019-11-12 17:04:58 [WARNING] Error while extracting IRs for accession `NC_030062`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:04:58 [INFO] Saving GenBank flat file for accession `NC_030063`.
+2019-11-12 17:05:00 [INFO] Writing sequence as FASTA for accession `NC_030063`.
+2019-11-12 17:05:00 [WARNING] Error while extracting IRs for accession `NC_030063`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:00 [INFO] Saving GenBank flat file for accession `KU521376`.
+2019-11-12 17:05:01 [INFO] Writing sequence as FASTA for accession `KU521376`.
+2019-11-12 17:05:01 [INFO] Both IRs (IRa and IRb) detected in accession `KU521376`.
+2019-11-12 17:05:01 [INFO] Saving GenBank flat file for accession `KT881174`.
+2019-11-12 17:05:02 [INFO] Writing sequence as FASTA for accession `KT881174`.
+2019-11-12 17:05:02 [INFO] Both IRs (IRa and IRb) detected in accession `KT881174`.
+2019-11-12 17:05:03 [INFO] Saving GenBank flat file for accession `KT881177`.
+2019-11-12 17:05:04 [INFO] Writing sequence as FASTA for accession `KT881177`.
+2019-11-12 17:05:04 [INFO] Both IRs (IRa and IRb) detected in accession `KT881177`.
+2019-11-12 17:05:04 [INFO] Saving GenBank flat file for accession `KT881169`.
+2019-11-12 17:05:05 [INFO] Writing sequence as FASTA for accession `KT881169`.
+2019-11-12 17:05:05 [INFO] Both IRs (IRa and IRb) detected in accession `KT881169`.
+2019-11-12 17:05:05 [INFO] Saving GenBank flat file for accession `KX014625`.
+2019-11-12 17:05:07 [INFO] Writing sequence as FASTA for accession `KX014625`.
+2019-11-12 17:05:07 [INFO] Both IRs (IRa and IRb) detected in accession `KX014625`.
+2019-11-12 17:05:07 [INFO] Saving GenBank flat file for accession `KU833271`.
+2019-11-12 17:05:08 [INFO] Writing sequence as FASTA for accession `KU833271`.
+2019-11-12 17:05:08 [WARNING] Error while extracting IRs for accession `KU833271`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:08 [INFO] Saving GenBank flat file for accession `NC_031202`.
+2019-11-12 17:05:10 [INFO] Writing sequence as FASTA for accession `NC_031202`.
+2019-11-12 17:05:10 [WARNING] Error while extracting IRs for accession `NC_031202`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:10 [INFO] Saving GenBank flat file for accession `NC_031193`.
+2019-11-12 17:05:12 [INFO] Writing sequence as FASTA for accession `NC_031193`.
+2019-11-12 17:05:12 [WARNING] Error while extracting IRs for accession `NC_031193`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:12 [INFO] Saving GenBank flat file for accession `NC_031194`.
+2019-11-12 17:05:13 [INFO] Writing sequence as FASTA for accession `NC_031194`.
+2019-11-12 17:05:13 [WARNING] Error while extracting IRs for accession `NC_031194`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:13 [INFO] Saving GenBank flat file for accession `NC_031196`.
+2019-11-12 17:05:14 [INFO] Writing sequence as FASTA for accession `NC_031196`.
+2019-11-12 17:05:14 [WARNING] Error while extracting IRs for accession `NC_031196`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:14 [INFO] Saving GenBank flat file for accession `NC_031197`.
+2019-11-12 17:05:16 [INFO] Writing sequence as FASTA for accession `NC_031197`.
+2019-11-12 17:05:16 [WARNING] Error while extracting IRs for accession `NC_031197`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:16 [INFO] Saving GenBank flat file for accession `NC_031198`.
+2019-11-12 17:05:17 [INFO] Writing sequence as FASTA for accession `NC_031198`.
+2019-11-12 17:05:17 [WARNING] Error while extracting IRs for accession `NC_031198`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:17 [INFO] Saving GenBank flat file for accession `NC_031199`.
+2019-11-12 17:05:19 [INFO] Writing sequence as FASTA for accession `NC_031199`.
+2019-11-12 17:05:19 [WARNING] Error while extracting IRs for accession `NC_031199`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:19 [INFO] Saving GenBank flat file for accession `NC_031200`.
+2019-11-12 17:05:20 [INFO] Writing sequence as FASTA for accession `NC_031200`.
+2019-11-12 17:05:20 [WARNING] Error while extracting IRs for accession `NC_031200`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:20 [INFO] Saving GenBank flat file for accession `NC_031201`.
+2019-11-12 17:05:21 [INFO] Writing sequence as FASTA for accession `NC_031201`.
+2019-11-12 17:05:21 [WARNING] Error while extracting IRs for accession `NC_031201`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:22 [INFO] Saving GenBank flat file for accession `NC_031203`.
+2019-11-12 17:05:23 [INFO] Writing sequence as FASTA for accession `NC_031203`.
+2019-11-12 17:05:23 [WARNING] Error while extracting IRs for accession `NC_031203`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:23 [INFO] Saving GenBank flat file for accession `NC_031204`.
+2019-11-12 17:05:24 [INFO] Writing sequence as FASTA for accession `NC_031204`.
+2019-11-12 17:05:24 [WARNING] Error while extracting IRs for accession `NC_031204`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:24 [INFO] Saving GenBank flat file for accession `NC_031205`.
+2019-11-12 17:05:26 [INFO] Writing sequence as FASTA for accession `NC_031205`.
+2019-11-12 17:05:26 [WARNING] Error while extracting IRs for accession `NC_031205`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:26 [INFO] Saving GenBank flat file for accession `NC_031376`.
+2019-11-12 17:05:27 [INFO] Writing sequence as FASTA for accession `NC_031376`.
+2019-11-12 17:05:27 [WARNING] Error while extracting IRs for accession `NC_031376`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:27 [INFO] Saving GenBank flat file for accession `KX118607`.
+2019-11-12 17:05:29 [INFO] Writing sequence as FASTA for accession `KX118607`.
+2019-11-12 17:05:29 [INFO] Both IRs (IRa and IRb) detected in accession `KX118607`.
+2019-11-12 17:05:29 [INFO] Saving GenBank flat file for accession `NC_033337`.
+2019-11-12 17:05:30 [INFO] Writing sequence as FASTA for accession `NC_033337`.
+2019-11-12 17:05:30 [WARNING] Error while extracting IRs for accession `NC_033337`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:30 [INFO] Saving GenBank flat file for accession `NC_033363`.
+2019-11-12 17:05:32 [INFO] Writing sequence as FASTA for accession `NC_033363`.
+2019-11-12 17:05:32 [INFO] Both IRs (IRa and IRb) detected in accession `NC_033363`.
+2019-11-12 17:05:32 [INFO] Saving GenBank flat file for accession `NC_033368`.
+2019-11-12 17:05:33 [INFO] Writing sequence as FASTA for accession `NC_033368`.
+2019-11-12 17:05:33 [INFO] Both IRs (IRa and IRb) detected in accession `NC_033368`.
+2019-11-12 17:05:33 [INFO] Saving GenBank flat file for accession `NC_033369`.
+2019-11-12 17:05:34 [INFO] Writing sequence as FASTA for accession `NC_033369`.
+2019-11-12 17:05:34 [INFO] Both IRs (IRa and IRb) detected in accession `NC_033369`.
+2019-11-12 17:05:35 [INFO] Saving GenBank flat file for accession `NC_033370`.
+2019-11-12 17:05:36 [INFO] Writing sequence as FASTA for accession `NC_033370`.
+2019-11-12 17:05:36 [INFO] Both IRs (IRa and IRb) detected in accession `NC_033370`.
+2019-11-12 17:05:36 [INFO] Saving GenBank flat file for accession `NC_033373`.
+2019-11-12 17:05:37 [INFO] Writing sequence as FASTA for accession `NC_033373`.
+2019-11-12 17:05:37 [INFO] Both IRs (IRa and IRb) detected in accession `NC_033373`.
+2019-11-12 17:05:37 [INFO] Saving GenBank flat file for accession `KX832334`.
+2019-11-12 17:05:40 [INFO] Writing sequence as FASTA for accession `KX832334`.
+2019-11-12 17:05:40 [INFO] Both IRs (IRa and IRb) detected in accession `KX832334`.
+2019-11-12 17:05:40 [INFO] Saving GenBank flat file for accession `NC_030532`.
+2019-11-12 17:05:41 [INFO] Writing sequence as FASTA for accession `NC_030532`.
+2019-11-12 17:05:41 [INFO] Both IRs (IRa and IRb) detected in accession `NC_030532`.
+2019-11-12 17:05:41 [INFO] Saving GenBank flat file for accession `NC_034992`.
+2019-11-12 17:05:43 [INFO] Writing sequence as FASTA for accession `NC_034992`.
+2019-11-12 17:05:43 [INFO] Both IRs (IRa and IRb) detected in accession `NC_034992`.
+2019-11-12 17:05:43 [INFO] Saving GenBank flat file for accession `NC_034985`.
+2019-11-12 17:05:44 [INFO] Writing sequence as FASTA for accession `NC_034985`.
+2019-11-12 17:05:44 [INFO] Both IRs (IRa and IRb) detected in accession `NC_034985`.
+2019-11-12 17:05:44 [INFO] Saving GenBank flat file for accession `NC_034987`.
+2019-11-12 17:05:46 [INFO] Writing sequence as FASTA for accession `NC_034987`.
+2019-11-12 17:05:46 [INFO] Both IRs (IRa and IRb) detected in accession `NC_034987`.
+2019-11-12 17:05:46 [INFO] Saving GenBank flat file for accession `NC_034988`.
+2019-11-12 17:05:47 [INFO] Writing sequence as FASTA for accession `NC_034988`.
+2019-11-12 17:05:47 [INFO] Both IRs (IRa and IRb) detected in accession `NC_034988`.
+2019-11-12 17:05:47 [INFO] Saving GenBank flat file for accession `NC_034991`.
+2019-11-12 17:05:48 [INFO] Writing sequence as FASTA for accession `NC_034991`.
+2019-11-12 17:05:48 [INFO] Both IRs (IRa and IRb) detected in accession `NC_034991`.
+2019-11-12 17:05:49 [INFO] Saving GenBank flat file for accession `KY354225`.
+2019-11-12 17:05:50 [INFO] Writing sequence as FASTA for accession `KY354225`.
+2019-11-12 17:05:50 [INFO] Both IRs (IRa and IRb) detected in accession `KY354225`.
+2019-11-12 17:05:50 [INFO] Saving GenBank flat file for accession `MF061188`.
+2019-11-12 17:05:51 [INFO] Writing sequence as FASTA for accession `MF061188`.
+2019-11-12 17:05:51 [INFO] Both IRs (IRa and IRb) detected in accession `MF061188`.
+2019-11-12 17:05:51 [INFO] Saving GenBank flat file for accession `MF061214`.
+2019-11-12 17:05:53 [INFO] Writing sequence as FASTA for accession `MF061214`.
+2019-11-12 17:05:53 [INFO] Both IRs (IRa and IRb) detected in accession `MF061214`.
+2019-11-12 17:05:53 [INFO] Saving GenBank flat file for accession `NC_035361`.
+2019-11-12 17:05:54 [INFO] Writing sequence as FASTA for accession `NC_035361`.
+2019-11-12 17:05:54 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035361`.
+2019-11-12 17:05:54 [INFO] Saving GenBank flat file for accession `NC_035375`.
+2019-11-12 17:05:56 [INFO] Writing sequence as FASTA for accession `NC_035375`.
+2019-11-12 17:05:56 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035375`.
+2019-11-12 17:05:56 [INFO] Saving GenBank flat file for accession `NC_035235`.
+2019-11-12 17:05:57 [INFO] Writing sequence as FASTA for accession `NC_035235`.
+2019-11-12 17:05:57 [WARNING] Error while extracting IRs for accession `NC_035235`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:05:57 [INFO] Saving GenBank flat file for accession `NC_035347`.
+2019-11-12 17:05:59 [INFO] Writing sequence as FASTA for accession `NC_035347`.
+2019-11-12 17:05:59 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035347`.
+2019-11-12 17:05:59 [INFO] Saving GenBank flat file for accession `NC_035348`.
+2019-11-12 17:06:00 [INFO] Writing sequence as FASTA for accession `NC_035348`.
+2019-11-12 17:06:00 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035348`.
+2019-11-12 17:06:00 [INFO] Saving GenBank flat file for accession `NC_035354`.
+2019-11-12 17:06:01 [INFO] Writing sequence as FASTA for accession `NC_035354`.
+2019-11-12 17:06:01 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035354`.
+2019-11-12 17:06:01 [INFO] Saving GenBank flat file for accession `NC_035357`.
+2019-11-12 17:06:03 [INFO] Writing sequence as FASTA for accession `NC_035357`.
+2019-11-12 17:06:03 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035357`.
+2019-11-12 17:06:03 [INFO] Saving GenBank flat file for accession `NC_035362`.
+2019-11-12 17:06:04 [INFO] Writing sequence as FASTA for accession `NC_035362`.
+2019-11-12 17:06:04 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035362`.
+2019-11-12 17:06:04 [INFO] Saving GenBank flat file for accession `NC_035371`.
+2019-11-12 17:06:06 [INFO] Writing sequence as FASTA for accession `NC_035371`.
+2019-11-12 17:06:06 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035371`.
+2019-11-12 17:06:06 [INFO] Saving GenBank flat file for accession `NC_035372`.
+2019-11-12 17:06:07 [INFO] Writing sequence as FASTA for accession `NC_035372`.
+2019-11-12 17:06:07 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035372`.
+2019-11-12 17:06:07 [INFO] Saving GenBank flat file for accession `NC_035373`.
+2019-11-12 17:06:08 [INFO] Writing sequence as FASTA for accession `NC_035373`.
+2019-11-12 17:06:08 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035373`.
+2019-11-12 17:06:08 [INFO] Saving GenBank flat file for accession `NC_035377`.
+2019-11-12 17:06:10 [INFO] Writing sequence as FASTA for accession `NC_035377`.
+2019-11-12 17:06:10 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035377`.
+2019-11-12 17:06:10 [INFO] Saving GenBank flat file for accession `NC_035381`.
+2019-11-12 17:06:11 [INFO] Writing sequence as FASTA for accession `NC_035381`.
+2019-11-12 17:06:11 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035381`.
+2019-11-12 17:06:11 [INFO] Saving GenBank flat file for accession `NC_035383`.
+2019-11-12 17:06:12 [INFO] Writing sequence as FASTA for accession `NC_035383`.
+2019-11-12 17:06:12 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035383`.
+2019-11-12 17:06:13 [INFO] Saving GenBank flat file for accession `NC_035387`.
+2019-11-12 17:06:14 [INFO] Writing sequence as FASTA for accession `NC_035387`.
+2019-11-12 17:06:14 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035387`.
+2019-11-12 17:06:14 [INFO] Saving GenBank flat file for accession `NC_035388`.
+2019-11-12 17:06:15 [INFO] Writing sequence as FASTA for accession `NC_035388`.
+2019-11-12 17:06:15 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035388`.
+2019-11-12 17:06:15 [INFO] Saving GenBank flat file for accession `NC_035393`.
+2019-11-12 17:06:17 [INFO] Writing sequence as FASTA for accession `NC_035393`.
+2019-11-12 17:06:17 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035393`.
+2019-11-12 17:06:17 [INFO] Saving GenBank flat file for accession `NC_035624`.
+2019-11-12 17:06:19 [INFO] Writing sequence as FASTA for accession `NC_035624`.
+2019-11-12 17:06:19 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035624`.
+2019-11-12 17:06:19 [INFO] Saving GenBank flat file for accession `NC_035637`.
+2019-11-12 17:06:20 [INFO] Writing sequence as FASTA for accession `NC_035637`.
+2019-11-12 17:06:21 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035637`.
+2019-11-12 17:06:21 [INFO] Saving GenBank flat file for accession `NC_035723`.
+2019-11-12 17:06:22 [INFO] Writing sequence as FASTA for accession `NC_035723`.
+2019-11-12 17:06:22 [WARNING] Error while extracting IRs for accession `NC_035723`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:06:22 [INFO] Saving GenBank flat file for accession `NC_035761`.
+2019-11-12 17:06:23 [INFO] Writing sequence as FASTA for accession `NC_035761`.
+2019-11-12 17:06:23 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035761`.
+2019-11-12 17:06:23 [INFO] Saving GenBank flat file for accession `NC_035762`.
+2019-11-12 17:06:25 [INFO] Writing sequence as FASTA for accession `NC_035762`.
+2019-11-12 17:06:25 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035762`.
+2019-11-12 17:06:25 [INFO] Saving GenBank flat file for accession `NC_035763`.
+2019-11-12 17:06:26 [INFO] Writing sequence as FASTA for accession `NC_035763`.
+2019-11-12 17:06:26 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035763`.
+2019-11-12 17:06:26 [INFO] Saving GenBank flat file for accession `NC_035764`.
+2019-11-12 17:06:28 [INFO] Writing sequence as FASTA for accession `NC_035764`.
+2019-11-12 17:06:28 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035764`.
+2019-11-12 17:06:28 [INFO] Saving GenBank flat file for accession `NC_035765`.
+2019-11-12 17:06:29 [INFO] Writing sequence as FASTA for accession `NC_035765`.
+2019-11-12 17:06:29 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035765`.
+2019-11-12 17:06:29 [INFO] Saving GenBank flat file for accession `NC_035766`.
+2019-11-12 17:06:30 [INFO] Writing sequence as FASTA for accession `NC_035766`.
+2019-11-12 17:06:30 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035766`.
+2019-11-12 17:06:31 [INFO] Saving GenBank flat file for accession `NC_035769`.
+2019-11-12 17:06:32 [INFO] Writing sequence as FASTA for accession `NC_035769`.
+2019-11-12 17:06:32 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035769`.
+2019-11-12 17:06:32 [INFO] Saving GenBank flat file for accession `NC_035770`.
+2019-11-12 17:06:33 [INFO] Writing sequence as FASTA for accession `NC_035770`.
+2019-11-12 17:06:33 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035770`.
+2019-11-12 17:06:33 [INFO] Saving GenBank flat file for accession `NC_035771`.
+2019-11-12 17:06:35 [INFO] Writing sequence as FASTA for accession `NC_035771`.
+2019-11-12 17:06:35 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035771`.
+2019-11-12 17:06:35 [INFO] Saving GenBank flat file for accession `NC_035772`.
+2019-11-12 17:06:36 [INFO] Writing sequence as FASTA for accession `NC_035772`.
+2019-11-12 17:06:36 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035772`.
+2019-11-12 17:06:36 [INFO] Saving GenBank flat file for accession `NC_035774`.
+2019-11-12 17:06:37 [INFO] Writing sequence as FASTA for accession `NC_035774`.
+2019-11-12 17:06:37 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035774`.
+2019-11-12 17:06:38 [INFO] Saving GenBank flat file for accession `NC_035775`.
+2019-11-12 17:06:39 [INFO] Writing sequence as FASTA for accession `NC_035775`.
+2019-11-12 17:06:39 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035775`.
+2019-11-12 17:06:39 [INFO] Saving GenBank flat file for accession `NC_035776`.
+2019-11-12 17:06:40 [INFO] Writing sequence as FASTA for accession `NC_035776`.
+2019-11-12 17:06:40 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035776`.
+2019-11-12 17:06:40 [INFO] Saving GenBank flat file for accession `NC_035778`.
+2019-11-12 17:06:42 [INFO] Writing sequence as FASTA for accession `NC_035778`.
+2019-11-12 17:06:42 [INFO] Both IRs (IRa and IRb) detected in accession `NC_035778`.
+2019-11-12 17:06:42 [INFO] Saving GenBank flat file for accession `NC_035896`.
+2019-11-12 17:06:43 [INFO] Writing sequence as FASTA for accession `NC_035896`.
+2019-11-12 17:06:43 [INFO] Only IRa detected in accession `NC_035896`.
+2019-11-12 17:06:43 [INFO] Saving GenBank flat file for accession `NC_036036`.
+2019-11-12 17:06:45 [INFO] Writing sequence as FASTA for accession `NC_036036`.
+2019-11-12 17:06:45 [WARNING] Error while extracting IRs for accession `NC_036036`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:06:45 [INFO] Saving GenBank flat file for accession `NC_036037`.
+2019-11-12 17:06:46 [INFO] Writing sequence as FASTA for accession `NC_036037`.
+2019-11-12 17:06:46 [WARNING] Error while extracting IRs for accession `NC_036037`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:06:46 [INFO] Saving GenBank flat file for accession `NC_036071`.
+2019-11-12 17:06:47 [INFO] Writing sequence as FASTA for accession `NC_036071`.
+2019-11-12 17:06:47 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036071`.
+2019-11-12 17:06:48 [INFO] Saving GenBank flat file for accession `NC_036074`.
+2019-11-12 17:06:49 [INFO] Writing sequence as FASTA for accession `NC_036074`.
+2019-11-12 17:06:49 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036074`.
+2019-11-12 17:06:49 [INFO] Saving GenBank flat file for accession `NC_036075`.
+2019-11-12 17:06:51 [INFO] Writing sequence as FASTA for accession `NC_036075`.
+2019-11-12 17:06:51 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036075`.
+2019-11-12 17:06:51 [INFO] Saving GenBank flat file for accession `NC_036079`.
+2019-11-12 17:06:52 [INFO] Writing sequence as FASTA for accession `NC_036079`.
+2019-11-12 17:06:52 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036079`.
+2019-11-12 17:06:52 [INFO] Saving GenBank flat file for accession `NC_036080`.
+2019-11-12 17:06:54 [INFO] Writing sequence as FASTA for accession `NC_036080`.
+2019-11-12 17:06:54 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036080`.
+2019-11-12 17:06:54 [INFO] Saving GenBank flat file for accession `NC_036082`.
+2019-11-12 17:06:55 [INFO] Writing sequence as FASTA for accession `NC_036082`.
+2019-11-12 17:06:55 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036082`.
+2019-11-12 17:06:55 [INFO] Saving GenBank flat file for accession `NC_036083`.
+2019-11-12 17:06:56 [INFO] Writing sequence as FASTA for accession `NC_036083`.
+2019-11-12 17:06:56 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036083`.
+2019-11-12 17:06:57 [INFO] Saving GenBank flat file for accession `NC_036085`.
+2019-11-12 17:06:58 [INFO] Writing sequence as FASTA for accession `NC_036085`.
+2019-11-12 17:06:58 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036085`.
+2019-11-12 17:06:58 [INFO] Saving GenBank flat file for accession `NC_036086`.
+2019-11-12 17:06:59 [INFO] Writing sequence as FASTA for accession `NC_036086`.
+2019-11-12 17:06:59 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036086`.
+2019-11-12 17:07:00 [INFO] Saving GenBank flat file for accession `NC_036087`.
+2019-11-12 17:07:01 [INFO] Writing sequence as FASTA for accession `NC_036087`.
+2019-11-12 17:07:01 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036087`.
+2019-11-12 17:07:01 [INFO] Saving GenBank flat file for accession `NC_036088`.
+2019-11-12 17:07:02 [INFO] Writing sequence as FASTA for accession `NC_036088`.
+2019-11-12 17:07:02 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036088`.
+2019-11-12 17:07:03 [INFO] Saving GenBank flat file for accession `NC_036089`.
+2019-11-12 17:07:04 [INFO] Writing sequence as FASTA for accession `NC_036089`.
+2019-11-12 17:07:04 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036089`.
+2019-11-12 17:07:04 [INFO] Saving GenBank flat file for accession `NC_036090`.
+2019-11-12 17:07:05 [INFO] Writing sequence as FASTA for accession `NC_036090`.
+2019-11-12 17:07:05 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036090`.
+2019-11-12 17:07:05 [INFO] Saving GenBank flat file for accession `NC_036091`.
+2019-11-12 17:07:07 [INFO] Writing sequence as FASTA for accession `NC_036091`.
+2019-11-12 17:07:07 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036091`.
+2019-11-12 17:07:07 [INFO] Saving GenBank flat file for accession `NC_036092`.
+2019-11-12 17:07:08 [INFO] Writing sequence as FASTA for accession `NC_036092`.
+2019-11-12 17:07:08 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036092`.
+2019-11-12 17:07:09 [INFO] Saving GenBank flat file for accession `NC_036093`.
+2019-11-12 17:07:10 [INFO] Writing sequence as FASTA for accession `NC_036093`.
+2019-11-12 17:07:10 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036093`.
+2019-11-12 17:07:10 [INFO] Saving GenBank flat file for accession `NC_036094`.
+2019-11-12 17:07:11 [INFO] Writing sequence as FASTA for accession `NC_036094`.
+2019-11-12 17:07:11 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036094`.
+2019-11-12 17:07:11 [INFO] Saving GenBank flat file for accession `NC_036095`.
+2019-11-12 17:07:13 [INFO] Writing sequence as FASTA for accession `NC_036095`.
+2019-11-12 17:07:13 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036095`.
+2019-11-12 17:07:13 [INFO] Saving GenBank flat file for accession `NC_036097`.
+2019-11-12 17:07:14 [INFO] Writing sequence as FASTA for accession `NC_036097`.
+2019-11-12 17:07:14 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036097`.
+2019-11-12 17:07:14 [INFO] Saving GenBank flat file for accession `NC_036098`.
+2019-11-12 17:07:16 [INFO] Writing sequence as FASTA for accession `NC_036098`.
+2019-11-12 17:07:16 [INFO] Both IRs (IRa and IRb) detected in accession `NC_036098`.
+2019-11-12 17:07:16 [INFO] Saving GenBank flat file for accession `NC_036221`.
+2019-11-12 17:07:17 [INFO] Writing sequence as FASTA for accession `NC_036221`.
+2019-11-12 17:07:17 [WARNING] Error while extracting IRs for accession `NC_036221`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:17 [INFO] Saving GenBank flat file for accession `NC_036222`.
+2019-11-12 17:07:18 [INFO] Writing sequence as FASTA for accession `NC_036222`.
+2019-11-12 17:07:18 [WARNING] Error while extracting IRs for accession `NC_036222`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:18 [INFO] Saving GenBank flat file for accession `KY993962`.
+2019-11-12 17:07:20 [INFO] Writing sequence as FASTA for accession `KY993962`.
+2019-11-12 17:07:20 [WARNING] Error while extracting IRs for accession `KY993962`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:20 [INFO] Saving GenBank flat file for accession `KY100264`.
+2019-11-12 17:07:21 [INFO] Writing sequence as FASTA for accession `KY100264`.
+2019-11-12 17:07:21 [WARNING] Error while extracting IRs for accession `KY100264`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:21 [INFO] Saving GenBank flat file for accession `KY100268`.
+2019-11-12 17:07:23 [INFO] Writing sequence as FASTA for accession `KY100268`.
+2019-11-12 17:07:23 [WARNING] Error while extracting IRs for accession `KY100268`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:23 [INFO] Saving GenBank flat file for accession `NC_036734`.
+2019-11-12 17:07:24 [INFO] Writing sequence as FASTA for accession `NC_036734`.
+2019-11-12 17:07:24 [WARNING] Error while extracting IRs for accession `NC_036734`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:24 [INFO] Saving GenBank flat file for accession `NC_036735`.
+2019-11-12 17:07:25 [INFO] Writing sequence as FASTA for accession `NC_036735`.
+2019-11-12 17:07:25 [WARNING] Error while extracting IRs for accession `NC_036735`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:26 [INFO] Saving GenBank flat file for accession `NC_036311`.
+2019-11-12 17:07:27 [INFO] Writing sequence as FASTA for accession `NC_036311`.
+2019-11-12 17:07:27 [WARNING] Error while extracting IRs for accession `NC_036311`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:27 [INFO] Saving GenBank flat file for accession `NC_036940`.
+2019-11-12 17:07:28 [INFO] Writing sequence as FASTA for accession `NC_036940`.
+2019-11-12 17:07:28 [WARNING] Error while extracting IRs for accession `NC_036940`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:28 [INFO] Saving GenBank flat file for accession `NC_036989`.
+2019-11-12 17:07:30 [INFO] Writing sequence as FASTA for accession `NC_036989`.
+2019-11-12 17:07:30 [INFO] Only IRa detected in accession `NC_036989`.
+2019-11-12 17:07:30 [INFO] Saving GenBank flat file for accession `NC_036990`.
+2019-11-12 17:07:31 [INFO] Writing sequence as FASTA for accession `NC_036990`.
+2019-11-12 17:07:31 [INFO] Only IRa detected in accession `NC_036990`.
+2019-11-12 17:07:31 [INFO] Saving GenBank flat file for accession `MF460827`.
+2019-11-12 17:07:33 [INFO] Writing sequence as FASTA for accession `MF460827`.
+2019-11-12 17:07:33 [INFO] Both IRs (IRa and IRb) detected in accession `MF460827`.
+2019-11-12 17:07:33 [INFO] Saving GenBank flat file for accession `MF460830`.
+2019-11-12 17:07:34 [INFO] Writing sequence as FASTA for accession `MF460830`.
+2019-11-12 17:07:34 [INFO] Both IRs (IRa and IRb) detected in accession `MF460830`.
+2019-11-12 17:07:34 [INFO] Saving GenBank flat file for accession `MF460834`.
+2019-11-12 17:07:35 [INFO] Writing sequence as FASTA for accession `MF460834`.
+2019-11-12 17:07:35 [INFO] Both IRs (IRa and IRb) detected in accession `MF460834`.
+2019-11-12 17:07:36 [INFO] Saving GenBank flat file for accession `NC_037190`.
+2019-11-12 17:07:37 [INFO] Writing sequence as FASTA for accession `NC_037190`.
+2019-11-12 17:07:37 [WARNING] Error while extracting IRs for accession `NC_037190`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:37 [INFO] Saving GenBank flat file for accession `NC_037226`.
+2019-11-12 17:07:38 [INFO] Writing sequence as FASTA for accession `NC_037226`.
+2019-11-12 17:07:38 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037226`.
+2019-11-12 17:07:38 [INFO] Saving GenBank flat file for accession `NC_037227`.
+2019-11-12 17:07:40 [INFO] Writing sequence as FASTA for accession `NC_037227`.
+2019-11-12 17:07:40 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037227`.
+2019-11-12 17:07:40 [INFO] Saving GenBank flat file for accession `NC_037228`.
+2019-11-12 17:07:41 [INFO] Writing sequence as FASTA for accession `NC_037228`.
+2019-11-12 17:07:41 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037228`.
+2019-11-12 17:07:41 [INFO] Saving GenBank flat file for accession `NC_037229`.
+2019-11-12 17:07:43 [INFO] Writing sequence as FASTA for accession `NC_037229`.
+2019-11-12 17:07:43 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037229`.
+2019-11-12 17:07:43 [INFO] Saving GenBank flat file for accession `NC_037230`.
+2019-11-12 17:07:44 [INFO] Writing sequence as FASTA for accession `NC_037230`.
+2019-11-12 17:07:44 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037230`.
+2019-11-12 17:07:44 [INFO] Saving GenBank flat file for accession `NC_037231`.
+2019-11-12 17:07:45 [INFO] Writing sequence as FASTA for accession `NC_037231`.
+2019-11-12 17:07:45 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037231`.
+2019-11-12 17:07:45 [INFO] Saving GenBank flat file for accession `NC_037232`.
+2019-11-12 17:07:47 [INFO] Writing sequence as FASTA for accession `NC_037232`.
+2019-11-12 17:07:47 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037232`.
+2019-11-12 17:07:47 [INFO] Saving GenBank flat file for accession `NC_037765`.
+2019-11-12 17:07:48 [INFO] Writing sequence as FASTA for accession `NC_037765`.
+2019-11-12 17:07:48 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037765`.
+2019-11-12 17:07:48 [INFO] Saving GenBank flat file for accession `NC_037784`.
+2019-11-12 17:07:50 [INFO] Writing sequence as FASTA for accession `NC_037784`.
+2019-11-12 17:07:50 [INFO] Both IRs (IRa and IRb) detected in accession `NC_037784`.
+2019-11-12 17:07:50 [INFO] Saving GenBank flat file for accession `NC_038153`.
+2019-11-12 17:07:51 [INFO] Writing sequence as FASTA for accession `NC_038153`.
+2019-11-12 17:07:51 [INFO] Both IRs (IRa and IRb) detected in accession `NC_038153`.
+2019-11-12 17:07:51 [INFO] Saving GenBank flat file for accession `AJ271079`.
+2019-11-12 17:07:52 [INFO] Writing sequence as FASTA for accession `AJ271079`.
+2019-11-12 17:07:52 [INFO] Both IRs (IRa and IRb) detected in accession `AJ271079`.
+2019-11-12 17:07:53 [INFO] Saving GenBank flat file for accession `NC_039418`.
+2019-11-12 17:07:54 [INFO] Writing sequence as FASTA for accession `NC_039418`.
+2019-11-12 17:07:54 [INFO] Both IRs (IRa and IRb) detected in accession `NC_039418`.
+2019-11-12 17:07:54 [INFO] Saving GenBank flat file for accession `NC_039756`.
+2019-11-12 17:07:55 [INFO] Writing sequence as FASTA for accession `NC_039756`.
+2019-11-12 17:07:55 [INFO] Both IRs (IRa and IRb) detected in accession `NC_039756`.
+2019-11-12 17:07:55 [INFO] Saving GenBank flat file for accession `NC_039815`.
+2019-11-12 17:07:57 [INFO] Writing sequence as FASTA for accession `NC_039815`.
+2019-11-12 17:07:57 [WARNING] Error while extracting IRs for accession `NC_039815`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:57 [INFO] Saving GenBank flat file for accession `NC_039677`.
+2019-11-12 17:07:58 [INFO] Writing sequence as FASTA for accession `NC_039677`.
+2019-11-12 17:07:58 [WARNING] Error while extracting IRs for accession `NC_039677`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:07:58 [INFO] Saving GenBank flat file for accession `MH029157`.
+2019-11-12 17:08:00 [INFO] Writing sequence as FASTA for accession `MH029157`.
+2019-11-12 17:08:00 [WARNING] Error while extracting IRs for accession `MH029157`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:00 [INFO] Saving GenBank flat file for accession `MF770602`.
+2019-11-12 17:08:01 [INFO] Writing sequence as FASTA for accession `MF770602`.
+2019-11-12 17:08:01 [INFO] Both IRs (IRa and IRb) detected in accession `MF770602`.
+2019-11-12 17:08:01 [INFO] Saving GenBank flat file for accession `MF770605`.
+2019-11-12 17:08:02 [INFO] Writing sequence as FASTA for accession `MF770605`.
+2019-11-12 17:08:02 [INFO] Both IRs (IRa and IRb) detected in accession `MF770605`.
+2019-11-12 17:08:02 [INFO] Saving GenBank flat file for accession `MF770616`.
+2019-11-12 17:08:04 [INFO] Writing sequence as FASTA for accession `MF770616`.
+2019-11-12 17:08:04 [INFO] Both IRs (IRa and IRb) detected in accession `MF770616`.
+2019-11-12 17:08:04 [INFO] Saving GenBank flat file for accession `MF770618`.
+2019-11-12 17:08:05 [INFO] Writing sequence as FASTA for accession `MF770618`.
+2019-11-12 17:08:05 [INFO] Both IRs (IRa and IRb) detected in accession `MF770618`.
+2019-11-12 17:08:05 [INFO] Saving GenBank flat file for accession `MF770624`.
+2019-11-12 17:08:07 [INFO] Writing sequence as FASTA for accession `MF770624`.
+2019-11-12 17:08:07 [INFO] Both IRs (IRa and IRb) detected in accession `MF770624`.
+2019-11-12 17:08:07 [INFO] Saving GenBank flat file for accession `MF770627`.
+2019-11-12 17:08:08 [INFO] Writing sequence as FASTA for accession `MF770627`.
+2019-11-12 17:08:08 [INFO] Both IRs (IRa and IRb) detected in accession `MF770627`.
+2019-11-12 17:08:08 [INFO] Saving GenBank flat file for accession `MH018574`.
+2019-11-12 17:08:09 [INFO] Writing sequence as FASTA for accession `MH018574`.
+2019-11-12 17:08:09 [INFO] Both IRs (IRa and IRb) detected in accession `MH018574`.
+2019-11-12 17:08:10 [INFO] Saving GenBank flat file for accession `MK397887`.
+2019-11-12 17:08:11 [INFO] Writing sequence as FASTA for accession `MK397887`.
+2019-11-12 17:08:11 [INFO] Both IRs (IRa and IRb) detected in accession `MK397887`.
+2019-11-12 17:08:11 [INFO] Saving GenBank flat file for accession `MH168559`.
+2019-11-12 17:08:12 [INFO] Writing sequence as FASTA for accession `MH168559`.
+2019-11-12 17:08:12 [INFO] Both IRs (IRa and IRb) detected in accession `MH168559`.
+2019-11-12 17:08:12 [INFO] Saving GenBank flat file for accession `NC_040864`.
+2019-11-12 17:08:14 [INFO] Writing sequence as FASTA for accession `NC_040864`.
+2019-11-12 17:08:14 [WARNING] Error while extracting IRs for accession `NC_040864`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:14 [INFO] Saving GenBank flat file for accession `NC_040938`.
+2019-11-12 17:08:15 [INFO] Writing sequence as FASTA for accession `NC_040938`.
+2019-11-12 17:08:15 [INFO] Both IRs (IRa and IRb) detected in accession `NC_040938`.
+2019-11-12 17:08:15 [INFO] Saving GenBank flat file for accession `NC_040933`.
+2019-11-12 17:08:16 [INFO] Writing sequence as FASTA for accession `NC_040933`.
+2019-11-12 17:08:16 [INFO] Both IRs (IRa and IRb) detected in accession `NC_040933`.
+2019-11-12 17:08:17 [INFO] Saving GenBank flat file for accession `MK327553`.
+2019-11-12 17:08:18 [INFO] Writing sequence as FASTA for accession `MK327553`.
+2019-11-12 17:08:18 [WARNING] Error while extracting IRs for accession `MK327553`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:18 [INFO] Saving GenBank flat file for accession `NC_041117`.
+2019-11-12 17:08:19 [INFO] Writing sequence as FASTA for accession `NC_041117`.
+2019-11-12 17:08:19 [INFO] Both IRs (IRa and IRb) detected in accession `NC_041117`.
+2019-11-12 17:08:19 [INFO] Saving GenBank flat file for accession `NC_041245`.
+2019-11-12 17:08:21 [INFO] Writing sequence as FASTA for accession `NC_041245`.
+2019-11-12 17:08:21 [INFO] Both IRs (IRa and IRb) detected in accession `NC_041245`.
+2019-11-12 17:08:21 [INFO] Saving GenBank flat file for accession `KT881170`.
+2019-11-12 17:08:22 [INFO] Writing sequence as FASTA for accession `KT881170`.
+2019-11-12 17:08:22 [INFO] Both IRs (IRa and IRb) detected in accession `KT881170`.
+2019-11-12 17:08:22 [INFO] Saving GenBank flat file for accession `KT881171`.
+2019-11-12 17:08:24 [INFO] Writing sequence as FASTA for accession `KT881171`.
+2019-11-12 17:08:24 [INFO] Both IRs (IRa and IRb) detected in accession `KT881171`.
+2019-11-12 17:08:24 [INFO] Saving GenBank flat file for accession `KT881172`.
+2019-11-12 17:08:25 [INFO] Writing sequence as FASTA for accession `KT881172`.
+2019-11-12 17:08:25 [INFO] Both IRs (IRa and IRb) detected in accession `KT881172`.
+2019-11-12 17:08:25 [INFO] Saving GenBank flat file for accession `KX687913`.
+2019-11-12 17:08:27 [INFO] Writing sequence as FASTA for accession `KX687913`.
+2019-11-12 17:08:27 [INFO] Both IRs (IRa and IRb) detected in accession `KX687913`.
+2019-11-12 17:08:27 [INFO] Saving GenBank flat file for accession `NC_041431`.
+2019-11-12 17:08:28 [INFO] Writing sequence as FASTA for accession `NC_041431`.
+2019-11-12 17:08:28 [WARNING] Error while extracting IRs for accession `NC_041431`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:28 [INFO] Saving GenBank flat file for accession `NC_041440`.
+2019-11-12 17:08:29 [INFO] Writing sequence as FASTA for accession `NC_041440`.
+2019-11-12 17:08:29 [WARNING] Error while extracting IRs for accession `NC_041440`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:29 [INFO] Saving GenBank flat file for accession `NC_041442`.
+2019-11-12 17:08:31 [INFO] Writing sequence as FASTA for accession `NC_041442`.
+2019-11-12 17:08:31 [INFO] Both IRs (IRa and IRb) detected in accession `NC_041442`.
+2019-11-12 17:08:31 [INFO] Saving GenBank flat file for accession `NC_041553`.
+2019-11-12 17:08:32 [INFO] Writing sequence as FASTA for accession `NC_041553`.
+2019-11-12 17:08:32 [WARNING] Error while extracting IRs for accession `NC_041553`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:32 [INFO] Saving GenBank flat file for accession `MH251613`.
+2019-11-12 17:08:34 [INFO] Writing sequence as FASTA for accession `MH251613`.
+2019-11-12 17:08:34 [WARNING] Error while extracting IRs for accession `MH251613`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:34 [INFO] Saving GenBank flat file for accession `NC_042167`.
+2019-11-12 17:08:35 [INFO] Writing sequence as FASTA for accession `NC_042167`.
+2019-11-12 17:08:35 [WARNING] Error while extracting IRs for accession `NC_042167`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:35 [INFO] Saving GenBank flat file for accession `MH795307`.
+2019-11-12 17:08:37 [INFO] Writing sequence as FASTA for accession `MH795307`.
+2019-11-12 17:08:37 [WARNING] Error while extracting IRs for accession `MH795307`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:37 [INFO] Saving GenBank flat file for accession `MH795308`.
+2019-11-12 17:08:38 [INFO] Writing sequence as FASTA for accession `MH795308`.
+2019-11-12 17:08:38 [WARNING] Error while extracting IRs for accession `MH795308`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:38 [INFO] Saving GenBank flat file for accession `NC_042713`.
+2019-11-12 17:08:40 [INFO] Writing sequence as FASTA for accession `NC_042713`.
+2019-11-12 17:08:40 [WARNING] Error while extracting IRs for accession `NC_042713`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:40 [INFO] Saving GenBank flat file for accession `NC_042714`.
+2019-11-12 17:08:41 [INFO] Writing sequence as FASTA for accession `NC_042714`.
+2019-11-12 17:08:41 [INFO] Both IRs (IRa and IRb) detected in accession `NC_042714`.
+2019-11-12 17:08:41 [INFO] Saving GenBank flat file for accession `NC_042874`.
+2019-11-12 17:08:42 [INFO] Writing sequence as FASTA for accession `NC_042874`.
+2019-11-12 17:08:42 [WARNING] Error while extracting IRs for accession `NC_042874`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:08:42 [INFO] Saving GenBank flat file for accession `NC_042920`.
+2019-11-12 17:08:44 [INFO] Writing sequence as FASTA for accession `NC_042920`.
+2019-11-12 17:08:44 [INFO] No IRs detected in accession `NC_042920`.
+2019-11-12 17:08:44 [INFO] Saving GenBank flat file for accession `NC_042950`.
+2019-11-12 17:08:45 [INFO] Writing sequence as FASTA for accession `NC_042950`.
+2019-11-12 17:08:45 [INFO] Both IRs (IRa and IRb) detected in accession `NC_042950`.
+2019-11-12 17:08:45 [INFO] Saving GenBank flat file for accession `NC_043923`.
+2019-11-12 17:08:47 [INFO] Writing sequence as FASTA for accession `NC_043923`.
+2019-11-12 17:08:47 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043923`.
+2019-11-12 17:08:47 [INFO] Saving GenBank flat file for accession `NC_043924`.
+2019-11-12 17:08:48 [INFO] Writing sequence as FASTA for accession `NC_043924`.
+2019-11-12 17:08:48 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043924`.
+2019-11-12 17:08:48 [INFO] Saving GenBank flat file for accession `NC_043774`.
+2019-11-12 17:08:49 [INFO] Writing sequence as FASTA for accession `NC_043774`.
+2019-11-12 17:08:49 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043774`.
+2019-11-12 17:08:50 [INFO] Saving GenBank flat file for accession `NC_043791`.
+2019-11-12 17:08:51 [INFO] Writing sequence as FASTA for accession `NC_043791`.
+2019-11-12 17:08:51 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043791`.
+2019-11-12 17:08:51 [INFO] Saving GenBank flat file for accession `NC_043800`.
+2019-11-12 17:08:52 [INFO] Writing sequence as FASTA for accession `NC_043800`.
+2019-11-12 17:08:52 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043800`.
+2019-11-12 17:08:52 [INFO] Saving GenBank flat file for accession `NC_043801`.
+2019-11-12 17:08:54 [INFO] Writing sequence as FASTA for accession `NC_043801`.
+2019-11-12 17:08:54 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043801`.
+2019-11-12 17:08:54 [INFO] Saving GenBank flat file for accession `NC_043806`.
+2019-11-12 17:08:55 [INFO] Writing sequence as FASTA for accession `NC_043806`.
+2019-11-12 17:08:55 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043806`.
+2019-11-12 17:08:55 [INFO] Saving GenBank flat file for accession `NC_043811`.
+2019-11-12 17:08:57 [INFO] Writing sequence as FASTA for accession `NC_043811`.
+2019-11-12 17:08:57 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043811`.
+2019-11-12 17:08:57 [INFO] Saving GenBank flat file for accession `NC_043818`.
+2019-11-12 17:08:58 [INFO] Writing sequence as FASTA for accession `NC_043818`.
+2019-11-12 17:08:58 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043818`.
+2019-11-12 17:08:58 [INFO] Saving GenBank flat file for accession `NC_043819`.
+2019-11-12 17:08:59 [INFO] Writing sequence as FASTA for accession `NC_043819`.
+2019-11-12 17:08:59 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043819`.
+2019-11-12 17:09:00 [INFO] Saving GenBank flat file for accession `NC_043829`.
+2019-11-12 17:09:01 [INFO] Writing sequence as FASTA for accession `NC_043829`.
+2019-11-12 17:09:01 [WARNING] Error while extracting IRs for accession `NC_043829`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:01 [INFO] Saving GenBank flat file for accession `NC_043844`.
+2019-11-12 17:09:02 [INFO] Writing sequence as FASTA for accession `NC_043844`.
+2019-11-12 17:09:02 [INFO] Both IRs (IRa and IRb) detected in accession `NC_043844`.
+2019-11-12 17:09:02 [INFO] Saving GenBank flat file for accession `NC_044085`.
+2019-11-12 17:09:04 [INFO] Writing sequence as FASTA for accession `NC_044085`.
+2019-11-12 17:09:04 [INFO] Both IRs (IRa and IRb) detected in accession `NC_044085`.
+2019-11-12 17:09:04 [INFO] Saving GenBank flat file for accession `NC_044108`.
+2019-11-12 17:09:05 [INFO] Writing sequence as FASTA for accession `NC_044108`.
+2019-11-12 17:09:05 [WARNING] Error while extracting IRs for accession `NC_044108`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:05 [INFO] Saving GenBank flat file for accession `NC_044119`.
+2019-11-12 17:09:07 [INFO] Writing sequence as FASTA for accession `NC_044119`.
+2019-11-12 17:09:07 [WARNING] Error while extracting IRs for accession `NC_044119`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:07 [INFO] Saving GenBank flat file for accession `MN117072`.
+2019-11-12 17:09:08 [INFO] Writing sequence as FASTA for accession `MN117072`.
+2019-11-12 17:09:08 [INFO] Both IRs (IRa and IRb) detected in accession `MN117072`.
+2019-11-12 17:09:08 [INFO] Saving GenBank flat file for accession `MK133255`.
+2019-11-12 17:09:09 [INFO] Writing sequence as FASTA for accession `MK133255`.
+2019-11-12 17:09:09 [INFO] Both IRs (IRa and IRb) detected in accession `MK133255`.
+2019-11-12 17:09:10 [INFO] Saving GenBank flat file for accession `NC_045096`.
+2019-11-12 17:09:11 [INFO] Writing sequence as FASTA for accession `NC_045096`.
+2019-11-12 17:09:11 [WARNING] Error while extracting IRs for accession `NC_045096`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:11 [INFO] Saving GenBank flat file for accession `NC_045104`.
+2019-11-12 17:09:12 [INFO] Writing sequence as FASTA for accession `NC_045104`.
+2019-11-12 17:09:12 [WARNING] Error while extracting IRs for accession `NC_045104`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:12 [INFO] Saving GenBank flat file for accession `NC_045105`.
+2019-11-12 17:09:14 [INFO] Writing sequence as FASTA for accession `NC_045105`.
+2019-11-12 17:09:14 [WARNING] Error while extracting IRs for accession `NC_045105`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:14 [INFO] Saving GenBank flat file for accession `NC_045106`.
+2019-11-12 17:09:15 [INFO] Writing sequence as FASTA for accession `NC_045106`.
+2019-11-12 17:09:15 [WARNING] Error while extracting IRs for accession `NC_045106`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:15 [INFO] Saving GenBank flat file for accession `NC_045125`.
+2019-11-12 17:09:16 [INFO] Writing sequence as FASTA for accession `NC_045125`.
+2019-11-12 17:09:16 [WARNING] Error while extracting IRs for accession `NC_045125`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
+2019-11-12 17:09:16 [INFO] Saving GenBank flat file for accession `MN201546`.
+2019-11-12 17:09:18 [INFO] Writing sequence as FASTA for accession `MN201546`.
+2019-11-12 17:09:18 [WARNING] Error while extracting IRs for accession `MN201546`: Record does not contain any features with which the IR are typically marked (i.e., repeat_region, misc_feature). Skipping further processing of this accession.
