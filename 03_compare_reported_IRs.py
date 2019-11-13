@@ -40,7 +40,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2019.11.13.1130'
+__version__ = '2019.11.13.1530'
 
 #############
 # DEBUGGING #
@@ -67,7 +67,7 @@ def main(args):
 
 
 
-    ## TO DO: Please have this script append additional columns to the user-supplied table (i.e., the output table of script 02), unless these columns are already in existence (in which case the script simply continues). The column titles shall be: "MUMMER_ABS_SNPS", "MUMMER_ABS_INDELS", "MUMMER_SIMIL_SCORE", and "CONFIRM_BY_CMP".
+    ## TO DO: Please have this script append additional columns to the user-supplied table (i.e., the output table of script 02), unless these columns are already in existence (in which case the script simply continues). The column titles shall be: "MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE", "CMP_DIFF_COUNT", and "CONGRUENCE_MUMMER_CMP".
 
     main_dir = os.getcwd()
     # Check if outfile exists, write headers
@@ -186,7 +186,7 @@ def main(args):
 
 
 
-            ## TO DO: Add code here that extracts the relevant info from the output file "accession_MUMMER.report", which was generated in Step 3. Specifically, the information of the lines "AvgIdentity", "TotalSNPs" and "TotalIndels" shall be parsed out, checked for consistency (i.e., in each of the relevant lines, the two values must be identical), and saved to the correct columns (i.e., "MUMMER_SIMIL_SCORE", "MUMMER_ABS_SNPS", "MUMMER_ABS_INDELS") of the input(=output) table.
+            ## TO DO: Add code here that extracts the relevant info from the output file "accession_MUMMER.report", which was generated in Step 3. Specifically, the information of the lines "AvgIdentity", "TotalSNPs" and "TotalIndels" shall be parsed out, checked for consistency (i.e., in each of the relevant lines, the two values must be identical), and saved to the correct columns (i.e., "MUMMER_SIMIL_SCORE", "MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT") of the input(=output) table.
             
             # STEP 4. Parse relevant info from file "accession_MUMMER.report", check for internal consistency, and save to output file
             # code here #
@@ -199,37 +199,40 @@ def main(args):
             def operations_cmp(accession):
             '''
             # Align the IRs
-            cat "$ACCN"_IR*.fas > tmp;
-            clustalo -i tmp > "$ACCN"_clustalo.fas;
+            cat ${ACCN}_IR*.fasta > tmp
+            mafft tmp 1>${ACCN}_IR_aligned.fasta 2>${ACCN}_IR_aligned.log
+            rm tmp
 
             # Deinterleaving alignment (if necessary)
-            # perl -MBio::SeqIO -e 'my $seqin = Bio::SeqIO->new(-fh => \*STDIN, -format => 'fasta'); while (my $seq = $seqin->next_seq) { print ">",$seq->id,"\n",$seq->seq,"\n"; }' < "$ACCN"_clustalo.fas > "$ACCN"_clustalo_deint.fas
+            awk '/^>/ {printf("\n%s\n",$0);next; } { printf("%s",$0);}  END {printf("\n");}' < ${ACCN}_IR_aligned.fasta | tail -n +2 > ${ACCN}_IR_aligned_deint.fasta
+            rm ${ACCN}_IR_aligned.fasta
 
             # Numerical comparison via command 'cmp'
-            IRA_ALN=$(sed -n '2p' "$ACCN"_clustalo_deint.fas);
-            IRB_ALN=$(sed -n '4p' "$ACCN"_clustalo_deint.fas);
-            cmp -bl <(echo $IRA_ALN) <(echo $IRB_ALN) | awk '{print $1,$3,$5}';
+            IRA_ALIGNED=$(sed -n '2p' "$ACCN"_IR_aligned_deint.fasta)
+            IRB_ALIGNED=$(sed -n '4p' "$ACCN"_IR_aligned_deint.fasta)
+            cmp -bl <(echo $IRA_ALIGNED) <(echo $IRB_ALIGNED) > ${ACCN}_CMP.report
+            awk '{print $1,$3,$5}' ${ACCN}_CMP.report
             '''
                 # code here
             """
 
             # STEP 5. Compare IRs via Bash command 'CMP'
             # Step 5.1. Align the IRs
-            log.info("Performing alignment of IR FASTAs.")
+            log.info("Aligning IRs via MAFFT")
             ir_filenames = [accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
             with open("tmp","w") as tmp_file:
                 for fname in ir_filenames:
                     with open(fname,"r") as infile:
                         for line in infile:
                             tmp_file.write(line)
-            clustargs = ["clustalo", "-i", "tmp"]
-            with open(accession + "_clustalo.fasta", "w") as clust_file:
-                clustalo = subprocess.Popen(clustargs,stdout=clust_file)
-                clustalo.wait()
+            clustargs = ["mafft", "tmp"]
+            with open(accession + "_IR_aligned.fasta", "w") as clust_file:
+                IR_aligned = subprocess.Popen(clustargs,stdout=clust_file)
+                IR_aligned.wait()
 
             # Step 5.2. Deinterleave the alignment
-            with open(accession + "_clustalo_deint.fasta", "w") as outfile:
-              with open(accession + "_clustalo.fasta", "r") as infile:
+            with open(accession + "_IR_aligned_deint.fasta", "w") as outfile:
+              with open(accession + "_IR_aligned.fasta", "r") as infile:
                   outfile.write(infile.readline())
                   for line in infile:
                       line = line.strip()
@@ -242,19 +245,20 @@ def main(args):
                           else:
                               outfile.write(line)
             os.remove("tmp")
-            os.remove(accession + "_clustalo.fasta")
+            os.remove(accession+"_IR_aligned.fasta")
 
             # Step 5.3. Numerical comparison via CMP
-            log.info("Comparing differences between IR sequences using generated alignment.")
-            with open(accession + ".compare","w") as comparefile:
-                cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_clustalo_deint.fasta) <(sed -n '2p' " + accession + "_clustalo_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
+            log.info("Comparing aligned IRs via Bash function CMP.")
+            with open(accession+"_CMP.report", "w") as comparefile:
+                cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
                 cmp_awk.wait()
-            with open(accession + ".compare","r") as comparefile:
-                snp_count = len(comparefile.readlines())
+            with open(accession+"_CMP.report", "r") as comparefile:
+                diff_count = len(comparefile.readlines())
 
 
 
-            ## TO DO: Add code here that extracts the relevant info from the output file "accession_compare", which was generated in Step 5. Specifically, the information of ... shall be parsed out and compared to the information received under step 3. If the two values match, please write a "yes" into column "" of the input(=output) table.
+
+            ## TO DO: Add code here that extracts the relevant info from the output file "accession_CMP.report", which was generated in Step 5. Specifically, the total number of differences between the aligned IRs shall be parsed out (i.e., the number of lines in file "accession_CMP.report"), saved to column "CMP_DIFF_COUNT", and compared to the information received under step 3. If the two values match, please write a "yes" into column "CONGRUENCE_MUMMER_CMP" of the input(=output) table.
             
             # STEP 6. Parse relevant info from file "accession_compare" and, if consistent with the MUMMER output, save to output file
             # code here #
@@ -273,7 +277,7 @@ def main(args):
         log.info("Writing gathered information to output.")
         os.chdir(main_dir)
         with open(args.outfn,"a") as outfile:
-            outfile.write("%s\t%s\t%s\t%s\t%s\t%s\n" % (str(accession), str(ir_count), str(len_a), str(len_b), str(len_diff), str(snp_count)))
+            outfile.write("%s\t%s\t%s\t%s\t%s\t%s\n" % (str(accession), str(ir_count), str(len_a), str(len_b), str(len_diff), str(diff_count)))
 
 
 
