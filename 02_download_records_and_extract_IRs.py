@@ -35,6 +35,8 @@ NOTES:
 #####################
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+from fuzzywuzzy import fuzz
 import pandas as pd
 import os, subprocess, argparse
 import tarfile, coloredlogs, logging
@@ -147,26 +149,29 @@ def getInvertedRepeats(rec):
                     IRb = misc_feature
 
     # STEP 3. Inferring the position of the IR implicitly by extracting the positions of the large (LSC) and small single copy (SSC) regions and calculating the IRs as the complement set thereof.
-    
-    # TO-DO: Please continue here!
+
     if IRa is None and IRb is None:
+        ssc = None
+        lsc = None
         all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature']
-        # The large single copy (LSC) region and the small single copy (SSC) region are always coded as a "misc_feature" with the qualifier "note", in which one of the following keywords would be located ["small single copy", "SSC", "large single copy", "LSC"].
-        # To infer the position of an IR, annotations for both the LSC and the SSC must be present. If this condition is satisfied, the IRs are calculated as the two gaps between the LSC and the SSC when taking the circular structure of the plastid genome into account. In essence, the desired code would extract the exact positions of the LSC and the SSC, and then set up new SeqFeatures with the following positions: IRb = (LSC_end..SSC_start) and IRa = (SSC_end..LSC_start).
-        # Example of how to setup a SeqFeature from scratch in Biopython (taken from section 4.3.3 from http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc38):
-        #>>> from Bio.Seq import Seq
-        #>>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        #>>> LSC_end = 12345
-        #>>> SSC_start = 56789
-        #>>> IRb = SeqFeature(FeatureLocation(LSC_end, SSC_start), type="misc_feature", strand=-1)
-        #>>> IRb.qualifiers["note"] = "inverted repeat b"
-        
+        for misc_feature in all_misc_features:
+            if "ssc" in misc_feature.qualifiers["note"][0].lower() or "small single copy" in misc_feature.qualifiers["note"][0].lower():
+                ssc = misc_feature
+            if "lsc" in misc_feature.qualifiers["note"][0].lower() or "large single copy" in misc_feature.qualifiers["note"][0].lower():
+                lsc = misc_feature
+        if lsc and ssc:
+            # TM: Do we need to add +1 to the positions?
+            SSC_start = int(ssc.location.start)
+            SSC_end = int(ssc.location.end)
+            LSC_start = int(lsc.location.start)
+            LSC_end = int(lsc.location.end)
+            IRa = SeqFeature(FeatureLocation(SSC_end, LSC_start), type="misc_feature", strand=-1)
+            IRa.qualifiers["note"] = "inverted repeat a"
+            IRb = SeqFeature(FeatureLocation(LSC_end, SSC_start), type="misc_feature", strand=-1)
+            IRb.qualifiers["note"] = "inverted repeat b"
+        else:
+            raise Exception("No annotations for SSC or LSC found! Cannot infer IR positions.")
 
-    # Biopython automatically seems to extract IRb in a reverse complement fashion
-    # This was true for a record (NC_043815) that had two "repeat_region" features with "rpt_type=inverted", one of which had its sequence marked "complement"
-    # Will have to test if the behaviour changes for misc_feature records or records where rpt_type=inverted is omitted
-
-    # MG: The code regarding reverse complementing (or not) is correct, if str(IRa) == str(IRb) for a typical record. (It's the exceptions to this rule that we are curious about in this research project.)
     return IRa, IRb
 
 
@@ -300,28 +305,37 @@ def main(args):
                 IRinfo_table = IRinfo_table.append(pd.Series(name=str(accession)))
             try:
                 IRa_feature, IRb_feature = getInvertedRepeats(rec)
-                
+
                 # TO DO: Let us add a function that explicitly checks if the IRb_feature must be reverse complemented or not. The current FASTA output is too inconsistent (i.e., sometimes the reverse-complementing appears to have been done, sometimes not). An explicit check, followed by a reverse-complementing operation (where required) appears indicated. The situation is complicated by the fact that a certain level of non-identity (i.e., up to 10% of all nucleotides) must remain permissible, even if the IRb has been correctly reverse-complemented. Hence, I suggest designing a function that takes the IRa and the IRb as received from function "getInvertedRepeats()" and then conducts an approximate string matching to see if a reverse-complementing is indicated. There are a series of Python libraries for approximate string matching available.
-                
+
                 # Example code (just an idea!)
                 '''
                 pip install fuzzywuzzy
                 pip install python-Levenshtein  # optional, I think; to make it faster
 
                 from fuzzywuzzy import fuzz
-                
+
                 score_noRC = fuzz.ratio(IRa_feature.extract(rec).seq, IRb_feature.extract(rec).seq)
                 score_RC = fuzz.ratio(IRa_feature.extract(rec).seq, IRb_feature.extract(rec).seq.reverse_complement())
-                
+
                 if score_noRC > score_RC:
                     return IRb_feature.extract(rec).seq
                 else:
                     return IRb_feature.extract(rec).seq.reverse_complement()
                 '''
-                IRbRC_feature = IRb_feature  # Note: this line is to be deleted upon implementation of better code
-                
-                
-                
+
+                if IRa_feature and IRb_feature:
+                    score_noRC = fuzz.ratio(IRa_feature.extract(rec).seq, IRb_feature.extract(rec).seq)
+                    score_RC = fuzz.ratio(IRa_feature.extract(rec).seq, IRb_feature.extract(rec).seq.reverse_complement())
+                    if score_noRC > score_RC:
+                        IRbRC_feature = IRb_feature
+                    else:
+                        IRbRC_feature = IRb_feature
+                        # TM: Switching strands should be all we need. Not sure if the features we detect have their strand property set though - need to test
+                        IRbRC_feature.strand = IRb_feature.strand * -1
+
+
+
                 if not (IRa_feature is None or IRbRC_feature is None):
                     log.info("Both IRs (IRa and IRb) detected in accession `%s`." % (str(accession)))
                     IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
