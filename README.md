@@ -18,16 +18,15 @@ mkdir -p $TESTFOLDER
 # SCRIPT 01: Generating plastome availability table
 python 01_generate_plastome_availability_table.py -q "$MYQUERY" -o $TESTFOLDER/$AVAILTABLE 1>>$TESTFOLDER/Script01_${DATE}.runlog 2>&1
 
-# SCRIPT 02: Downloading records and extracting IRs
+# SCRIPT 02: Downloading records and extracting IR information
 mkdir -p $TESTFOLDER/records_${DATE}
 mkdir -p $TESTFOLDER/data_${DATE}
 python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TESTFOLDER/records_${DATE}/ -d $TESTFOLDER/data_${DATE}/ -o $TESTFOLDER/$REPRTDSTAT 1>>$TESTFOLDER/Script02_${DATE}.runlog 2>&1
 
-
-
+# SCRIPT 03: Comparing the reported IR information
 #python3 ../PlastomeIntegrityChecks/02_download_records_and_extract_aspects.py -l $(awk 'NR > 1 {print $2}' summaries.csv) -o .
 
-# Compare IRs
+# SCRIPT 04: Comparing the IRs to generate accurate IR information
 #python3 ../PlastomeIntegrityChecks/03_compare_existing_IRs.py -o align_info.csv -i NC_*.tar.gz
 
 ```
@@ -39,6 +38,10 @@ python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TES
 ```
 -->
 
-## VISUALIZATIONS & GRAPHS
+## VISUALIZATIONS, GRAPHS & STATISTICAL TESTS
 #### TO DO
-* Let us plot the distribution by how many nucleotides the individual records have misidentified the IR length. (It would be interesting to see if the mis-estimation is normally distributed or if there is a skew in the distribution.)
+* Please conduct statistical test to see if the absence of reported IRs (i.e., "no" in column "IRa_REPORTED") higher for an unpublished status (i.e., "Unpublished" in column "TITLE") and a published status (i.e., any other value in column "TITLE")?
+
+* Please conduct statistical test to see if the absence of reported IRs (i.e., "no" in column "IRa_REPORTED") higher for records with a version number of 1 as compared to higher version numbers (see column "VERSION")?
+
+* Please plot the distribution by how many nucleotides the individual records have misidentified the IR length. (It would be interesting to see if the mis-estimation is normally distributed or if there is a skew in the distribution.)
