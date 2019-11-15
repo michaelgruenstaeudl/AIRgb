@@ -184,18 +184,18 @@ def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_featu
         IRinfo_table.loc[accession]["IRa_REPORTED_END"] = str(int(IRa_feature.location.end))
         IRinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end)))
     else:
-        IRinfo_table.loc[accession]["IRa_REPORTED_START"] = "not identified"
-        IRinfo_table.loc[accession]["IRa_REPORTED_END"] = "not identified"
-        IRinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = "not identified"
+        IRinfo_table.loc[accession]["IRa_REPORTED_START"] = "n.a."
+        IRinfo_table.loc[accession]["IRa_REPORTED_END"] = "n.a."
+        IRinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = "n.a."
 
     if IRb_feature:
         IRinfo_table.loc[accession]["IRb_REPORTED_START"] = str(int(IRb_feature.location.start))
         IRinfo_table.loc[accession]["IRb_REPORTED_END"] = str(int(IRb_feature.location.end))
         IRinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end)))
     else:
-        IRinfo_table.loc[accession]["IRb_REPORTED_START"] = "not identified"
-        IRinfo_table.loc[accession]["IRb_REPORTED_END"] = "not identified"
-        IRinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = "not identified"
+        IRinfo_table.loc[accession]["IRb_REPORTED_START"] = "n.a."
+        IRinfo_table.loc[accession]["IRb_REPORTED_END"] = "n.a."
+        IRinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = "n.a."
 
     with open(filename, "w") as outfile:
         IRinfo_table.to_csv(outfile, sep='\t', header=True)

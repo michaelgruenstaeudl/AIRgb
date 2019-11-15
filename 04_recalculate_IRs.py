@@ -8,14 +8,17 @@ OBJECTIVE:
 
 TO DO:
     * Once the IRs are re-calculated, the originally inferred IR length and the newly calculated IR length shall be compared in order to see if previous studies have - on average - overestimated or underestimated the IR length.
-
+    
     * If differences between the originally inferred IR length and the newly calculated IR length are discovered, it will be interesting to see on which side of the IRs (the side that faces the LSC or the side that faces the SSC) the original inference was incorrect (i.e., on which side a bias in the original inference happened).
-
+    
     * The following batch code shall be used to re-calculate the compare the IRs (i.e., the IR file pair) of each record:
         ```
         # Self-blasting of the plastid genome sequence in order to infer the IR length
         blastn -db chloroplastGenome.fasta -query chloroplastGenome.fasta -outfmt 7 -strand 'both' | awk '{ if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}'
         ```
+    
+    * Also do the inference of the IR via MUMMER (specifically, a self-comparison via dnadiff) so that the IR boundaries as inferred via self-BLASTING are confirmed (i.e., similar to the internal confirmation check of the total number of sequence differences via CMP).
+
 DESIGN:
     * Like in the other scripts, the evaluation of the records is conducted one by one, not all simultaneously.
 
