@@ -24,7 +24,7 @@ TO DO:
 
     * Let us please make the usage of a mindate optional. Specifically, a mindate for GenBank records shall only be applied if an optional commandline parameter to that end is specified. Otherwise, an issue arises when the execution of SCRIPT01 is interrupted (e.g., because of a server-side error), as is currently the case (see log-file of folder "testing2"). The objective is to implement a default behaviour in which the script continues to process all plastid genomes if an output file already exists, unless a commandline parameter (e.g., "--update-only") is specified, in which case the oldest date of the records processed so far is used as the mindate parameter. Thus, only updates are searched for. This optional parameter could, consequently, be named "--update-only".
 
-    
+
 NOTES:
     * none for now
 
@@ -121,6 +121,7 @@ def getEntryInfo(uid):
     esummary = subprocess.Popen(esummaryargs, stdout=subprocess.PIPE)
     out, err = esummary.communicate()
 
+
   # STEP 2. Parse out the relevant info from XML-formatted record summary
     # No need to add UID as a separate field here since it will be added by pandas as an index later
     root = ET.fromstring(out)
@@ -175,7 +176,7 @@ def getEntryInfo(uid):
     return fields, accession, duplseq
 
 
-def main(outfn, query):
+def main(outfn, query, update_only):
 
   # STEP 1. Set up logger
     log = logging.getLogger(__name__)
@@ -190,13 +191,14 @@ def main(outfn, query):
             UIDs_alreadyProcessed = [row.split('\t')[0] for row in outputFile] # Read UID column
             UIDs_alreadyProcessed = list(map(int, UIDs_alreadyProcessed[1:])) # Discard header and convert UIDs to integer values
             log.info("Summary file `%s` already exists. Number of UIDs read: %s" % (str(outfn), str(len(UIDs_alreadyProcessed))))
-            try: # Trying to set creation date of newest record as starting date for search query. If the file exists but there are no records in it (just the headers), it will skip.
-                outputFile.seek(0) # Return to beginning of file. Otherwise the next line will always throw an exception
-                mindate = datetime.strptime(outputFile.readlines()[-1].split('\t')[5], '%Y-%m-%d')
-                log.info("NOTE: Only records more recent than `%s` are being looked for." % (str(mindate)))
-            except:
-                log.error("Could not read newest date from existing summary file.")
-                raise Exception
+            if(update_only):
+                try: # Trying to set creation date of newest record as starting date for search query. If the file exists but there are no records in it (just the headers), it will skip.
+                    outputFile.seek(0) # Return to beginning of file. Otherwise the next line will always throw an exception
+                    mindate = datetime.strptime(outputFile.readlines()[-1].split('\t')[5], '%Y-%m-%d')
+                    log.info("NOTE: Only records more recent than `%s` are being looked for." % (str(mindate)))
+                except:
+                    log.error("Could not read newest date from existing summary file.")
+                    raise Exception
     else:
         with open(outfn, "w") as outputFile:
             log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
@@ -204,7 +206,10 @@ def main(outfn, query):
 
 
   # STEP 3. Get all existing UIDs and calculate which to be processed
-    UIDs_allExisting = getQueriedUIDs(query, mindate)
+    try:
+        UIDs_allExisting = getQueriedUIDs(query, mindate)
+    except Exception as err:
+        log.exception("Error while retrieving UID list: " + str(err))
     log.info(("Number of UIDs on NCBI: %s" % (str(len(UIDs_allExisting)))))
     UIDs_notYetProcessed = []
     if len(UIDs_alreadyProcessed) > 0:
@@ -230,7 +235,11 @@ def main(outfn, query):
             for uid in UIDs_notYetProcessed:
                 log.info(("Reading and parsing UID `%s`, writing to `%s`." % (str(uid), str(outfn))))
                 # Parse data
-                parsedUIDdata, accession, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
+                try:
+                    parsedUIDdata, accession, duplseq = getEntryInfo(uid) # Note: This is where the heavy-lifting is done!
+                except Exception as err:
+                    log.exception("Error retrieving info for UID " + str(uid) + ": " + str(err) + "\nSkipping this accession.")
+                    continue
                 # Write data to summary file
                 outputHandle.loc[uid] = parsedUIDdata
                 outputHandle.to_csv(outputFile, sep='\t', header=False)
@@ -264,5 +273,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
     parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000170000[SLEN] : 00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE]", help="(Optional) Entrez query that will replace the standard query")
+    parser.add_argument("-u", "--update_only", action="store_true", required=False, default=False)
     args = parser.parse_args()
-    main(os.path.abspath(args.outfn), args.query)
+    main(os.path.abspath(args.outfn), args.query, args.update_only)
