@@ -6,7 +6,7 @@ Scripts for evaluating plastome integrity across all available plastid genomes o
 ## EXAMPLE USAGE
 #### On Linux / MacOS
 ```
-TESTFOLDER=testing3
+TESTFOLDER=testing
 DATE=$(date '+%Y_%m_%d')
 MYQUERY='Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE]'
 AVAILTABLE=plastome_availability_table_${DATE}.csv
@@ -40,6 +40,8 @@ python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TES
 
 ## VISUALIZATIONS, GRAPHS & STATISTICAL TESTS
 #### TO DO
+* Please plot the growth in plastid genomes (as done via vizulations script 01), but not with the number of plastid genomes on the y-axis but with the number of unique genera plotted. (This will illustrate if the current growth in plastid genome number is reflective of a better taxonomic survey or of higher sampling in genera and families.)
+
 * Please conduct statistical test to see if the absence of reported IRs (i.e., "no" in column "IRa_REPORTED") higher for an unpublished status (i.e., "Unpublished" in column "TITLE") and a published status (i.e., any other value in column "TITLE")?
 
 * Please conduct statistical test to see if the absence of reported IRs (i.e., "no" in column "IRa_REPORTED") higher for records with a version number of 1 as compared to higher version numbers (see column "VERSION")?

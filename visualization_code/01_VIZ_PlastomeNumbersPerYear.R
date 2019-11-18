@@ -3,7 +3,7 @@
 #copyright = "Copyright (C) 2019 Michael Gruenstaeudl"
 #contributors = c("Michael Gruenstaeudl")
 #email = "m.gruenstaeudl@fu-berlin.de"
-#version = "2019.11.14.1300"
+#version = "2019.11.18.1100"
 
 ########################################################################
 
@@ -33,7 +33,7 @@ plotData = data.frame(DATE=as.Date(names(tab)), FREQUENCY=as.vector(tab))
 ########################################################################
 
 base_plot = ggplot(data=plotData, aes(x=DATE, y=cumsum(plotData[,"FREQUENCY"])), width=1) + 
-    geom_bar(stat="identity", position="identity", color="grey", fill="grey", alpha=0.5) + 
+    geom_bar(stat="identity", position="identity", color="grey", fill="grey", alpha=0.5) #+ 
     #geom_line(color="grey", alpha=0.5)
 
 myPlot = base_plot + 
@@ -41,9 +41,10 @@ myPlot = base_plot +
     ylab("Total Number of Records\n") + 
     ggtitle("Number of complete plastid genome sequences available on NCBI GenBank per submission year",
             subtitle="Note: Only plastid genomes of angiosperms are counted") + 
-    scale_x_date(limits=c(as.Date("2000-01-01"), as.Date("2025-01-01")),
+    scale_x_date(limits=c(as.Date("2000-01-01"), as.Date("2020-01-01")),
                  date_breaks="1 year", minor_breaks=NULL, expand=expand_scale(0),
                  date_labels="%Y") + 
+    scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
     #theme_bw() + 
     theme_minimal() + 
     theme(plot.title = element_text(size=20),
@@ -54,7 +55,7 @@ myPlot = base_plot +
 
 ########################################################################
 
-svglite(file=paste(out_fn, "VIZ_PlastomeNumbersPerYear.svg", sep=''), width=17, height=11.5)
+svglite(file=paste(out_fn, "VIZ_PlastomeNumbersPerYear.svg", sep=''), width=21, height=14.85)
 myPlot
 dev.off()
 
