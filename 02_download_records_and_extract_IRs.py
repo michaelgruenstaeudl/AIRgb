@@ -47,7 +47,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2019.11.18.1630'
+__version__ = '2019.11.18.1900'
 
 #############
 # DEBUGGING #
