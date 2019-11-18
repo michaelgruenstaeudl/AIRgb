@@ -21,9 +21,7 @@ DESIGN:
     There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
 
 TO DO:
-
-    * Let us please make the usage of a mindate optional. Specifically, a mindate for GenBank records shall only be applied if an optional commandline parameter to that end is specified. Otherwise, an issue arises when the execution of SCRIPT01 is interrupted (e.g., because of a server-side error), as is currently the case (see log-file of folder "testing2"). The objective is to implement a default behaviour in which the script continues to process all plastid genomes if an output file already exists, unless a commandline parameter (e.g., "--update-only") is specified, in which case the oldest date of the records processed so far is used as the mindate parameter. Thus, only updates are searched for. This optional parameter could, consequently, be named "--update-only".
-
+    * none for now
 
 NOTES:
     * none for now

@@ -9,8 +9,8 @@ Scripts for evaluating plastome integrity across all available plastid genomes o
 TESTFOLDER=testing
 DATE=$(date '+%Y_%m_%d')
 MYQUERY='Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE]'
-AVAILTABLE=plastome_availability_table_${DATE}.csv
-REPRTDSTAT=reported_IR_stats_table_${DATE}.csv
+AVAILTABLE=plastome_availability_table_${DATE}.tsv
+REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
 
 
 mkdir -p $TESTFOLDER
@@ -24,7 +24,7 @@ mkdir -p $TESTFOLDER/data_${DATE}
 python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TESTFOLDER/records_${DATE}/ -d $TESTFOLDER/data_${DATE}/ -o $TESTFOLDER/$REPRTDSTAT 1>>$TESTFOLDER/Script02_${DATE}.runlog 2>&1
 
 # SCRIPT 03: Comparing the reported IR information
-#python3 ../PlastomeIntegrityChecks/02_download_records_and_extract_aspects.py -l $(awk 'NR > 1 {print $2}' summaries.csv) -o .
+#python3 ../PlastomeIntegrityChecks/02_download_records_and_extract_aspects.py -l $(awk 'NR > 1 {print $2}' summaries.tsv) -o .
 
 # SCRIPT 04: Comparing the IRs to generate accurate IR information
 #python3 ../PlastomeIntegrityChecks/03_compare_existing_IRs.py -o align_info.csv -i NC_*.tar.gz
