@@ -8,16 +8,28 @@
 ########################################################################
 
 library(ggplot2)
-library(svglite)
 library(tcltk) # For dialog boxes
 library(tools) # For function 'file_path_sans_ext'
 library(dplyr) # For function '%>%'
 
 ########################################################################
 
+# GETTING SCRIPT NAME
+args = commandArgs(TRUE)
+this_script = sub(".*=", "", commandArgs()[4])
+script_name = file_path_sans_ext(basename(this_script))
+
+########################################################################
+
+#GLOBAL VARIABLES
+start_year = 2010
+
+########################################################################
+
 ## Load Plastome Availability Table (.csv-format)
 inFn = tk_choose.files(caption = "Select the plastome availability table (.tsv-format)")
-out_fn = paste(file_path_sans_ext(inFn), "_", sep='')
+#out_fn = paste(file_path_sans_ext(inFn), "_", sep='')
+out_fn = dirname(inFn)
 inData = read.csv(inFn, sep = "\t")
 
 ########################################################################
@@ -42,11 +54,16 @@ base_plot = ggplot(data=plotData, aes(x=DATE, y=CUMFREQ), width=1) +
 myPlot = base_plot + 
     xlab("\nYear") + 
     ylab("Total Number of Records\n") + 
-    ggtitle("Total number of complete plastid genome sequences available on NCBI GenBank in each year",
-            subtitle="Note: Only plastid genomes of angiosperms are counted") + 
-    scale_x_date(limits=c(as.Date("2000-01-01"), as.Date("2020-01-01")),
-                 date_breaks="1 year", minor_breaks=NULL, expand=expand_scale(0),
-                 date_labels="%Y") + 
+    ggtitle("Total number of complete plastid genome sequences on NCBI GenBank\nper year",
+            subtitle="Note: Only plastid genomes of angiosperms are counted"
+    ) + 
+    scale_x_date(
+        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-01-01")),
+        date_breaks="1 year",
+        minor_breaks=NULL,
+        expand=expand_scale(0),
+        date_labels="%Y"
+    ) + 
     scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
     #scale_colour_grey(aesthetics = "fill") + 
     #scale_fill_brewer(palette="Dark2", name="Criterion positive/negative") + 
@@ -62,13 +79,7 @@ myPlot = base_plot +
 
 ########################################################################
 
-PlastomeNumbersPerYear = myPlot
-save(PlastomeNumbersPerYear, file="VIZ_PlastomeNumbersPerYear.Rdata")
-
-########################################################################
-
-svglite(file="VIZ_PlastomeNumbersPerYear.svg", width=21, height=7.425)
-myPlot
-dev.off()
+assign(script_name, myPlot)
+saveRDS(eval(as.name(script_name)), file=paste(out_fn, '/', script_name, ".Rds", sep=''))
 
 ########################################################################

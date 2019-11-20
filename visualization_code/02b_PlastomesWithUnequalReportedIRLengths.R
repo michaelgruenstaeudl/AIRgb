@@ -8,14 +8,21 @@
 ########################################################################
 
 library(ggplot2)
-library(svglite)
 library(tcltk) # For dialog boxes
 library(tools) # For function 'file_path_sans_ext'
 library(dplyr) # For function '%>%'
-library(grid)  # For 'textGrob'
-library(gridExtra) # For 'grid.arrange'
 
-options(scipen=999) # Avoid E-notation in numbers
+########################################################################
+
+# GETTING SCRIPT NAME
+args = commandArgs(TRUE)
+this_script = sub(".*=", "", commandArgs()[4])
+script_name = file_path_sans_ext(basename(this_script))
+
+########################################################################
+
+#GLOBAL VARIABLES
+start_year = 2010
 
 ########################################################################
 
@@ -25,7 +32,8 @@ inData1 = read.csv(inFn1, sep = "\t")
 
 ## Load Plastome Availability Table (.csv-format)
 inFn2 = tk_choose.files(caption = "Select the reported IR stats table (.tsv-format)")
-out_fn = paste(file_path_sans_ext(inFn2), "_", sep='')
+#out_fn = paste(file_path_sans_ext(inFn2), "_", sep='')
+out_fn = dirname(inFn2)
 inData2 = read.csv(inFn2, sep = "\t")
 
 ## Combine the input files
@@ -69,18 +77,22 @@ notEqualPlotData = notEqualPlotData %>% mutate(CUMFREQ=cumsum(FREQ_RECORDS))
 
 ####################################
 
-notEqual_basePlot = ggplot(data=notEqualPlotData, aes(x=DATE, y=CUMFREQ), width=1) + 
+base_plot = ggplot(data=notEqualPlotData, aes(x=DATE, y=CUMFREQ), width=1) + 
     geom_bar(stat="identity", position="identity", fill="grey50", alpha=0.5) #+ 
     #geom_line(color="grey", alpha=0.5)
 
-notEqual_finalPlot = notEqual_basePlot + 
+myPlot = base_plot + 
     xlab("\nYear") + 
     ylab("Total Number of Records\n") + 
-    ggtitle("Total number of complete plastid genome sequences available on NCBI GenBank in each year,\nwhose reported annotations of the IR do not have identical lengths",
+    ggtitle("Total number of complete plastid genome sequences on NCBI GenBank\nper year, whose reported IR annotations have unequal lengths",
             subtitle="Note: Only plastid genomes of angiosperms are counted") + 
-    scale_x_date(limits=c(as.Date("2000-01-01"), as.Date("2020-01-01")),
-                 date_breaks="1 year", minor_breaks=NULL, expand=expand_scale(0),
-                 date_labels="%Y") + 
+    scale_x_date(
+        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-01-01")),
+        date_breaks="1 year",
+        minor_breaks=NULL,
+        expand=expand_scale(0),
+        date_labels="%Y"
+    ) + 
     #scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
     #scale_colour_grey(aesthetics = "fill") + 
     #scale_fill_brewer(palette="Dark2", name="Criterion positive/negative") + 
@@ -96,68 +108,7 @@ notEqual_finalPlot = notEqual_basePlot +
 
 ####################################
 
-PlastomesWithUnequalReportedIRLengths = notEqual_finalPlot
-save(PlastomesWithUnequalReportedIRLengths, file="VIZ_PlastomesWithUnequalReportedIRLengths.Rdata")
-
-
-####################################
-
-#svglite(file=paste(out_fn, "VIZ_PlastomesWithUnequalReportedIRLengths.svg", sep=''), width=21, height=7.425)
-#notEqual_finalPlot
-#dev.off()
+assign(script_name, myPlot)
+saveRDS(eval(as.name(script_name)), file=paste(out_fn, '/', script_name, ".Rds", sep=''))
 
 ########################################################################
-
-## PLOTTING IR LENGTH DIFFERENCES AS HISTOGRAM ##
-
-## Add a column that displays the number of nucleotide differences between the IR lengths
-notEqualDF = notEqualDF %>% mutate(IR_LEN_DIFF=abs(notEqualDF$IRa_REPORTED_LENGTH-notEqualDF$IRb_REPORTED_LENGTH))
-
-####################################
-
-LenDiff_basePlot = ggplot(data=notEqualDF, aes(x=IR_LEN_DIFF)) + 
-    geom_histogram(fill="grey50", alpha=0.5) #+ 
-    #geom_density(aes(y=..density..*n), color="grey0")
-
-LenDiff_finalPlot = LenDiff_basePlot + 
-    xlab("\nLength Difference") + 
-    ylab("Total Number of Occurrences\n") + 
-    ggtitle("Distribution of the differences in length\nbetween the IRa and the IRb",
-            subtitle="Note: x-axis is set to logarithmic scale"
-    ) + 
-    scale_x_log10(
-        #limits=c(1,200000),
-        breaks=c(1,2,3,4,5,10,100,1000,10000,100000),
-        minor_breaks=NULL,
-        expand=expand_scale(0),
-        labels=c(1,2,3,4,5,10,100,1000,10000,100000)
-    ) +
-    #scale_fill_manual(values=c("grey50", "grey0"), name="Plastid genome\navailable", labels=c("Yes", "No")) +
-    #theme_bw() + 
-    theme_minimal() + 
-    theme(plot.title = element_text(size=20),
-          plot.subtitle = element_text(size=16, face="italic"),
-          axis.text=element_text(size=14),
-          axis.title=element_text(size=16, face="bold"),
-          plot.margin=unit(c(0.5,1.0,0.1,0.1),"cm"),  # Note: margin(t=0, r=0, b=0, l=0, unit="pt")
-          legend.key.width=unit(1,"cm"))
-
-####################################
-
-IRLengthDiffDistribution = LenDiff_finalPlot
-save(IRLengthDiffDistribution, file="VIZ_IRLengthDiffDistribution.Rdata")
-
-####################################
-
-#svglite(file=paste(out_fn, "VIZ_IRLengthDiffDistribution.svg", sep=''), width=21, height=7.425)
-#notEqual_finalPlot
-#dev.off()
-
-########################################################################
-
-## COMBINING SUBPLOTS INTO LARGE PLOT
-svglite(file="VIZ_ComparsionOfReportedIRLengths.svg", width=21, height=7.425)
-grid.arrange(notEqual_finalPlot, LenDiff_finalPlot, ncol=2, widths=c(2,1),
-             top=textGrob("Comparsion of reported IR lengths", gp=gpar(fontsize=16, font=2))
-            )
-dev.off()
