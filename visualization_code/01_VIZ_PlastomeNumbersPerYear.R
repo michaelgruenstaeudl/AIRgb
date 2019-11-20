@@ -11,6 +11,7 @@ library(ggplot2)
 library(svglite)
 library(tcltk) # For dialog boxes
 library(tools) # For function 'file_path_sans_ext'
+library(dplyr) # For function '%>%'
 
 ########################################################################
 
@@ -29,17 +30,19 @@ datesData = as.Date(inData$CREATE_DATE, format="%Y-%m-%d")
 tab = table(cut(datesData, 'month'))
 # Format as data.frame
 plotData = data.frame(DATE=as.Date(names(tab)), FREQUENCY=as.vector(tab))
+## Add a column that displays the growing cumulative sum
+plotData = plotData %>% mutate(CUMFREQ=cumsum(FREQUENCY))
 
 ########################################################################
 
-base_plot = ggplot(data=plotData, aes(x=DATE, y=cumsum(plotData[,"FREQUENCY"])), width=1) + 
+base_plot = ggplot(data=plotData, aes(x=DATE, y=CUMFREQ), width=1) + 
     geom_bar(stat="identity", position="identity", fill="grey50", alpha=0.5) #+ 
     #geom_line(color="grey", alpha=0.5)
 
 myPlot = base_plot + 
     xlab("\nYear") + 
     ylab("Total Number of Records\n") + 
-    ggtitle("Number of complete plastid genome sequences available on NCBI GenBank per submission year",
+    ggtitle("Total number of complete plastid genome sequences available on NCBI GenBank in each year",
             subtitle="Note: Only plastid genomes of angiosperms are counted") + 
     scale_x_date(limits=c(as.Date("2000-01-01"), as.Date("2020-01-01")),
                  date_breaks="1 year", minor_breaks=NULL, expand=expand_scale(0),
@@ -64,7 +67,7 @@ save(PlastomeNumbersPerYear, file="VIZ_PlastomeNumbersPerYear.Rdata")
 
 ########################################################################
 
-svglite(file=paste(out_fn, "VIZ_PlastomeNumbersPerYear.svg", sep=''), width=21, height=7.425)
+svglite(file="VIZ_PlastomeNumbersPerYear.svg", width=21, height=7.425)
 myPlot
 dev.off()
 

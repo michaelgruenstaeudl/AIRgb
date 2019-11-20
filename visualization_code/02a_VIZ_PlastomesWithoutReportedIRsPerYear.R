@@ -29,6 +29,20 @@ combData = merge(inData1, inData2, by="ACCESSION")
 
 ########################################################################
 
+## Ensure that numeric values are recognized as numeric (i.e., transform from factor to numeric via character)
+## See: https://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-integer-numeric-without-loss-of-information
+
+combData = transform(combData, 
+IRa_REPORTED_START = as.integer(as.character(IRa_REPORTED_START)),
+IRb_REPORTED_START = as.integer(as.character(IRb_REPORTED_START)),
+IRa_REPORTED_END = as.integer(as.character(IRa_REPORTED_END)),
+IRb_REPORTED_END = as.integer(as.character(IRa_REPORTED_END)),
+IRa_REPORTED_LENGTH = as.integer(as.character(IRa_REPORTED_LENGTH)),
+IRb_REPORTED_LENGTH = as.integer(as.character(IRa_REPORTED_LENGTH))
+)
+
+########################################################################
+
 ## Seperate rows by criterion
 posMatch = combData[which(combData[,"IRa_REPORTED"]=="yes"),]
 negMatch = combData[which(combData[,"IRa_REPORTED"]=="no"),]
@@ -59,7 +73,7 @@ base_plot = ggplot(data=plotData, aes(x=DATE, y=CUMFREQ, fill=CRITERION), width=
 myPlot = base_plot + 
     xlab("\nYear") + 
     ylab("Total Number of Records\n") + 
-    ggtitle("Number of complete plastid genome sequences available on NCBI GenBank per submission year, \nseparated by presence of IR annotation",
+    ggtitle("Total number of complete plastid genome sequences available on NCBI GenBank in each year, \nseparated by presence of IR annotation",
             subtitle="Note: Only plastid genomes of angiosperms are counted") + 
     scale_x_date(limits=c(as.Date("2000-01-01"), as.Date("2020-01-01")),
                  date_breaks="1 year", minor_breaks=NULL, expand=expand_scale(0),
@@ -103,7 +117,7 @@ save(PlastomesWithWithoutIRAnnos, file="VIZ_PlastomesWithWithoutIRAnnos.Rdata")
 
 ########################################################################
 
-svglite(file=paste(out_fn, "VIZ_PlastomesWithWithoutIRAnnos.svg", sep=''), width=21, height=7.425)
+svglite(file="VIZ_PlastomesWithWithoutIRAnnos.svg", width=21, height=7.425)
 myPlot
 dev.off()
 
