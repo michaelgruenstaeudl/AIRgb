@@ -28,9 +28,9 @@ NOTES:
 # IMPORT OPERATIONS #
 #####################
 #import xml.etree.ElementTree as ET
-import os.path, subprocess, shutil
+import os.path, subprocess
 import pandas as pd
-import argparse, tarfile
+import argparse
 import coloredlogs, logging
 
 ###############
@@ -52,6 +52,123 @@ __version__ = '2019.11.13.1530'
 # FUNCTIONS #
 #############
 
+
+def operations_mummer_legacy(accession):
+    ## TO DO: Please move the legacy processing steps with MUMMER into its own function (e.g., "operations_mummer_legacy(accession)" ) and put the corresponding bash code into its preamble.
+    """
+    # Comparison of IR FASTAs via application 'mummer', function 'nucmer'
+    # Corresponding bash code:
+
+    nucmer --maxmatch -c 100 -p $ACCN ${ACCN}_IRa.fasta ${ACCN}_IRb_revComp.fasta -p ${ACCN}_MUMMER 1>${ACCN}_MUMMER_nucmer.log 2>&1
+    show-coords -r -c -l ${ACCN}_MUMMER.delta > ${ACCN}_MUMMER.coords
+    show-snps ${ACCN}_MUMMER.delta > ${ACCN}_MUMMER.snps
+    show-tiling ${ACCN}_MUMMER.delta > ${ACCN}_MUMMER.tiling
+    show-aligns ${ACCN}_MUMMER.delta "$ACCN"_IRa "$ACCN"_IRb_revComp > ${ACCN}_MUMMER.alignviz
+    """
+    #log.info("Comparing IRs via MUMMER (function nucmer).")
+
+    nucmerargs = ["nucmer", "--maxmatch", "-c", "100", "-p", accession+"_MUMMER", accession+"_IRa.fasta", accession+"_IRb_revComp.fasta"]
+    with open(accession + "_MUMMER_nucmer.log", "w") as nucmer_log:
+        #nucmer = subprocess.Popen(nucmerargs, stdout=nucmer_log, sterr=subprocess.stdout) #TM: Where are we trying to pipe the error?
+        nucmer = subprocess.Popen(nucmerargs, stdout=nucmer_log)
+        nucmer.wait()
+
+    coordargs = ["show-coords", "-r", "-c", "-l", accession+"_MUMMER.delta"]
+    with open(accession + "_MUMMER.coords", "w") as accession_coords:
+        show_coords = subprocess.Popen(coordargs, stdout=accession_coords)
+        show_coords.wait()
+
+    snpsargs = ["show-snps", accession+"_MUMMER.delta"]
+    with open(accession+"_MUMMER.snps", "w") as accession_snps:
+        show_snps = subprocess.Popen(snpsargs, stdout=accession_snps)
+        show_snps.wait()
+
+    tilingargs = ["show-tiling", accession+"_MUMMER.delta"]
+    with open(accession+"_MUMMER.tiling", "w") as accession_tiling:
+        show_tiling = subprocess.Popen(snpsargs, stdout=accession_tiling)
+        show_tiling.wait()
+
+    alignsargs = ["show-aligns", accession+"_MUMMER.delta", accession+"_IRa", accession+"_IRb_revComp"]
+    with open(accession+"_MUMMER.alignviz","w") as accession_aligns:
+        show_aligns = subprocess.Popen(alignsargs, stdout=accession_aligns)
+        show_aligns.wait()
+
+
+def operations_mummer(accession):
+    '''
+    # Comparison of IR FASTAs via application 'mummer', function 'dnadiff'
+    # Corresponding bash code:
+
+    dnadiff ${ACCN}_IRa.fasta ${ACCN}_IRb_revComp.fasta -p ${ACCN}_MUMMER 1>${ACCN}_MUMMER_dnadiff.log 2>&1
+    '''
+    dnadiffargs = ["dnadiff", accession+"_IRa.fasta", accession+"_IRb_revComp.fasta", "-p", accession+"_MUMMER"]
+    with open(accession + "_MUMMER_dnadiff.log", "w") as dnadiff_log:
+        #dnadiff = subprocess.Popen(dnadiffargs, stdout=dnadiff_log, sterr=subprocess.stdout)  #TM: Where are we trying to pipe the error?
+        dnadiff = subprocess.Popen(dnadiffargs, stdout=dnadiff_log)
+        dnadiff.wait()
+
+def operations_cmp(accession, log):
+    '''
+    # Compare IRs via Bash command 'CMP'
+    # Corresponding bash code:
+
+    # Align the IRs
+    cat ${ACCN}_IR*.fasta > tmp
+    mafft tmp 1>${ACCN}_IR_aligned.fasta 2>${ACCN}_IR_aligned.log
+    rm tmp
+
+    # Deinterleaving alignment (if necessary)
+    awk '/^>/ {printf("\n%s\n",$0);next; } { printf("%s",$0);}  END {printf("\n");}' < ${ACCN}_IR_aligned.fasta | tail -n +2 > ${ACCN}_IR_aligned_deint.fasta
+    rm ${ACCN}_IR_aligned.fasta
+
+    # Numerical comparison via command 'cmp'
+    IRA_ALIGNED=$(sed -n '2p' "$ACCN"_IR_aligned_deint.fasta)
+    IRB_ALIGNED=$(sed -n '4p' "$ACCN"_IR_aligned_deint.fasta)
+    cmp -bl <(echo $IRA_ALIGNED) <(echo $IRB_ALIGNED) > ${ACCN}_CMP.report
+    awk '{print $1,$3,$5}' ${ACCN}_CMP.report
+    '''
+
+
+    # Align the IRs
+    log.info("Aligning IRs via MAFFT")
+    ir_filenames = [accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
+    with open("tmp","w") as tmp_file:
+        for fname in ir_filenames:
+            with open(fname,"r") as infile:
+                for line in infile:
+                    tmp_file.write(line)
+    clustargs = ["mafft", "tmp"]
+    with open(accession + "_IR_aligned.fasta", "w") as clust_file:
+        IR_aligned = subprocess.Popen(clustargs,stdout=clust_file)
+        IR_aligned.wait()
+
+    # Deinterleave the alignment
+    with open(accession + "_IR_aligned_deint.fasta", "w") as outfile:
+      with open(accession + "_IR_aligned.fasta", "r") as infile:
+          outfile.write(infile.readline())
+          for line in infile:
+              line = line.strip()
+              if(len(line) > 0):
+                  if line[0] == '>':
+                      if "IRa" in line:
+                          outfile.write(line + "\n")
+                      else:
+                          outfile.write("\n" + line + "\n")
+                  else:
+                      outfile.write(line)
+    os.remove("tmp")
+    os.remove(accession+"_IR_aligned.fasta")
+
+    # Step 5.3. Numerical comparison via CMP
+    log.info("Comparing aligned IRs via Bash function CMP.")
+    with open(accession+"_CMP.report", "w") as comparefile:
+        cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
+        cmp_awk.wait()
+    with open(accession+"_CMP.report", "r") as comparefile:
+        diff_count = len(comparefile.readlines())
+
+    return diff_count
+
 def main(args):
 
   # STEP 1. Set up logger
@@ -59,28 +176,29 @@ def main(args):
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
 
-
     ## TO DO: Please have this script read in a user-supplied table (i.e., the output table of script 02) and loop over all those accession numbers that have the entry "yes" for columns #2 ("IRa_REPORTED") and #6 ("IRb_REPORTED").
+    try:
+        IRinfo_file = os.path.abspath(args.infn)
+        IRinfo_table = pd.read_csv(IRinfo_file, index_col=0, sep='\t', encoding="utf-8")
+        relevant_accessions = list(IRinfo_table[(IRinfo_table['IRa_REPORTED']=='yes') & (IRinfo_table['IRb_REPORTED']=='yes')].index)
+    except Exception as err:
+        log.exception("Error reading from %s: %s" % (str(IRinfo_file), str(err)))
+        raise
 
-  # STEP 2. Loop though provided folders
-    folders = [os.path.abspath(x) for x in args.input]
+    if os.path.isdir(args.datadir):
+        folders = [os.path.abspath(os.path.join(args.datadir, x)) for x in os.listdir("data") if x in relevant_accessions]
+    else:
+        log.error(args.datadir + " is not a valid directory!")
+        raise Exception(args.datadir + " is not a valid directory!")
 
+    if len(folders) < len(relevant_accessions):
+        log.warning("Missing data folder for at least one provided accession.")
 
-
-    ## TO DO: Please have this script append additional columns to the user-supplied table (i.e., the output table of script 02), unless these columns are already in existence (in which case the script simply continues). The column titles shall be: "MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE", "CMP_DIFF_COUNT", and "CONGRUENCE_MUMMER_CMP".
+    added_columns = ["MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE", "CMP_DIFF_COUNT","CONGRUENCE_MUMMER_CMP"]
+    if any(col in list(IRinfo_table.columns) for col in added_columns):
+        IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
 
     main_dir = os.getcwd()
-    # Check if outfile exists, write headers
-    # Raise an error if outfile exists but does not begin with the required headers
-    if not os.path.isfile(args.outfn):
-        with open(args.outfn, "w") as outfile:
-            outfile.write("ACCESSION\tIR_COUNT\tLEN_A\tLEN_B\tLEN_DIFF\tSNP_COUNT\n")
-    else:
-        with open(args.outfn, "r") as outfile:
-            if not outfile.readline() == "ACCESSION\tIR_COUNT\tLEN_A\tLEN_B\tLEN_DIFF\tSNP_COUNT\n":
-                raise Exception('Malformed output file!')
-
-
 
     ## TO DO: Loop over the accession numbers that fullfil the above requirements.
 
@@ -88,196 +206,59 @@ def main(args):
     for folder in folders:
         counter += 1
 
-
-
         log.info("Processing accession " + str(counter) + "/" + str(len(folders)))
-        # Init values that will be written to table
         accession = os.path.basename(folder)
-        ir_count = 0
 
-        len_a = None        ## TO DO: Variable to be deleted.
-        len_b = None        ## TO DO: Variable to be deleted.
-        len_diff = None     ## TO DO: Variable to be deleted.
-        
         snp_count = None
         # Change to directory containing sequence files
         os.chdir(folder)
         # Check if two IRs exist for this accession
         if os.path.isfile(accession + "_IRa.fasta") and os.path.isfile(accession + "_IRb_revComp.fasta"):
             log.info("Found both IRs for accession " + accession)
-            ir_count = 2
-
-
-
-            ## TO DO: Please delete the calculation of length difference here. This calculation is better done in R during the visualization process.
-
-            # STEP 1. Inferring length difference between IRs
-            with open(accession + "_IRa.fasta", "r") as ira:            ## TO DO: to be deleted
-                len_a = len(ira.readlines()[1])                         ## TO DO: to be deleted
-            with open(accession + "_IRb_revComp.fasta", "r") as irb:    ## TO DO: to be deleted
-                len_b = len(irb.readlines()[1])                         ## TO DO: to be deleted
-            len_diff = abs(len_a - len_b)                               ## TO DO: to be deleted
-
-
-
-            ## TO DO: Please move the legacy processing steps with MUMMER into its own function (e.g., "operations_mummer_legacy(accession)" ) and put the corresponding bash code into its preamble.
-            """
-            def operations_mummer_legacy(accession):
-            '''
-            # Comparison of IR FASTAs via application 'mummer', function 'nucmer'
-            nucmer --maxmatch -c 100 -p $ACCN ${ACCN}_IRa.fasta ${ACCN}_IRb_revComp.fasta -p ${ACCN}_MUMMER 1>${ACCN}_MUMMER_nucmer.log 2>&1
-            show-coords -r -c -l ${ACCN}_MUMMER.delta > ${ACCN}_MUMMER.coords
-            show-snps ${ACCN}_MUMMER.delta > ${ACCN}_MUMMER.snps
-            show-tiling ${ACCN}_MUMMER.delta > ${ACCN}_MUMMER.tiling
-            show-aligns ${ACCN}_MUMMER.delta "$ACCN"_IRa "$ACCN"_IRb_revComp > ${ACCN}_MUMMER.alignviz
-            '''
-                # code here
-            """
-
-            # STEP 2. Compare IRs via MUMMER
-            log.info("Comparing IRs via MUMMER (function nucmer).")
-
-            nucmerargs = ["nucmer", "--maxmatch", "-c", "100", "-p", accession+"_MUMMER", accession+"_IRa.fasta", accession+"_IRb_revComp.fasta"]
-            with open(accession + "_MUMMER_nucmer.log", "w") as nucmer_log:
-                nucmer = subprocess.Popen(nucmerargs, stdout=nucmer_log, sterr=subprocess.stdout)
-                nucmer.wait()
-
-            coordargs = ["show-coords", "-r", "-c", "-l", accession+"_MUMMER.delta"]
-            with open(accession + "_MUMMER.coords", "w") as accession_coords:
-                show_coords = subprocess.Popen(coordargs, stdout=accession_coords)
-                show_coords.wait()
-
-            snpsargs = ["show-snps", accession+"_MUMMER.delta"]
-            with open(accession+"_MUMMER.snps", "w") as accession_snps:
-                show_snps = subprocess.Popen(snpsargs, stdout=accession_snps)
-                show_snps.wait()
-
-            tilingargs = ["show-tiling", accession+"_MUMMER.delta"]
-            with open(accession+"_MUMMER.tiling", "w") as accession_tiling:
-                show_tiling = subprocess.Popen(snpsargs, stdout=accession_tiling)
-                show_tiling.wait()
-
-            alignsargs = ["show-aligns", accession+"_MUMMER.delta", accession+"_IRa", accession+"_IRb_revComp"]
-            with open(accession+"_MUMMER.alignviz","w") as accession_aligns:
-                show_aligns = subprocess.Popen(alignsargs, stdout=accession_aligns)
-                show_aligns.wait()
-
-
-
-
-            ## TO DO: Please move the new processing steps with MUMMER into its own function (e.g., "operations_mummer(accession)" ) and put the corresponding bash code into its preamble.
-            """
-            def operations_mummer(accession):
-            '''
-            # Comparison of IR FASTAs via application 'mummer', function 'dnadiff'
-            dnadiff ${ACCN}_IRa.fasta ${ACCN}_IRb_revComp.fasta -p ${ACCN}_MUMMER 1>${ACCN}_MUMMER_dnadiff.log 2>&1
-            '''
-                # code here
-            """
 
             # STEP 3. Compare IRs via MUMMER
             log.info("Comparing IRs via MUMMER (function dnadiff).")
-
-            dnadiffargs = ["dnadiff", accession+"_IRa.fasta", accession+"_IRb_revComp.fasta", "-p", accession+"_MUMMER"]
-            with open(accession + "_MUMMER_dnadiff.log", "w") as dnadiff_log:
-                dnadiff = subprocess.Popen(dnadiffargs, stdout=dnadiff_log, sterr=subprocess.stdout)
-                dnadiff.wait()
-
-
-
+            operations_mummer(accession)
 
             ## TO DO: Add code here that extracts the relevant info from the output file "accession_MUMMER.report", which was generated in Step 3. Specifically, the information of the lines "AvgIdentity", "TotalSNPs" and "TotalIndels" shall be parsed out, checked for consistency (i.e., in each of the relevant lines, the two values must be identical), and saved to the correct columns (i.e., "MUMMER_SIMIL_SCORE", "MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT") of the input(=output) table.
-            
+
             # STEP 4. Parse relevant info from file "accession_MUMMER.report", check for internal consistency, and save to output file
             # code here #
-
-
-
-
-            ## TO DO: Please move the processing steps with CMP into its own function (e.g., "operations_cmp(accession)" ) and put the corresponding bash code into its preamble.
-            """
-            def operations_cmp(accession):
-            '''
-            # Align the IRs
-            cat ${ACCN}_IR*.fasta > tmp
-            mafft tmp 1>${ACCN}_IR_aligned.fasta 2>${ACCN}_IR_aligned.log
-            rm tmp
-
-            # Deinterleaving alignment (if necessary)
-            awk '/^>/ {printf("\n%s\n",$0);next; } { printf("%s",$0);}  END {printf("\n");}' < ${ACCN}_IR_aligned.fasta | tail -n +2 > ${ACCN}_IR_aligned_deint.fasta
-            rm ${ACCN}_IR_aligned.fasta
-
-            # Numerical comparison via command 'cmp'
-            IRA_ALIGNED=$(sed -n '2p' "$ACCN"_IR_aligned_deint.fasta)
-            IRB_ALIGNED=$(sed -n '4p' "$ACCN"_IR_aligned_deint.fasta)
-            cmp -bl <(echo $IRA_ALIGNED) <(echo $IRB_ALIGNED) > ${ACCN}_CMP.report
-            awk '{print $1,$3,$5}' ${ACCN}_CMP.report
-            '''
-                # code here
-            """
+            with open(accession+"_MUMMER.report","r") as mumreport:
+                for line in mumreport.readlines():
+                    if line.startswith("AvgIdentity"):
+                        if line.split()[1] == line.split()[2]:
+                            # TODO: handle good case
+                            IRinfo_table.loc[accession]["MUMMER_SIMIL_SCORE"] = line.split()[1]
+                        else:
+                            # TODO: handle bad case
+                            log.warning("Values differ")
+                    elif line.startswith("TotalSNPs"):
+                        if line.split()[1] == line.split()[2]:
+                            IRinfo_table.loc[accession]["MUMMER_SNP_COUNT"] = line.split()[1]
+                        else:
+                            # TODO: handle bad case
+                            log.warning("Values differ")
+                    elif line.startswith("TotalIndels"):
+                        if line.split()[1] == line.split()[2]:
+                            IRinfo_table.loc[accession]["MUMMER_INDEL_COUNT"] = line.split()[1]
+                        else:
+                            # TODO: handle bad case
+                            log.warning("Values differ")
 
             # STEP 5. Compare IRs via Bash command 'CMP'
-            # Step 5.1. Align the IRs
-            log.info("Aligning IRs via MAFFT")
-            ir_filenames = [accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
-            with open("tmp","w") as tmp_file:
-                for fname in ir_filenames:
-                    with open(fname,"r") as infile:
-                        for line in infile:
-                            tmp_file.write(line)
-            clustargs = ["mafft", "tmp"]
-            with open(accession + "_IR_aligned.fasta", "w") as clust_file:
-                IR_aligned = subprocess.Popen(clustargs,stdout=clust_file)
-                IR_aligned.wait()
-
-            # Step 5.2. Deinterleave the alignment
-            with open(accession + "_IR_aligned_deint.fasta", "w") as outfile:
-              with open(accession + "_IR_aligned.fasta", "r") as infile:
-                  outfile.write(infile.readline())
-                  for line in infile:
-                      line = line.strip()
-                      if(len(line) > 0):
-                          if line[0] == '>':
-                              if "IRa" in line:
-                                  outfile.write(line + "\n")
-                              else:
-                                  outfile.write("\n" + line + "\n")
-                          else:
-                              outfile.write(line)
-            os.remove("tmp")
-            os.remove(accession+"_IR_aligned.fasta")
-
-            # Step 5.3. Numerical comparison via CMP
-            log.info("Comparing aligned IRs via Bash function CMP.")
-            with open(accession+"_CMP.report", "w") as comparefile:
-                cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
-                cmp_awk.wait()
-            with open(accession+"_CMP.report", "r") as comparefile:
-                diff_count = len(comparefile.readlines())
-
-
-
-
-            ## TO DO: Add code here that extracts the relevant info from the output file "accession_CMP.report", which was generated in Step 5. Specifically, the total number of differences between the aligned IRs shall be parsed out (i.e., the number of lines in file "accession_CMP.report"), saved to column "CMP_DIFF_COUNT", and compared to the information received under step 3. If the two values match, please write a "yes" into column "CONGRUENCE_MUMMER_CMP" of the input(=output) table.
-            
+            IRinfo_table[accession]["CMP_DIFF_COUNT"] = operations_cmp(accession, log)
             # STEP 6. Parse relevant info from file "accession_compare" and, if consistent with the MUMMER output, save to output file
-            # code here #
-
-
-
-
-        elif os.path.isfile(accession + "_IRa.fasta") ^ os.path.isfile(accession + "_IRb_revComp.fasta"):
-            log.info("Missing one IR for accession " + accession + "! Skipping comparison.")
-            ir_count = 1
+            if int(IRinfo_table[accession]["CMP_DIFF_COUNT"]) == int(IRinfo_table[accession]["MUMMER_SNP_COUNT"]):
+                IRinfo_table.loc[accession]["CONGRUENCE_MUMMER_CMP"] = "yes"
+            else:
+                IRinfo_table.loc[accession]["CONGRUENCE_MUMMER_CMP"] = "no"
+            log.info("Writing gathered information to output for accession " + accession)
+            IRinfo_table.to_csv(IRinfo_file, sep='\t', header=True)
         else:
-            log.info("Missing both IRs for accession " + accession + "! Skipping comparison.")
+            log.warning("At least one IR fasta file is missing. Skipping this accession.")
 
-
-        ## TO DO: The following lines are probably integrated into the steps above, as necessary.
-        log.info("Writing gathered information to output.")
         os.chdir(main_dir)
-        with open(args.outfn,"a") as outfile:
-            outfile.write("%s\t%s\t%s\t%s\t%s\t%s\n" % (str(accession), str(ir_count), str(len_a), str(len_b), str(len_diff), str(diff_count)))
 
 
 
@@ -287,12 +268,9 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-
-    
      ## TO DO: Please have this script read in a user-supplied table (i.e., the output table of script 02).
-    parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of folder file paths containing inverted repeat FASTA files")
-
-
-    parser.add_argument("--outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
+    parser.add_argument("--infn", "-i", type=str, required=True, help="Name of the file that contains IR information for accessions")
+    parser.add_argument("--datadir", "-d", type=str, required=True, help="path to data directory")
+    #parser.add_argument("--outfn", "-o", type=str, required=True, help="Name of the file the results of the IR testing will be written to")
     args = parser.parse_args()
     main(args)
