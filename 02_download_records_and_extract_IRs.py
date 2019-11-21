@@ -47,7 +47,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2019.11.18.1900'
+__version__ = '2019.11.12.1700'
 
 #############
 # DEBUGGING #
@@ -118,8 +118,10 @@ def getInvertedRepeats(rec, log):
 
     # STEP 2: Loop through repeat_regions and attempt to identify IRs
     log.debug("Checking all repeat_features with 'rpt_type' qualifier for IR information...")
+    i = 0
     for repeat_feature in [rf for rf in all_repeat_features if "rpt_type" in rf.qualifiers]:
-        log.debug("Checking repeat_feature %s/%s (position %s - %s)..." % (str(all_repeat_features.index(repeat_feature) + 1), str(len(all_repeat_features)), str(repeat_feature.location.start), str(repeat_feature.location.end)))
+        i += 1
+        log.debug("Checking repeat_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_repeat_features)), str(repeat_feature.location.start), str(repeat_feature.location.end)))
         if repeat_feature.qualifiers["rpt_type"][0].lower() == "inverted":
             log.debug("Feature is of rpt_type=inverted")
             if len(repeat_feature) > 1000:
@@ -147,8 +149,10 @@ def getInvertedRepeats(rec, log):
 
     if IRa is None and IRb is None:
         log.debug("No IR positions found so far. Checking repeat_features without 'rpt_type' qualifier.")
+        i = 0
         for repeat_feature in [feature for feature in all_repeat_features if not "rpt_type" in feature.qualifiers]:
-            log.debug("Checking repeat_feature %s/%s (position %s - %s)..." % (str(all_repeat_features.index(repeat_feature) + 1), str(len(all_repeat_features)), str(repeat_feature.location.start), str(repeat_feature.location.end)))
+            i += 1
+            log.debug("Checking repeat_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_repeat_features)), str(repeat_feature.location.start), str(repeat_feature.location.end)))
             if "note" in repeat_feature.qualifiers:
                 log.debug("Checking note qualifier for IR identifiers...")
                 if any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
@@ -180,8 +184,10 @@ def getInvertedRepeats(rec, log):
     if IRa is None and IRb is None:
         log.debug("No valid IR positions found so far. Checking all misc_features for junction information...")
         # Identify junctions to infer IRs
+        i = 0
         for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
-            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(all_misc_features.index(misc_feature) + 1), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
+            i += 1
+            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
             if any(identifier in misc_feature.qualifiers["note"][0] for identifier in jlb_identifiers):
                 log.debug("Found junction LSC-IRb.")
                 jlb_feat = misc_feature
@@ -230,8 +236,10 @@ def getInvertedRepeats(rec, log):
         lsc = None
         if len(all_misc_features) == 0:
             raise Exception("Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).")
+        i = 0
         for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
-            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(all_misc_features.index(misc_feature) + 1), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
+            i += 1
+            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
             if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ssc_identifiers):
                 log.debug("Found identifier for SSC")
                 ssc = misc_feature
