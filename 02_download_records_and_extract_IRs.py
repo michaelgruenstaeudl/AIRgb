@@ -14,8 +14,8 @@ OBJECTIVE:
     The other files generated (i.e., the three FASTA files and the table) are saved in a folder called "data" and, within that, their own subfolder (named with the accession number)
 
 DESIGN:
-    * The IRs (i.e. IRa and IRb) of a plastid genome record may be annotated in different ways (i.e., via different features and feature qualifiers), depending on the record. This script is flexible enough to identify the different naming conventions, yet always extract only a single IR pair per record. 
-    
+    * The IRs (i.e. IRa and IRb) of a plastid genome record may be annotated in different ways (i.e., via different features and feature qualifiers), depending on the record. This script is flexible enough to identify the different naming conventions, yet always extract only a single IR pair per record.
+
     * This script can also infer the position of the IR implicitly via the position of large (LSC) and small single copy (SSC) regions. Specifically, it extracts the positions of the LSC and the SSC and calculate the IRs as the complement set of the LSC and the SSC, if no explicit annotation information for the IR is present.
 
     * The plastid genome records on GenBank are inconsistent in their annotations of the reading direction of the IR. Specifically, the annotations sometimes indicate that one of the IRs is on the opposite strand than its counterpart (i.e., is reverse-complemented compared to its counterpart), sometimes not. In order to avoid issues when extracting the IRs in FASTA-format, an explicit check of the IRs per genome, followed by a reverse-complementing operation (where required), is indicated. The situation is complicated by the fact that a certain level of non-identity (i.e., up to 10% of all nucleotides) must remain permissible between the IRs, because the identification of such a non-identity is the overall objective of this investigation. Consequently, this script explicitly checks for each GenBank record (in function "getInvertedRepeats()") if one of the IR features of a record must be reverse complemented or not. Specifically, the string conducts approximate string comparisons and, based on the results, switches the strand information for one of the IRs where necessary.
@@ -76,8 +76,7 @@ def fetchGBflatfile(outdir, id, log):
 
     return gbFile
 
-
-def getInvertedRepeats(rec):
+def getInvertedRepeats(rec, log):
     ''' Identifies the IR regions from a GenBank record and returns IRa and
         IRb as SeqFeature objects '''
     # Hierarchy of preference for identifying inverted repeats:
@@ -90,25 +89,48 @@ def getInvertedRepeats(rec):
     #       1.2.2 qualifier note contains either "inverted repeat a", "inverted repeat b", "ira", or "irb"
     #       1.2.3 qualifier note contains either ("inverted" and "repeat") or "IR"
     # 2. feature is of type "misc_feature" AND
-    #   2.1. qualifier note contains either "inverted repeat a", "inverted repeat b", "ira", or "irb"
-    #   2.2. qualifier note contains either ("inverted" and "repeat") or "IR"
+    #   2.1. qualifier note contains identifying information for a junction
+    #   2.2. qualifier note contains either "inverted repeat a", "inverted repeat b", "ira", or "irb"
+    #   2.3. qualifier note contains either ("inverted" and "repeat") or "IR"
 
     IRa = None
     IRb = None
+    log.debug("Trying to determine IRs...")
 
-    # STEP 1. Parsing out all repeat_regions, loop through them, and attempt to identify IRs
+    # List of keywords that can be checked against a feature's note qualifier to identify a feature
+    ira_identifiers = ("ira", "inverted repeat a")
+    irb_identifiers = ("irb", "inverted repeat b")
+    jlb_identifiers = ["jlb", "lsc-ir"]
+    jsb_identifiers = ["jsb", "ir-ssc", "irb-ssc"]
+    jsa_identifiers = ["jsa", "ssc-ir"]
+    ssc_identifiers = ["ssc", "small single copy"]
+    lsc_identifiers = ["lsc", "large single copy"]
+
+    # STEP 1. Parse out all potentially relevant features
     all_repeat_features = [feature for feature in rec.features if feature.type=='repeat_region']
-    for repeat_feature in all_repeat_features:
-        
-        # TO DO: The inference of the IR via feature "repeat_region" with the qualifier "rpt_type" and the qualifier value "inverted" shall only be permissible if the length of the feature is at least 1000bp. (Otherwise, small sequence curiosities that were annotated as 'inverted repeats' in very early plastid genomes would be counted as genuine IRs.) Please have this script write a log.info-line in such a case that an 'inverted repeat' less than 1000bp was detected but not counted (due to its short length).
-        
-        if "rpt_type" in repeat_feature.qualifiers:
-            if repeat_feature.qualifiers["rpt_type"][0].lower() == "inverted":
+    all_misc_features = [feature for feature in rec.features if (feature.type=='misc_feature' and 'pseudo' not in feature.qualifiers)]
+    if len(all_repeat_features) == 0 and len(all_misc_features) == 0:
+        raise Exception("Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).")
+    all_qualifiers = [misc_feature.qualifiers for misc_feature in all_misc_features]
+    keylist = [list(q) for q in all_qualifiers] # Nested list of all keys of all qualifiers found in all misc features
+    if "note" not in [key for keys in keylist for key in keys]: # Flatten the key list
+        raise Exception("Record does not contain any qualifiers for feature `misc_feature` which the IR are typically named with (i.e., qualifier `note`).")
+
+    # STEP 2: Loop through repeat_regions and attempt to identify IRs
+    log.debug("Checking all repeat_features with 'rpt_type' qualifier for IR information...")
+    for repeat_feature in [rf for rf in all_repeat_features if "rpt_type" in rf.qualifiers]:
+        log.debug("Checking repeat_feature %s/%s (position %s - %s)..." % (str(all_repeat_features.index(repeat_feature) + 1), str(len(all_repeat_features)), str(repeat_feature.location.start), str(repeat_feature.location.end)))
+        if repeat_feature.qualifiers["rpt_type"][0].lower() == "inverted":
+            log.debug("Feature is of rpt_type=inverted")
+            if len(repeat_feature) > 1000:
                 if "note" in repeat_feature.qualifiers:
+                    log.debug("Checking note qualifier for IR identifiers")
                     # If the "note" qualifier contains explicit mention of which IR (a/b) we're looking at, assign it to the appropriate variable
-                    if "ira" in repeat_feature.qualifiers["note"][0].lower() or "inverted repeat a" in repeat_feature.qualifiers["note"][0].lower():
+                    if any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
+                        log.debug("Found identifier for IRa")
                         IRa = repeat_feature
-                    elif "irb" in repeat_feature.qualifiers["note"][0].lower() or "inverted repeat b" in repeat_feature.qualifiers["note"][0].lower():
+                    elif any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers):
+                        log.debug("Found identifier for IRb")
                         IRb = repeat_feature
                     # If the "note" qualifier holds no information on which IR we're looking at, assign the repeat feature to one of the variables that hasn't been initialized yet.
                     elif IRa is None:
@@ -120,102 +142,113 @@ def getInvertedRepeats(rec):
                     IRa = repeat_feature
                 elif IRb is None:
                     IRb = repeat_feature
-        elif "note" in repeat_feature.qualifiers:
-            if "ira" in repeat_feature.qualifiers["note"][0].lower() or "inverted repeat a" in repeat_feature.qualifiers["note"][0].lower():
-                IRa = repeat_feature
-            elif "irb" in repeat_feature.qualifiers["note"][0].lower() or "inverted repeat b" in repeat_feature.qualifiers["note"][0].lower():
-                IRb = repeat_feature
-            elif ("inverted" in repeat_feature.qualifiers["note"][0].lower() and "repeat" in repeat_feature.qualifiers["note"][0].lower()) or "IR" in misc_feature.qualifiers["note"][0]:
-                if IRa is None:
-                    IRa = repeat_feature
-                elif IRb is None:
-                    IRb = repeat_feature
             else:
-                print("Found a repeat region without further identifying information. Ignoring this feature.")
-                #log.info("Found a repeat region without further identifying information. Ignoring this feature.")
+                log.info("Inverted repeat feature detected at position %s - %s. Region is too small (<1000bp) to be IRa or IRb." % (str(repeat_feature.location.start), str(repeat_feature.location.end)))
 
-    # STEP 2. Parsing out all misc_features, loop through them, and attempt to identify IRs
-    # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier; if one inverted repeat was tagged as repeat_region, the other probably would have been tagged the same
-    
     if IRa is None and IRb is None:
-        all_misc_features = [feature for feature in rec.features if (feature.type=='misc_feature' and 'pseudo' not in feature.qualifiers)]
-        all_qualifiers = [misc_feature.qualifiers for misc_feature in all_misc_features]
-        if len(all_repeat_features) == 0 and len(all_misc_features) == 0:
-            raise Exception("Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).")
-        if "note" not in [q.keys() for q in all_qualifiers][0]:
-            raise Exception("Record does not contain any qualifiers for feature `misc_feature` which the IR are typically named with (i.e., qualifier `note`).")
-        for misc_feature in all_misc_features:
-            if "ira" in misc_feature.qualifiers["note"][0].lower() or "inverted repeat a" in misc_feature.qualifiers["note"][0].lower():
-                IRa = misc_feature
-            elif "irb" in misc_feature.qualifiers["note"][0].lower() or "inverted repeat b" in misc_feature.qualifiers["note"][0].lower():
-                IRb = misc_feature
-            elif ("inverted" in misc_feature.qualifiers["note"][0].lower() and "repeat" in misc_feature.qualifiers["note"][0].lower()) or "IR" in misc_feature.qualifiers["note"][0]:
-                if IRa is None:
+        log.debug("No IR positions found so far. Checking repeat_features without 'rpt_type' qualifier.")
+        for repeat_feature in [feature for feature in all_repeat_features if not "rpt_type" in feature.qualifiers]:
+            log.debug("Checking repeat_feature %s/%s (position %s - %s)..." % (str(all_repeat_features.index(repeat_feature) + 1), str(len(all_repeat_features)), str(repeat_feature.location.start), str(repeat_feature.location.end)))
+            if "note" in repeat_feature.qualifiers:
+                log.debug("Checking note qualifier for IR identifiers...")
+                if any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
+                    log.debug("Found identifier for IRa")
+                    IRa = repeat_feature
+                elif any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers):
+                    log.debug("Found identifier for IRb")
+                    IRb = repeat_feature
+                elif ("inverted" in repeat_feature.qualifiers["note"][0].lower() and "repeat" in repeat_feature.qualifiers["note"][0].lower()) or "IR" in repeat_feature.qualifiers["note"][0]:
+                    log.debug("Found general identifier for IRs")
+                    if IRa is None:
+                        log.debug("Assign feature as IRa")
+                        IRa = repeat_feature
+                    elif IRb is None:
+                        log.debug("Assign feature as IRb")
+                        IRb = repeat_feature
+                else:
+                    log.info("Found a repeat region (%s - %s) without further identifying information. Ignoring this feature." % (str(repeat_feature.location.start), str(repeat_feature.location.end)))
+
+    # Sanity check for IRs selected by the script so far.
+    if (IRa is not None and len(IRa.extract(rec).seq)<100) or (IRb is not None and len(IRb.extract(rec).seq)<100):
+        log.warning("Selected IRs are far too short to be genuine IRs and have been discarded.")
+        IRa = None
+        IRb = None
+
+    # STEP 3. Loop through misc_features, and attempt to identify IRs
+    # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier; if one inverted repeat was tagged as repeat_region, the other probably would have been tagged the same
+
+    if IRa is None and IRb is None:
+        log.debug("No valid IR positions found so far. Checking all misc_features for junction information...")
+        # Identify junctions to infer IRs
+        for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
+            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(all_misc_features.index(misc_feature) + 1), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
+            if any(identifier in misc_feature.qualifiers["note"][0] for identifier in jlb_identifiers):
+                log.debug("Found junction LSC-IRb.")
+                jlb_feat = misc_feature
+            elif any(identifier in misc_feature.qualifiers["note"][0] for identifier in jsb_identifiers):
+                log.debug("Found junction IRb-SSC.")
+                jsb_feat = misc_feature
+            elif any(identifier in misc_feature.qualifiers["note"][0] for identifier in jsa_identifiers):
+                log.debug("Found junction SSC-IRa.")
+                jsa_feat = misc_feature
+        if jlb_feat and jsb_feat:
+            log.debug("Constructing IRb from found junctions.")
+            IRb = SeqFeature(FeatureLocation(int(jlb_feat.location.end+1), int(jsb_feat.location.start-1)), type="misc_feature", strand=-1)
+        if jsa_feat:
+            log.debug("Constructing IRa from found junctions.")
+            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end+1), int(len(rec.seq)), type="misc_feature", strand=-1))
+
+        # Identify IRs by note qualifier alone
+        if IRa is None and IRb is None:
+            log.debug("No valid IR positions found so far. Checking all misc_features for identifying information in their note qualifier...")
+            for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
+                if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
+                    log.debug("Found identifier for IRa")
                     IRa = misc_feature
-                elif IRb is None:
+                elif any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers):
+                    log.debug("Found identifier for IRb")
                     IRb = misc_feature
+                elif ("inverted" in misc_feature.qualifiers["note"][0].lower() and "repeat" in misc_feature.qualifiers["note"][0].lower()) or "IR" in misc_feature.qualifiers["note"][0]:
+                    log.debug("Found general identifier for IRs")
+                    if IRa is None:
+                        log.debug("Assign feature as IRa")
+                        IRa = misc_feature
+                    elif IRb is None:
+                        log.debug("Assign feature as IRb")
+                        IRb = misc_feature
 
-
-    ## TO DO: In very early plastid genome records, the authors only listed the junction sites between the single-copy and the IR regions in a GenBank record. See, for example, record NC_001320 which provides three of the four junction sites, namely LSC-IRb, IRb-SSC, and SSC-IRa. The fourth junction site (IRa-LSC) is always the last nucleotide in the sequence and must, thus, not be given explicitly:
-    '''
-        misc_feature    80592..80593
-                     /note="[JLB]; Junction LSC-IR"
-        misc_feature    101391..101392
-                     /note="[JSB]; Junction IR-SSC"
-        misc_feature    113726..113727
-                     /note="[JSA]; Junction SSC-IR"
-    '''
-    # Here's another example, this time from record NC_002202:
-    '''
-        misc_feature    82719..82720
-                     /note="JLB, junction LSC-IRB"
-        misc_feature    107792..107793
-                     /note="JSB, junction IRB-SSC"
-        misc_feature    125652..125653
-                     /note="JSA, junction SSC-IRA"
-    '''
-    # Here's yet another example that illustrates the diversity of how these junction sites were listed:
-    '''
-        misc_feature    1..159886
-                     /note="IR-LSC boundary"
-        misc_feature    88152..88153
-                     /note="LSC-IR boundary"
-        misc_feature    114536..114537
-                     /note="IR-SSC boundary"
-        misc_feature    133500..133501
-                     /note="SSC-IR boundary"
-    '''
-    # In such cases, it is necessary to have a separate block of code to determine the correct IR position. Please design and add such code below! The current code already identifies the IRs, but mistakes the junction sites as the full length and, thus, lists the IRs as having a length of only one or a few bp.
-    
-    # STEP 3. Inferring the position of the IR if only the junction sites are provided
-    if (IRa is not None and len(IRa.extract(rec).seq)<100) or (IRb is not None and len(IRb.extract(rec).seq)<100):  # IMPORTANT: Please keep "or" in this line, as the circumstance that the IRa-LSC junction site is between the last and the first bp of the plastome gives the IRa sometimes the appearance that it has the length of the entrire plastome (and is, thus >100bp).
-        raise Exception("IRa (length: `%s`) or IRb (length: `%s`) are far too short to be genuine IRs" % (len(IRa.extract(rec).seq), len(IRb.extract(rec).seq))) # remove once better code is implemented
-
+    # Sanity check for IRs selected by the script so far.
+    if (IRa is not None and len(IRa.extract(rec).seq)<100) or (IRb is not None and len(IRb.extract(rec).seq)<100):
+        log.warning("Selected IRs are far too short to be genuine IRs and have been discarded.")
+        IRa = None
+        IRb = None
 
     # STEP 4. Inferring the position of the IR implicitly by extracting the positions of the large (LSC) and small single copy (SSC) regions and calculating the IRs as the complement set thereof.
     if IRa is None and IRb is None:
+        log.debug("Trying to infer IRs by given single-copy region positions.")
         ssc = None
         lsc = None
-        all_misc_features = [feature for feature in rec.features if (feature.type=='misc_feature' and 'pseudo' not in feature.qualifiers)]
-        all_qualifiers = [misc_feature.qualifiers for misc_feature in all_misc_features]
         if len(all_misc_features) == 0:
             raise Exception("Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).")
-        if "note" not in [q.keys() for q in all_qualifiers][0]:
-            raise Exception("Record does not contain any qualifiers for feature `misc_feature` which the single-copy regions are typically named with (i.e., qualifier `note`).")
-        for misc_feature in all_misc_features:
-            if "ssc" in misc_feature.qualifiers["note"][0].lower() or "small single copy" in misc_feature.qualifiers["note"][0].lower():
+        for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
+            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(all_misc_features.index(misc_feature) + 1), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
+            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ssc_identifiers):
+                log.debug("Found identifier for SSC")
                 ssc = misc_feature
-            if "lsc" in misc_feature.qualifiers["note"][0].lower() or "large single copy" in misc_feature.qualifiers["note"][0].lower():
+            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in lsc_identifiers):
+                log.debug("Found identifier for LSC")
                 lsc = misc_feature
         if lsc and ssc:
             SSC_start = int(ssc.location.start)
             SSC_end = int(ssc.location.end)
             LSC_start = int(lsc.location.start)
             LSC_end = int(lsc.location.end)
+            log.debug("Constructing IRa from found single-copy positions.")
             IRa = SeqFeature(FeatureLocation(SSC_end+1, LSC_start-1), type="misc_feature", strand=-1)
-            IRa.qualifiers["note"] = "inverted repeat a"
+            IRa.qualifiers["note"] = "IRa; inverted repeat a"
+            log.debug("Constructing IRb from found single-copy positions.")
             IRb = SeqFeature(FeatureLocation(LSC_end+1, SSC_start-1), type="misc_feature", strand=-1)
-            IRb.qualifiers["note"] = "inverted repeat b"
+            IRb.qualifiers["note"] = "IRb; inverted repeat b"
         else:
             raise Exception("Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.")
 
@@ -274,7 +307,10 @@ def main(args):
 
   # STEP 1. Set up logger
     log = logging.getLogger(__name__)
-    coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
+    if args.verbose:
+        coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
+    else:
+        coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='INFO', logger=log)
 
   # STEP 2. Read in accession numbers to loop over
     accNumbers = []
@@ -352,7 +388,7 @@ def main(args):
                 IRinfo_table = IRinfo_table.append(pd.Series(name=str(accession)))
 
             try:
-                IRa_feature, IRbRC_feature = getInvertedRepeats(rec)
+                IRa_feature, IRbRC_feature = getInvertedRepeats(rec, log)
                 if IRa_feature and IRbRC_feature:
                     score_noRC = fuzz.ratio(IRa_feature.extract(rec).seq, IRbRC_feature.extract(rec).seq)
                     score_RC = fuzz.ratio(IRa_feature.extract(rec).seq, IRbRC_feature.extract(rec).seq.reverse_complement())
@@ -412,5 +448,6 @@ if __name__ == "__main__":
     parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file that contains information on IR positions and length")
     parser.add_argument("--recordsdir", "-r", type=str, required=False, default="./records/", help="path to records directory")
     parser.add_argument("--datadir", "-d", type=str, required=False, default="./data/", help="path to data directory")
+    parser.add_argument("--verbose", "-v", action="store_true", required=False, default=False, help="Enable verbose logging.")
     args = parser.parse_args()
     main(args)
