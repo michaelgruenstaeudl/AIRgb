@@ -229,27 +229,27 @@ def main(args):
                     if line.startswith("AvgIdentity"):
                         if line.split()[1] == line.split()[2]:
                             # TODO: handle good case
-                            IRinfo_table.loc[accession]["MUMMER_SIMIL_SCORE"] = line.split()[1]
+                            IRinfo_table.loc[accession]["MUMMER_SIMIL_SCORE"] = float(line.split()[1])
                         else:
                             # TODO: handle bad case
                             log.warning("Values differ")
                     elif line.startswith("TotalSNPs"):
                         if line.split()[1] == line.split()[2]:
-                            IRinfo_table.loc[accession]["MUMMER_SNP_COUNT"] = line.split()[1]
+                            IRinfo_table.loc[accession]["MUMMER_SNP_COUNT"] = int(line.split()[1])
                         else:
                             # TODO: handle bad case
                             log.warning("Values differ")
                     elif line.startswith("TotalIndels"):
                         if line.split()[1] == line.split()[2]:
-                            IRinfo_table.loc[accession]["MUMMER_INDEL_COUNT"] = line.split()[1]
+                            IRinfo_table.loc[accession]["MUMMER_INDEL_COUNT"] = int(line.split()[1])
                         else:
                             # TODO: handle bad case
                             log.warning("Values differ")
 
             # STEP 5. Compare IRs via Bash command 'CMP'
-            IRinfo_table[accession]["CMP_DIFF_COUNT"] = operations_cmp(accession, log)
+            IRinfo_table.loc[accession]["CMP_DIFF_COUNT"] = int(operations_cmp(accession, log))
             # STEP 6. Parse relevant info from file "accession_compare" and, if consistent with the MUMMER output, save to output file
-            if int(IRinfo_table[accession]["CMP_DIFF_COUNT"]) == int(IRinfo_table[accession]["MUMMER_SNP_COUNT"]):
+            if IRinfo_table.loc[accession]["CMP_DIFF_COUNT"] == IRinfo_table.loc[accession]["MUMMER_SNP_COUNT"]:
                 IRinfo_table.loc[accession]["CONGRUENCE_MUMMER_CMP"] = "yes"
             else:
                 IRinfo_table.loc[accession]["CONGRUENCE_MUMMER_CMP"] = "no"
