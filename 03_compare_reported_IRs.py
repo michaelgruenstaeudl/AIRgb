@@ -195,8 +195,9 @@ def main(args):
         log.warning("Missing data folder for at least one provided accession.")
 
     added_columns = ["MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE", "CMP_DIFF_COUNT","CONGRUENCE_MUMMER_CMP"]
-    if any(col in list(IRinfo_table.columns) for col in added_columns):
-        IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
+    if not any(col in list(IRinfo_table.columns) for col in added_columns):
+        IRinfo_table = IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
+    IRinfo_table = IRinfo_table.astype({"MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
 
     main_dir = os.getcwd()
 
@@ -229,30 +230,30 @@ def main(args):
                     if line.startswith("AvgIdentity"):
                         if line.split()[1] == line.split()[2]:
                             # TODO: handle good case
-                            IRinfo_table.loc[accession]["MUMMER_SIMIL_SCORE"] = float(line.split()[1])
+                            IRinfo_table.at[accession, "MUMMER_SIMIL_SCORE"] = float(line.split()[1])
                         else:
                             # TODO: handle bad case
                             log.warning("Values differ")
                     elif line.startswith("TotalSNPs"):
                         if line.split()[1] == line.split()[2]:
-                            IRinfo_table.loc[accession]["MUMMER_SNP_COUNT"] = int(line.split()[1])
+                            IRinfo_table.at[accession, "MUMMER_SNP_COUNT"] = int(line.split()[1])
                         else:
                             # TODO: handle bad case
                             log.warning("Values differ")
                     elif line.startswith("TotalIndels"):
                         if line.split()[1] == line.split()[2]:
-                            IRinfo_table.loc[accession]["MUMMER_INDEL_COUNT"] = int(line.split()[1])
+                            IRinfo_table.at[accession, "MUMMER_INDEL_COUNT"] = int(line.split()[1])
                         else:
                             # TODO: handle bad case
                             log.warning("Values differ")
 
             # STEP 5. Compare IRs via Bash command 'CMP'
-            IRinfo_table.loc[accession]["CMP_DIFF_COUNT"] = int(operations_cmp(accession, log))
+            IRinfo_table.at[accession, "CMP_DIFF_COUNT"] = int(operations_cmp(accession, log))
             # STEP 6. Parse relevant info from file "accession_compare" and, if consistent with the MUMMER output, save to output file
-            if IRinfo_table.loc[accession]["CMP_DIFF_COUNT"] == IRinfo_table.loc[accession]["MUMMER_SNP_COUNT"]:
-                IRinfo_table.loc[accession]["CONGRUENCE_MUMMER_CMP"] = "yes"
+            if IRinfo_table.at[accession, "CMP_DIFF_COUNT"] == IRinfo_table.at[accession, "MUMMER_SNP_COUNT"]:
+                IRinfo_table.at[accession, "CONGRUENCE_MUMMER_CMP"] = "yes"
             else:
-                IRinfo_table.loc[accession]["CONGRUENCE_MUMMER_CMP"] = "no"
+                IRinfo_table.at[accession, "CONGRUENCE_MUMMER_CMP"] = "no"
             log.info("Writing gathered information to output for accession " + accession)
             IRinfo_table.to_csv(IRinfo_file, sep='\t', header=True)
         else:
