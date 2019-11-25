@@ -268,22 +268,22 @@ def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_featu
         lengths, of the IRs in a given SeqFeature object as a table '''
 
     if IRa_feature:
-        IRinfo_table.loc[accession]["IRa_REPORTED_START"] = str(int(IRa_feature.location.start))
-        IRinfo_table.loc[accession]["IRa_REPORTED_END"] = str(int(IRa_feature.location.end))
-        IRinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end)))
+        IRinfo_table.at[accession, "IRa_REPORTED_START"] = str(int(IRa_feature.location.start))
+        IRinfo_table.at[accession, "IRa_REPORTED_END"] = str(int(IRa_feature.location.end))
+        IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end)))
     else:
-        IRinfo_table.loc[accession]["IRa_REPORTED_START"] = "n.a."
-        IRinfo_table.loc[accession]["IRa_REPORTED_END"] = "n.a."
-        IRinfo_table.loc[accession]["IRa_REPORTED_LENGTH"] = "n.a."
+        IRinfo_table.at[accession, "IRa_REPORTED_START"] = "n.a."
+        IRinfo_table.at[accession, "IRa_REPORTED_END"] = "n.a."
+        IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = "n.a."
 
     if IRb_feature:
-        IRinfo_table.loc[accession]["IRb_REPORTED_START"] = str(int(IRb_feature.location.start))
-        IRinfo_table.loc[accession]["IRb_REPORTED_END"] = str(int(IRb_feature.location.end))
-        IRinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end)))
+        IRinfo_table.at[accession, "IRb_REPORTED_START"] = str(int(IRb_feature.location.start))
+        IRinfo_table.at[accession, "IRb_REPORTED_END"] = str(int(IRb_feature.location.end))
+        IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end)))
     else:
-        IRinfo_table.loc[accession]["IRb_REPORTED_START"] = "n.a."
-        IRinfo_table.loc[accession]["IRb_REPORTED_END"] = "n.a."
-        IRinfo_table.loc[accession]["IRb_REPORTED_LENGTH"] = "n.a."
+        IRinfo_table.at[accession, "IRb_REPORTED_START"] = "n.a."
+        IRinfo_table.at[accession, "IRb_REPORTED_END"] = "n.a."
+        IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = "n.a."
 
     with open(filename, "w") as outfile:
         IRinfo_table.to_csv(outfile, sep='\t', header=True)
@@ -336,10 +336,11 @@ def main(args):
             os.makedirs(args.datadir)
 
     columns = ["ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"]
+    additional_columns = ["MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE", "CMP_DIFF_COUNT","CONGRUENCE_MUMMER_CMP"] # Note: these columns are added to the file/table by Script03. If we do not allow these columns to appear in the file/table, we cannot update the file
     if os.path.isfile(args.outfn):
         with open(args.outfn) as outfile:
             header = outfile.readline()
-            if not header == "\t".join(columns) + "\n":
+            if not (header == "\t".join(columns) + "\n" or header == "\t".join(columns + additional_columns)):
                 raise Exception("Missing or malformed header in provided output file!")
         IRinfo_table = pd.read_csv(args.outfn, sep='\t', index_col=0, encoding="utf-8")
     else:
@@ -406,23 +407,23 @@ def main(args):
 
                 if not (IRa_feature is None or IRbRC_feature is None):
                     log.info("Both IRs (IRa and IRb) detected in accession `%s`." % (str(accession)))
-                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
-                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
+                    IRinfo_table.at[str(accession),"IRa_REPORTED"] = "yes"
+                    IRinfo_table.at[str(accession),"IRb_REPORTED"] = "yes"
                 elif not IRa_feature is None and IRbRC_feature is None:
                     log.info("Only IRa detected in accession `%s`." % (str(accession)))
-                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "yes"
-                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
+                    IRinfo_table.at[str(accession),"IRa_REPORTED"] = "yes"
+                    IRinfo_table.at[str(accession),"IRb_REPORTED"] = "no"
                 elif IRa_feature is None and not IRbRC_feature is None:
                     log.info("Only IRb detected in accession `%s`." % (str(accession)))
-                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
-                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "yes"
+                    IRinfo_table.at[str(accession),"IRa_REPORTED"] = "no"
+                    IRinfo_table.at[str(accession),"IRb_REPORTED"] = "yes"
                 else:
                     log.info("No IRs detected in accession `%s`." % (str(accession)))
-                    IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
-                    IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
+                    IRinfo_table.at[str(accession),"IRa_REPORTED"] = "no"
+                    IRinfo_table.at[str(accession),"IRb_REPORTED"] = "no"
             except Exception as err:
-                IRinfo_table.loc[str(accession)]["IRa_REPORTED"] = "no"
-                IRinfo_table.loc[str(accession)]["IRb_REPORTED"] = "no"
+                IRinfo_table.at[str(accession),"IRa_REPORTED"] = "no"
+                IRinfo_table.at[str(accession),"IRb_REPORTED"] = "no"
                 writeReportedIRpos(args.outfn, IRinfo_table, str(accession), IRa_feature, IRbRC_feature)
                 raise Exception("Error while extracting IRs for accession `%s`: %s Skipping further processing of this accession." % (str(accession), str(err)))
                 continue

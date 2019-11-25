@@ -128,7 +128,6 @@ def operations_cmp(accession, log):
     awk '{print $1,$3,$5}' ${ACCN}_CMP.report
     '''
 
-
     # Align the IRs
     log.info("Aligning IRs via MAFFT")
     ir_filenames = [accession + "_IRa.fasta", accession + "_IRb_revComp.fasta"]
@@ -159,7 +158,7 @@ def operations_cmp(accession, log):
     os.remove("tmp")
     os.remove(accession+"_IR_aligned.fasta")
 
-    # Step 5.3. Numerical comparison via CMP
+    # Numerical comparison via CMP
     log.info("Comparing aligned IRs via Bash function CMP.")
     with open(accession+"_CMP.report", "w") as comparefile:
         cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
@@ -175,8 +174,7 @@ def main(args):
     log = logging.getLogger(__name__)
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
-
-    ## TO DO: Please have this script read in a user-supplied table (i.e., the output table of script 02) and loop over all those accession numbers that have the entry "yes" for columns #2 ("IRa_REPORTED") and #6 ("IRb_REPORTED").
+  # STEP 2. Read table from Script02 and append columns that will be filled in this script
     try:
         IRinfo_file = os.path.abspath(args.infn)
         IRinfo_table = pd.read_csv(IRinfo_file, index_col=0, sep='\t', encoding="utf-8")
@@ -197,12 +195,12 @@ def main(args):
     added_columns = ["MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE", "CMP_DIFF_COUNT","CONGRUENCE_MUMMER_CMP"]
     if not any(col in list(IRinfo_table.columns) for col in added_columns):
         IRinfo_table = IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
+    # Note: pd.Int64Dtype() provides a NaN-able integer data type (using regular int results in an error when trying to cast a non-finite value)
     IRinfo_table = IRinfo_table.astype({"MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
 
     main_dir = os.getcwd()
 
-    ## TO DO: Loop over the accession numbers that fullfil the above requirements.
-
+  # STEP 3. Loop through the relevant accessions
     counter = 0
     for folder in folders:
         counter += 1
@@ -210,46 +208,46 @@ def main(args):
         log.info("Processing accession " + str(counter) + "/" + str(len(folders)))
         accession = os.path.basename(folder)
 
-        snp_count = None
         # Change to directory containing sequence files
         os.chdir(folder)
         # Check if two IRs exist for this accession
         if os.path.isfile(accession + "_IRa.fasta") and os.path.isfile(accession + "_IRb_revComp.fasta"):
             log.info("Found both IRs for accession " + accession)
 
-            # STEP 3. Compare IRs via MUMMER
+          # STEP 4. Compare IRs via MUMMER
             log.info("Comparing IRs via MUMMER (function dnadiff).")
             operations_mummer(accession)
 
-            ## TO DO: Add code here that extracts the relevant info from the output file "accession_MUMMER.report", which was generated in Step 3. Specifically, the information of the lines "AvgIdentity", "TotalSNPs" and "TotalIndels" shall be parsed out, checked for consistency (i.e., in each of the relevant lines, the two values must be identical), and saved to the correct columns (i.e., "MUMMER_SIMIL_SCORE", "MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT") of the input(=output) table.
+          # STEP 5. Parse relevant info from file "accession_MUMMER.report", check for internal consistency, and save to output file
+            try:
+                with open(accession+"_MUMMER.report","r") as mumreport:
+                    is_first_avgidentity = True
+                    for line in mumreport.readlines():
+                        if line.startswith("AvgIdentity") and is_first_avgidentity:
+                            is_first_avgidentity = False
+                            if line.split()[1] == line.split()[2]:
+                                IRinfo_table.at[accession, "MUMMER_SIMIL_SCORE"] = float(line.split()[1])
+                            else:
+                                raise Exception("Values in row AvgIdentity differ!")
+                        elif line.startswith("TotalSNPs"):
+                            if line.split()[1] == line.split()[2]:
+                                IRinfo_table.at[accession, "MUMMER_SNP_COUNT"] = int(line.split()[1])
+                            else:
+                                raise Exception("Values in row TotalSNPs differ!")
+                        elif line.startswith("TotalIndels"):
+                            if line.split()[1] == line.split()[2]:
+                                IRinfo_table.at[accession, "MUMMER_INDEL_COUNT"] = int(line.split()[1])
+                            else:
+                                raise Exception("Values in row TotalIndels differ!")
+            except Exception as err:
+                log.exception("Error while parsing MUMMER report: %s\n Skipping this accession." % (err))
+                os.chdir(main_dir)
+                continue
 
-            # STEP 4. Parse relevant info from file "accession_MUMMER.report", check for internal consistency, and save to output file
-            # code here #
-            with open(accession+"_MUMMER.report","r") as mumreport:
-                for line in mumreport.readlines():
-                    if line.startswith("AvgIdentity"):
-                        if line.split()[1] == line.split()[2]:
-                            # TODO: handle good case
-                            IRinfo_table.at[accession, "MUMMER_SIMIL_SCORE"] = float(line.split()[1])
-                        else:
-                            # TODO: handle bad case
-                            log.warning("Values differ")
-                    elif line.startswith("TotalSNPs"):
-                        if line.split()[1] == line.split()[2]:
-                            IRinfo_table.at[accession, "MUMMER_SNP_COUNT"] = int(line.split()[1])
-                        else:
-                            # TODO: handle bad case
-                            log.warning("Values differ")
-                    elif line.startswith("TotalIndels"):
-                        if line.split()[1] == line.split()[2]:
-                            IRinfo_table.at[accession, "MUMMER_INDEL_COUNT"] = int(line.split()[1])
-                        else:
-                            # TODO: handle bad case
-                            log.warning("Values differ")
-
-            # STEP 5. Compare IRs via Bash command 'CMP'
+          # STEP 6. Compare IRs via Bash command 'CMP'
             IRinfo_table.at[accession, "CMP_DIFF_COUNT"] = int(operations_cmp(accession, log))
-            # STEP 6. Parse relevant info from file "accession_compare" and, if consistent with the MUMMER output, save to output file
+
+          # STEP 7. Parse relevant info from file "accession_compare" and, if consistent with the MUMMER output, save to output file
             if IRinfo_table.at[accession, "CMP_DIFF_COUNT"] == IRinfo_table.at[accession, "MUMMER_SNP_COUNT"]:
                 IRinfo_table.at[accession, "CONGRUENCE_MUMMER_CMP"] = "yes"
             else:
