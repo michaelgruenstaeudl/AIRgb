@@ -76,6 +76,76 @@ def fetchGBflatfile(outdir, id, log):
 
     return gbFile
 
+def evaluateJunction(feature, rec_len):
+    '''
+        Evaluates if a feature is a junction and returns the appropriate junction type as an integer.
+        The function checks for hard identifiers first, then tries to infer the type through soft identifiers
+
+        Return types:
+        -1: Feature cannot be identified as junction
+        0:  Feature is identified as JLB
+        1:  Feature is identified as JSB
+        2:  Feature is identified as JSA
+        3:  Feature is  identified as JLA
+        4:  Ambiguous (more than one possible junction type found)
+    '''
+    identified = False
+    possible_junctions = []
+    junction_type = None
+    jlb_identifiers = {"hard": ["jlb", "lsc-irb", "irb-lsc"], "soft": ["lsc-ir", "ir-lsc", "junction"]}
+    jsb_identifiers = {"hard": ["jsb", "ssc-irb", "irb-ssc"], "soft": ["ssc-ir", "ir-ssc", "junction"]}
+    jsa_identifiers = {"hard": ["jsa", "ssc-ira", "ira-ssc"], "soft": ["ssc-ir", "ir-ssc", "junction"]}
+    jla_identifiers = {"hard": ["jla", "ira-lsc", "lsc-ira"], "soft": ["lsc-ir", "ir-lsc", "junction"]}
+
+    if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["hard"]):
+        junction_type = 0
+        identified = True
+    elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["soft"])
+        possible_junctions.append(0)
+
+    if not identified:
+        if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["hard"]):
+            junction_type = 1
+            identified = True
+        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["soft"])
+            possible_junctions.append(1)
+
+    if not identified:
+        if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["hard"]):
+            junction_type = 2
+            identified = True
+        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["soft"])
+            possible_junctions.append(2)
+
+    if not identified:
+        if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["hard"]):
+            junction_type = 3
+            identified = True
+        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["soft"])
+            possible_junctions.append(3)
+
+    if not identified:
+        if len(possible_junctions) == 1:
+            junction_type = possible_junctions[0]
+        elif len(possible_junctions) > 1:
+            junction_type = 4
+            # if the feature is located at the end of the sequence, it is most certainly a JLA
+            if 3 in possible_junctions:
+                if feature.locations.start in range(rec_len - 10, rec_len):
+                    identified = True
+                    junction_type = 3
+                else:
+                    # if there is only one other junction type in consideration, pick it
+                    if len(possible_junctions) == 2:
+                        identified = True
+                        junction_type = possible_junctions[0]
+        else:
+            junction_type = -1
+
+    return junction_type
+
+
+
 def getInvertedRepeats(rec, log):
     ''' Identifies the IR regions from a GenBank record and returns IRa and
         IRb as SeqFeature objects '''
@@ -184,6 +254,9 @@ def getInvertedRepeats(rec, log):
     if IRa is None and IRb is None:
         log.debug("No valid IR positions found so far. Checking all misc_features for junction information...")
         # Identify junctions to infer IRs
+        jlb_feat = None
+        jsb_feat = None
+        jsa_feat = None
         i = 0
         for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
             i += 1
@@ -202,7 +275,7 @@ def getInvertedRepeats(rec, log):
             IRb = SeqFeature(FeatureLocation(int(jlb_feat.location.end+1), int(jsb_feat.location.start-1)), type="misc_feature", strand=-1)
         if jsa_feat:
             log.debug("Constructing IRa from found junctions.")
-            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end+1), int(len(rec.seq)), type="misc_feature", strand=-1))
+            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end+1), int(len(rec.seq))), type="misc_feature", strand=-1))
 
         # Identify IRs by note qualifier alone
         if IRa is None and IRb is None:
