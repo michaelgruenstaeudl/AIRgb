@@ -93,10 +93,10 @@ def evaluateJunction(feature, rec_len):
     identified = False
     possible_junctions = []
     junction_type = None
-    jlb_identifiers = {"hard": ["jlb", "lsc-irb", "irb-lsc"], "soft": ["lsc-ir", "ir-lsc", "junction"]}
-    jsb_identifiers = {"hard": ["jsb", "ssc-irb", "irb-ssc"], "soft": ["ssc-ir", "ir-ssc", "junction"]}
-    jsa_identifiers = {"hard": ["jsa", "ssc-ira", "ira-ssc"], "soft": ["ssc-ir", "ir-ssc", "junction"]}
-    jla_identifiers = {"hard": ["jla", "ira-lsc", "lsc-ira"], "soft": ["lsc-ir", "ir-lsc", "junction"]}
+    jlb_identifiers = {"hard": ["jlb", "lsc-irb", "irb-lsc"], "soft": ["lsc-ir", "ir-lsc"]}
+    jsb_identifiers = {"hard": ["jsb", "ssc-irb", "irb-ssc"], "soft": ["ssc-ir", "ir-ssc"]}
+    jsa_identifiers = {"hard": ["jsa", "ssc-ira", "ira-ssc"], "soft": ["ssc-ir", "ir-ssc"]}
+    jla_identifiers = {"hard": ["jla", "ira-lsc", "lsc-ira"], "soft": ["lsc-ir", "ir-lsc"]}
 
     if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["hard"]):
         junction_type = 0
@@ -195,29 +195,36 @@ def getInvertedRepeats(rec, log):
             log.debug("Feature is of rpt_type=inverted")
             if len(repeat_feature) > 1000:
                 if "note" in repeat_feature.qualifiers:
-                    log.debug("Checking note qualifier for IR identifiers")
+                    log.debug("Checking note qualifier for IR identifiers.")
                     # If the "note" qualifier contains explicit mention of which IR (a/b) we're looking at, assign it to the appropriate variable
                     if any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
-                        log.debug("Found identifier for IRa")
+                        log.debug("Found identifier for IRa.")
                         IRa = repeat_feature
                     elif any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers):
-                        log.debug("Found identifier for IRb")
+                        log.debug("Found identifier for IRb.")
                         IRb = repeat_feature
                     # If the "note" qualifier holds no information on which IR we're looking at, assign the repeat feature to one of the variables that hasn't been initialized yet.
-                    elif IRa is None:
-                        IRa = repeat_feature
+                    # IRb gets assigned first, since it is located before IRa in the sequence, so if there is no further information given, the first found IR is probably IRb
                     elif IRb is None:
+                        log.debug("No specific identifier found. Assigned feature as IRb.")
                         IRb = repeat_feature
+                    elif IRa is None:
+                        log.debug("No specific identifier found. Assigned feature as IRa.")
+                        IRa = repeat_feature
                 # If the "note" qualifier does not exist, assign the repeat feature to one of the variables that hasn't been initialized yet.
-                elif IRa is None:  # If a note qualifier does not exist to inform us if an IR is IRa or IRb, then the identified IR is by default assigned to IRa first, and the second one to IRb
-                    IRa = repeat_feature
+                # IRb gets assigned first, since it is located before IRa in the sequence, so if there is no further information given, the first found IR is probably IRb
                 elif IRb is None:
+                    log.debug("No 'note' qualifier found. Assigned feature as IRb.")
                     IRb = repeat_feature
+                elif IRa is None:  # If a note qualifier does not exist to inform us if an IR is IRa or IRb, then the identified IR is by default assigned to IRa first, and the second one to IRb
+                    log.debug("No 'note' qualifier found. Assigned feature as IRa.")
+                    IRa = repeat_feature
+
             else:
                 log.info("Inverted repeat feature detected at position %s - %s. Region is too small (<1000bp) to be IRa or IRb." % (str(repeat_feature.location.start), str(repeat_feature.location.end)))
 
-    if IRa is None and IRb is None:
-        log.debug("No IR positions found so far. Checking repeat_features without 'rpt_type' qualifier.")
+    if IRa is None or IRb is None:
+        log.debug("%s/2 IR positions found so far. Checking repeat_features without 'rpt_type' qualifier." % (str([IRa is None, IRb is None].count(False))))
         i = 0
         for repeat_feature in [feature for feature in all_repeat_features if not "rpt_type" in feature.qualifiers]:
             i += 1
@@ -225,19 +232,19 @@ def getInvertedRepeats(rec, log):
             if "note" in repeat_feature.qualifiers:
                 log.debug("Checking note qualifier for IR identifiers...")
                 if any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
-                    log.debug("Found identifier for IRa")
+                    log.debug("Found identifier for IRa.")
                     IRa = repeat_feature
                 elif any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers):
-                    log.debug("Found identifier for IRb")
+                    log.debug("Found identifier for IRb.")
                     IRb = repeat_feature
                 elif ("inverted" in repeat_feature.qualifiers["note"][0].lower() and "repeat" in repeat_feature.qualifiers["note"][0].lower()) or "IR" in repeat_feature.qualifiers["note"][0]:
-                    log.debug("Found general identifier for IRs")
-                    if IRa is None:
-                        log.debug("Assign feature as IRa")
-                        IRa = repeat_feature
-                    elif IRb is None:
-                        log.debug("Assign feature as IRb")
+                    log.debug("Found general identifier for IRs.")
+                    if IRb is None:
+                        log.debug("Assign feature as IRb.")
                         IRb = repeat_feature
+                    elif IRa is None:
+                        log.debug("Assigned feature as IRa.")
+                        IRa = repeat_feature
                 else:
                     log.info("Found a repeat region (%s - %s) without further identifying information. Ignoring this feature." % (str(repeat_feature.location.start), str(repeat_feature.location.end)))
 
@@ -274,10 +281,10 @@ def getInvertedRepeats(rec, log):
                 log.debug("Found a junction but its identifiers are ambiguous.")
         if jlb_feat and jsb_feat:
             log.debug("Constructing IRb from found junctions.")
-            IRb = SeqFeature(FeatureLocation(int(jlb_feat.location.end+1), int(jsb_feat.location.start-1)), type="misc_feature", strand=-1)
+            IRb = SeqFeature(FeatureLocation(int(jlb_feat.location.end), int(jsb_feat.location.end-1)), type="misc_feature", strand=-1)
         if jsa_feat:
             log.debug("Constructing IRa from found junctions.")
-            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end+1), int(len(rec.seq))), type="misc_feature", strand=-1)
+            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end), int(len(rec.seq))), type="misc_feature", strand=-1)
 
         # Identify IRs by note qualifier alone
         if IRa is None and IRb is None:
