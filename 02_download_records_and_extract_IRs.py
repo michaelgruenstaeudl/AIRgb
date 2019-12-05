@@ -101,28 +101,28 @@ def evaluateJunction(feature, rec_len):
     if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["hard"]):
         junction_type = 0
         identified = True
-    elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["soft"])
+    elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["soft"]):
         possible_junctions.append(0)
 
     if not identified:
         if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["hard"]):
             junction_type = 1
             identified = True
-        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["soft"])
+        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["soft"]):
             possible_junctions.append(1)
 
     if not identified:
         if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["hard"]):
             junction_type = 2
             identified = True
-        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["soft"])
+        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["soft"]):
             possible_junctions.append(2)
 
     if not identified:
         if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["hard"]):
             junction_type = 3
             identified = True
-        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["soft"])
+        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["soft"]):
             possible_junctions.append(3)
 
     if not identified:
@@ -132,7 +132,7 @@ def evaluateJunction(feature, rec_len):
             junction_type = 4
             # if the feature is located at the end of the sequence, it is most certainly a JLA
             if 3 in possible_junctions:
-                if feature.locations.start in range(rec_len - 10, rec_len):
+                if feature.location.start in range(rec_len - 10, rec_len):
                     identified = True
                     junction_type = 3
                 else:
@@ -177,7 +177,7 @@ def getInvertedRepeats(rec, log):
     # STEP 1. Parse out all potentially relevant features
     all_repeat_features = [feature for feature in rec.features if feature.type=='repeat_region']
     all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature']
-    all_mf_no_pseudo = [feature for feature in all_misc_features if 'pseudo' not in feature.qualifiers)]
+    all_mf_no_pseudo = [feature for feature in all_misc_features if 'pseudo' not in feature.qualifiers]
     if len(all_repeat_features) == 0 and len(all_mf_no_pseudo) == 0:
         raise Exception("Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).")
     all_qualifiers = [misc_feature.qualifiers for misc_feature in all_mf_no_pseudo]
@@ -270,12 +270,14 @@ def getInvertedRepeats(rec, log):
             elif junction_type == 2: # JSA
                 log.debug("Found junction SSC-IRa.")
                 jsa_feat = misc_feature
+            elif junction_type == 4: # Ambiguous
+                log.debug("Found a junction but its identifiers are ambiguous.")
         if jlb_feat and jsb_feat:
             log.debug("Constructing IRb from found junctions.")
             IRb = SeqFeature(FeatureLocation(int(jlb_feat.location.end+1), int(jsb_feat.location.start-1)), type="misc_feature", strand=-1)
         if jsa_feat:
             log.debug("Constructing IRa from found junctions.")
-            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end+1), int(len(rec.seq))), type="misc_feature", strand=-1))
+            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end+1), int(len(rec.seq))), type="misc_feature", strand=-1)
 
         # Identify IRs by note qualifier alone
         if IRa is None and IRb is None:
