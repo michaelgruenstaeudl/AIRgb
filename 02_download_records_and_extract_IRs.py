@@ -78,15 +78,16 @@ def fetchGBflatfile(outdir, id, log):
 
 def evaluateJunction(feature, rec_len):
     '''
-        Evaluates if a feature is a junction and returns the appropriate junction type as an integer.
+        Evaluates if a feature is a junction between an inverted repeat and a single copy region,
+        and returns the appropriate junction type as an integer.
         The function checks for hard identifiers first, then tries to infer the type through soft identifiers
 
-        Return types:
+        Return values:
         -1: Feature cannot be identified as junction
-        0:  Feature is identified as JLB
-        1:  Feature is identified as JSB
-        2:  Feature is identified as JSA
-        3:  Feature is  identified as JLA
+        0:  Feature is identified as JLB (junction LSC -> IRb)
+        1:  Feature is identified as JSB (junction IRb -> SSC)
+        2:  Feature is identified as JSA (junction SSC -> IRa)
+        3:  Feature is  identified as JLA (junction IRa -> LSC)
         4:  Ambiguous (more than one possible junction type found)
     '''
     identified = False
@@ -170,21 +171,19 @@ def getInvertedRepeats(rec, log):
     # List of keywords that can be checked against a feature's note qualifier to identify a feature
     ira_identifiers = ("ira", "inverted repeat a")
     irb_identifiers = ("irb", "inverted repeat b")
-    jlb_identifiers = ["jlb", "lsc-ir"]
-    jsb_identifiers = ["jsb", "ir-ssc", "irb-ssc"]
-    jsa_identifiers = ["jsa", "ssc-ir"]
     ssc_identifiers = ["ssc", "small single copy"]
     lsc_identifiers = ["lsc", "large single copy"]
 
     # STEP 1. Parse out all potentially relevant features
     all_repeat_features = [feature for feature in rec.features if feature.type=='repeat_region']
-    all_misc_features = [feature for feature in rec.features if (feature.type=='misc_feature' and 'pseudo' not in feature.qualifiers)]
-    if len(all_repeat_features) == 0 and len(all_misc_features) == 0:
+    all_misc_features = [feature for feature in rec.features if feature.type=='misc_feature']
+    all_mf_no_pseudo = [feature for feature in all_misc_features if 'pseudo' not in feature.qualifiers)]
+    if len(all_repeat_features) == 0 and len(all_mf_no_pseudo) == 0:
         raise Exception("Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).")
-    all_qualifiers = [misc_feature.qualifiers for misc_feature in all_misc_features]
+    all_qualifiers = [misc_feature.qualifiers for misc_feature in all_mf_no_pseudo]
     keylist = [list(q) for q in all_qualifiers] # Nested list of all keys of all qualifiers found in all misc features
     if "note" not in [key for keys in keylist for key in keys]: # Flatten the key list
-        raise Exception("Record does not contain any qualifiers for feature `misc_feature` which the IR are typically named with (i.e., qualifier `note`).")
+        raise Exception("Record does not contain any qualifiers for feature `misc_feature` which the IRs are typically named with (i.e., qualifier `note`).")
 
     # STEP 2: Loop through repeat_regions and attempt to identify IRs
     log.debug("Checking all repeat_features with 'rpt_type' qualifier for IR information...")
@@ -260,14 +259,15 @@ def getInvertedRepeats(rec, log):
         i = 0
         for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
             i += 1
-            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
-            if any(identifier in misc_feature.qualifiers["note"][0] for identifier in jlb_identifiers):
+            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_mf_no_pseudo)), str(misc_feature.location.start), str(misc_feature.location.end)))
+            junction_type = evaluateJunction(misc_feature, len(rec))
+            if junction_type == 0: # JLB
                 log.debug("Found junction LSC-IRb.")
                 jlb_feat = misc_feature
-            elif any(identifier in misc_feature.qualifiers["note"][0] for identifier in jsb_identifiers):
+            elif junction_type == 1: # JSB
                 log.debug("Found junction IRb-SSC.")
                 jsb_feat = misc_feature
-            elif any(identifier in misc_feature.qualifiers["note"][0] for identifier in jsa_identifiers):
+            elif junction_type == 2: # JSA
                 log.debug("Found junction SSC-IRa.")
                 jsa_feat = misc_feature
         if jlb_feat and jsb_feat:
@@ -280,7 +280,7 @@ def getInvertedRepeats(rec, log):
         # Identify IRs by note qualifier alone
         if IRa is None and IRb is None:
             log.debug("No valid IR positions found so far. Checking all misc_features for identifying information in their note qualifier...")
-            for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
+            for misc_feature in [mf for mf in all_mf_no_pseudo if "note" in mf.qualifiers]:
                 if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
                     log.debug("Found identifier for IRa")
                     IRa = misc_feature
@@ -307,12 +307,12 @@ def getInvertedRepeats(rec, log):
         log.debug("Trying to infer IRs by given single-copy region positions.")
         ssc = None
         lsc = None
-        if len(all_misc_features) == 0:
+        if len(all_mf_no_pseudo) == 0:
             raise Exception("Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).")
         i = 0
-        for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
+        for misc_feature in [mf for mf in all_mf_no_pseudo if "note" in mf.qualifiers]:
             i += 1
-            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
+            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_mf_no_pseudo)), str(misc_feature.location.start), str(misc_feature.location.end)))
             if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ssc_identifiers):
                 log.debug("Found identifier for SSC")
                 ssc = misc_feature
