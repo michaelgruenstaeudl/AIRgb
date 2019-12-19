@@ -98,6 +98,8 @@ def evaluateJunction(feature, rec_len):
     jsa_identifiers = {"hard": ["jsa", "ssc-ira", "ira-ssc"], "soft": ["ssc-ir", "ir-ssc"]}
     jla_identifiers = {"hard": ["jla", "ira-lsc", "lsc-ira"], "soft": ["lsc-ir", "ir-lsc"]}
 
+    # TODO: implement a check that looks at feature.qualifiers["standard_name"] for values ["jlb", "jsb", "jsa", "jla"]
+
     if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["hard"]):
         junction_type = 0
         identified = True
@@ -131,6 +133,7 @@ def evaluateJunction(feature, rec_len):
         elif len(possible_junctions) > 1:
             junction_type = 4
             # if the feature is located at the end of the sequence, it is most certainly a JLA
+            # NOTE: found exceptions to this rule -> TODO: account for those exceptions
             if 3 in possible_junctions:
                 if feature.location.start in range(rec_len - 10, rec_len):
                     identified = True
@@ -145,7 +148,109 @@ def evaluateJunction(feature, rec_len):
 
     return junction_type
 
+def adjustFeatureLocation(feature):
+    # Some junctions in genbank format are given as a single base location or "start^end", leading to start and end positions being the same.
+    # Note: When given a single base location as junction feature, it is unclear whether the junction is located before or after the given location.
+    #       Since we cannot know the reasoning of the person who annotated the genome, we simply assume that the junction is after the given location.
+    if feature:
+        if feature.location.start == feature.location.end:
+            feature.location = FeatureLocation(feature.location.start, feature.location.end + 1, strand = feature.strand)
+    return feature
 
+def constructIRsfromJunctions(rec_len, jlb_feat, jsb_feat, jsa_feat, jla_feat, log):
+    '''
+    Tries to calculate the IRs from the junction features and returns the IRs
+    '''
+    IRa = None
+    IRb = None
+    for junction in [jlb_feat, jsb_feat, jsa_feat, jla_feat]:
+        junction = adjustFeatureLocation(junction)
+
+    if jlb_feat and jsb_feat:
+        log.debug("Constructing IRb from found junctions.")
+        if jlb_feat.location.start < jsb_feat.location.start:
+            IRb = SeqFeature(FeatureLocation(jlb_feat.location.end-1, jsb_feat.location.start, strand = 1))
+        else:
+            IRb = SeqFeature(FeatureLocation(jsb_feat.location.end-1, jlb_feat.location.start, strand = 1))
+    if jsa_feat:
+        log.debug("Constructing IRa from found junctions.")
+        if jla_feat:
+            # comparing start locations to see in which order the IRs and SC regions are in the genome
+            if jsa_feat.location.start < jla_feat.location.start:
+                IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, jla_feat.location.start, strand = 1))
+            else:
+                IRa = SeqFeature(FeatureLocation(jla_feat.location.end-1, jsa_feat.location.start, strand = 1))
+        elif jsb_feat:
+            # If JLA is not given, we assume that the plastid genome is split at the JLA (i.e. start of the JLA is the last position in the sequence, end of the JLA is the first position)
+            if jsb_feat.location.start < jsa_feat.location.start:
+                IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, rec_len, strand = 1))
+            else:
+                IRa = SeqFeature(FeatureLocation(0, jsa_feat.location.start, strand = 1))
+        else:
+            # if JSB is not given either, we assume the plastid genome follows the convention of (start:LSC|IRb|SSC|IRa:end)
+            IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, rec_len, strand = 1))
+
+    return IRa, IRb
+
+def constructIRsFromSingleCopyRegions(rec_len, lsc, ssc, IRa, IRb, log):
+    if lsc.location.start < ssc.location.start:
+        if IRa is None:
+            log.debug("Constructing IRa from found single-copy positions.")
+            IRa = SeqFeature(FeatureLocation(ssc.location.end-1, lsc.location.start), type="misc_feature", strand=1)
+        if IRb is None:
+            log.debug("Constructing IRb from found single-copy positions.")
+            IRb = SeqFeature(FeatureLocation(lsc.location.end-1, ssc.location.start), type="misc_feature", strand=1)
+    else:
+        if IRa is None:
+            log.debug("Constructing IRa from found single-copy positions.")
+            IRa = SeqFeature(FeatureLocation(lsc.location.end-1, ssc.location.start), type="misc_feature", strand=1)
+        if IRb is None:
+            log.debug("Constructing IRb from found single-copy positions.")
+            IRb = SeqFeature(FeatureLocation(ssc.location.end-1, lsc.location.start), type="misc_feature", strand=1)
+
+    return IRa, IRb
+
+def identifyIRsFromMiscFeatures(all_mf_no_pseudo, IRa, IRb, log):
+    '''
+    Identifies IRs in a list of misc_features.
+    '''
+    ira_identifiers = ["ira", "inverted repeat a"]
+    irb_identifiers = ["irb", "inverted repeat b"]
+    blacklist = ["jlb", "jsb", "jsa", "jla", "junction"]
+
+    # Check for hard identifiers first
+    for misc_feature in [mf for mf in all_mf_no_pseudo if "note" in mf.qualifiers]:
+        if IRa is None:
+            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers) and not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
+                log.debug("Found identifier for IRa: " + misc_feature.qualifiers["note"][0])
+                if len(misc_feature) > 100:
+                    IRa = misc_feature
+                else:
+                    log.debug("Feature is way too short (%s) to be an IR." % str(len(misc_feature)))
+        if IRb is None:
+            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers) and not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
+                log.debug("Found identifier for IRb: " + misc_feature.qualifiers["note"][0])
+                if len(misc_feature) > 100:
+                    IRb = misc_feature
+                else:
+                    log.debug("Feature is way too short (%s) to be an IR." % str(len(misc_feature)))
+
+    # Check for soft identifiers
+    if IRa is None or IRb is None:
+        for misc_feature in [mf for mf in all_mf_no_pseudo if "note" in mf.qualifiers]:
+            if (("inverted" in misc_feature.qualifiers["note"][0].lower() and "repeat" in misc_feature.qualifiers["note"][0].lower()) or "IR" in misc_feature.qualifiers["note"][0]) and not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
+                log.debug("Found general identifier for IRs: " + misc_feature.qualifiers["note"][0])
+                if len(misc_feature) > 100:
+                    if IRb is None:
+                        log.debug("Assign feature as IRb")
+                        IRb = misc_feature
+                    elif IRa is None:
+                        log.debug("Assign feature as IRa")
+                        IRa = misc_feature
+                else:
+                    log.debug("Feature is way too short (%s) to be an IR." % str(len(misc_feature)))
+
+    return IRa, IRb
 
 def getInvertedRepeats(rec, log):
     ''' Identifies the IR regions from a GenBank record and returns IRa and
@@ -168,11 +273,8 @@ def getInvertedRepeats(rec, log):
     IRb = None
     log.debug("Trying to determine IRs...")
 
-    # List of keywords that can be checked against a feature's note qualifier to identify a feature
-    ira_identifiers = ("ira", "inverted repeat a")
-    irb_identifiers = ("irb", "inverted repeat b")
-    ssc_identifiers = ["ssc", "small single copy"]
-    lsc_identifiers = ["lsc", "large single copy"]
+    ira_identifiers = ["ira", "inverted repeat a"]
+    irb_identifiers = ["irb", "inverted repeat b"]
 
     # STEP 1. Parse out all potentially relevant features
     all_repeat_features = [feature for feature in rec.features if feature.type=='repeat_region']
@@ -257,53 +359,38 @@ def getInvertedRepeats(rec, log):
     # STEP 3. Loop through misc_features, and attempt to identify IRs
     # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier; if one inverted repeat was tagged as repeat_region, the other probably would have been tagged the same
 
-    if IRa is None and IRb is None:
-        log.debug("No valid IR positions found so far. Checking all misc_features for junction information...")
-        # Identify junctions to infer IRs
-        jlb_feat = None
-        jsb_feat = None
-        jsa_feat = None
-        i = 0
-        for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
-            i += 1
-            log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_mf_no_pseudo)), str(misc_feature.location.start), str(misc_feature.location.end)))
-            junction_type = evaluateJunction(misc_feature, len(rec))
-            if junction_type == 0: # JLB
-                log.debug("Found junction LSC-IRb.")
-                jlb_feat = misc_feature
-            elif junction_type == 1: # JSB
-                log.debug("Found junction IRb-SSC.")
-                jsb_feat = misc_feature
-            elif junction_type == 2: # JSA
-                log.debug("Found junction SSC-IRa.")
-                jsa_feat = misc_feature
-            elif junction_type == 4: # Ambiguous
-                log.debug("Found a junction but its identifiers are ambiguous.")
-        if jlb_feat and jsb_feat:
-            log.debug("Constructing IRb from found junctions.")
-            IRb = SeqFeature(FeatureLocation(int(jlb_feat.location.end), int(jsb_feat.location.end-1)), type="misc_feature", strand=-1)
-        if jsa_feat:
-            log.debug("Constructing IRa from found junctions.")
-            IRa = SeqFeature(FeatureLocation(int(jsa_feat.location.end), int(len(rec.seq))), type="misc_feature", strand=-1)
+    if IRa is None or IRb is None:
+        log.debug("%s/2 IR positions found so far. Checking all misc_features for identifying information in their note qualifier..." % (str([IRa is None, IRb is None].count(False))))
+        IRa, IRb = identifyIRsFromMiscFeatures(all_mf_no_pseudo, IRa, IRb, log)
 
-        # Identify IRs by note qualifier alone
-        if IRa is None and IRb is None:
-            log.debug("No valid IR positions found so far. Checking all misc_features for identifying information in their note qualifier...")
-            for misc_feature in [mf for mf in all_mf_no_pseudo if "note" in mf.qualifiers]:
-                if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
-                    log.debug("Found identifier for IRa")
-                    IRa = misc_feature
-                elif any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers):
-                    log.debug("Found identifier for IRb")
-                    IRb = misc_feature
-                elif ("inverted" in misc_feature.qualifiers["note"][0].lower() and "repeat" in misc_feature.qualifiers["note"][0].lower()) or "IR" in misc_feature.qualifiers["note"][0]:
-                    log.debug("Found general identifier for IRs")
-                    if IRa is None:
-                        log.debug("Assign feature as IRa")
-                        IRa = misc_feature
-                    elif IRb is None:
-                        log.debug("Assign feature as IRb")
-                        IRb = misc_feature
+        if IRa is None or IRb is None:
+            log.debug("%s/2 IR positions found so far. Checking all misc_features for junction information..." % (str([IRa is None, IRb is None].count(False))))
+            # Identify junctions to infer IRs
+            jlb_feat = None
+            jsb_feat = None
+            jsa_feat = None
+            jla_feat = None
+            i = 0
+            for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
+                i += 1
+                log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_mf_no_pseudo)), str(misc_feature.location.start), str(misc_feature.location.end)))
+                junction_type = evaluateJunction(misc_feature, len(rec))
+                if junction_type == 0: # JLB
+                    log.debug("Found junction LSC-IRb.")
+                    jlb_feat = misc_feature
+                elif junction_type == 1: # JSB
+                    log.debug("Found junction IRb-SSC.")
+                    jsb_feat = misc_feature
+                elif junction_type == 2: # JSA
+                    log.debug("Found junction SSC-IRa.")
+                    jsa_feat = misc_feature
+                elif junction_type == 3: # JLA
+                    log.debug("Found junction IRa-LSC")
+                    jla_feat = misc_feature
+                elif junction_type == 4: # Ambiguous
+                    log.debug("Found a junction but its identifiers are ambiguous.")
+            IRa, IRb = constructIRsfromJunctions(len(rec), jlb_feat, jsb_feat, jsa_feat, jla_feat, log)
+
 
     # Sanity check for IRs selected by the script so far.
     if (IRa is not None and len(IRa.extract(rec).seq)<100) or (IRb is not None and len(IRb.extract(rec).seq)<100):
@@ -312,10 +399,12 @@ def getInvertedRepeats(rec, log):
         IRb = None
 
     # STEP 4. Inferring the position of the IR implicitly by extracting the positions of the large (LSC) and small single copy (SSC) regions and calculating the IRs as the complement set thereof.
-    if IRa is None and IRb is None:
-        log.debug("Trying to infer IRs by given single-copy region positions.")
+    if IRa is None or IRb is None:
+        log.debug("%s/2 IR positions found so far. Trying to infer missing IRs by given single-copy region positions..." % (str([IRa is None, IRb is None].count(False))))
         ssc = None
         lsc = None
+        ssc_identifiers = ["ssc", "small single copy"]
+        lsc_identifiers = ["lsc", "large single copy"]
         if len(all_mf_no_pseudo) == 0:
             raise Exception("Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).")
         i = 0
@@ -329,16 +418,7 @@ def getInvertedRepeats(rec, log):
                 log.debug("Found identifier for LSC")
                 lsc = misc_feature
         if lsc and ssc:
-            SSC_start = int(ssc.location.start)
-            SSC_end = int(ssc.location.end)
-            LSC_start = int(lsc.location.start)
-            LSC_end = int(lsc.location.end)
-            log.debug("Constructing IRa from found single-copy positions.")
-            IRa = SeqFeature(FeatureLocation(SSC_end+1, LSC_start-1), type="misc_feature", strand=-1)
-            IRa.qualifiers["note"] = "IRa; inverted repeat a"
-            log.debug("Constructing IRb from found single-copy positions.")
-            IRb = SeqFeature(FeatureLocation(LSC_end+1, SSC_start-1), type="misc_feature", strand=-1)
-            IRb.qualifiers["note"] = "IRb; inverted repeat b"
+            IRa, IRb = constructIRsFromSingleCopyRegions(len(rec), ssc, lsc, IRa, IRb, log)
         else:
             raise Exception("Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.")
 
@@ -347,21 +427,24 @@ def getInvertedRepeats(rec, log):
 
 def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_feature):
     ''' Writes the reported start and end positions, as well as the
-        lengths, of the IRs in a given SeqFeature object as a table '''
+        lengths, of the IRs in a given SeqFeature object as a table.
+
+        Biopython's 0-based location coordinates are converted back to GenBank's 1-based location coordinates.
+    '''
 
     if IRa_feature:
-        IRinfo_table.at[accession, "IRa_REPORTED_START"] = str(int(IRa_feature.location.start))
-        IRinfo_table.at[accession, "IRa_REPORTED_END"] = str(int(IRa_feature.location.end))
-        IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = str(abs(int(IRa_feature.location.start) - int(IRa_feature.location.end)))
+        IRinfo_table.at[accession, "IRa_REPORTED_START"] = str(IRa_feature.location.start+1)
+        IRinfo_table.at[accession, "IRa_REPORTED_END"] = str(IRa_feature.location.end)
+        IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = str(abs(IRa_feature.location.start+1 - IRa_feature.location.end))
     else:
         IRinfo_table.at[accession, "IRa_REPORTED_START"] = "n.a."
         IRinfo_table.at[accession, "IRa_REPORTED_END"] = "n.a."
         IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = "n.a."
 
     if IRb_feature:
-        IRinfo_table.at[accession, "IRb_REPORTED_START"] = str(int(IRb_feature.location.start))
-        IRinfo_table.at[accession, "IRb_REPORTED_END"] = str(int(IRb_feature.location.end))
-        IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = str(abs(int(IRb_feature.location.start) - int(IRb_feature.location.end)))
+        IRinfo_table.at[accession, "IRb_REPORTED_START"] = str(IRb_feature.location.start+1)
+        IRinfo_table.at[accession, "IRb_REPORTED_END"] = str(IRb_feature.location.end)
+        IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = str(abs(IRb_feature.location.start+1 - IRb_feature.location.end))
     else:
         IRinfo_table.at[accession, "IRb_REPORTED_START"] = "n.a."
         IRinfo_table.at[accession, "IRb_REPORTED_END"] = "n.a."
