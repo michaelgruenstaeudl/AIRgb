@@ -90,71 +90,75 @@ def evaluateJunction(feature, rec_len):
         3:  Feature is  identified as JLA (junction IRa -> LSC)
         4:  Ambiguous (more than one possible junction type found)
     '''
-    identified = False
-    possible_junctions = []
     junction_type = None
-    jlb_identifiers = {"hard": ["jlb", "lsc-irb", "irb-lsc"], "soft": ["lsc-ir", "ir-lsc"]}
-    jsb_identifiers = {"hard": ["jsb", "ssc-irb", "irb-ssc"], "soft": ["ssc-ir", "ir-ssc"]}
-    jsa_identifiers = {"hard": ["jsa", "ssc-ira", "ira-ssc"], "soft": ["ssc-ir", "ir-ssc"]}
-    jla_identifiers = {"hard": ["jla", "ira-lsc", "lsc-ira"], "soft": ["lsc-ir", "ir-lsc"]}
 
-    # TODO: implement a check that looks at feature.qualifiers["standard_name"] for values ["jlb", "jsb", "jsa", "jla"]
+    if len(feature) < 3:
+        identified = False
+        possible_junctions = []
 
-    if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["hard"]):
-        junction_type = 0
-        identified = True
-    elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["soft"]):
-        possible_junctions.append(0)
+        jlb_identifiers = {"hard": ["jlb", "lsc-irb", "irb-lsc"], "soft": ["lsc-ir", "ir-lsc"]}
+        jsb_identifiers = {"hard": ["jsb", "ssc-irb", "irb-ssc"], "soft": ["ssc-ir", "ir-ssc"]}
+        jsa_identifiers = {"hard": ["jsa", "ssc-ira", "ira-ssc"], "soft": ["ssc-ir", "ir-ssc"]}
+        jla_identifiers = {"hard": ["jla", "ira-lsc", "lsc-ira"], "soft": ["lsc-ir", "ir-lsc"]}
 
-    if not identified:
-        if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["hard"]):
-            junction_type = 1
+        # TODO: implement a check that looks at feature.qualifiers["standard_name"] for values ["jlb", "jsb", "jsa", "jla"]
+
+        if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["hard"]):
+            junction_type = 0
             identified = True
-        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["soft"]):
-            possible_junctions.append(1)
+        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jlb_identifiers["soft"]):
+            possible_junctions.append(0)
 
-    if not identified:
-        if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["hard"]):
-            junction_type = 2
-            identified = True
-        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["soft"]):
-            possible_junctions.append(2)
+        if not identified:
+            if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["hard"]):
+                junction_type = 1
+                identified = True
+            elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsb_identifiers["soft"]):
+                possible_junctions.append(1)
 
-    if not identified:
-        if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["hard"]):
-            junction_type = 3
-            identified = True
-        elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["soft"]):
-            possible_junctions.append(3)
+        if not identified:
+            if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["hard"]):
+                junction_type = 2
+                identified = True
+            elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jsa_identifiers["soft"]):
+                possible_junctions.append(2)
 
-    if not identified:
-        if len(possible_junctions) == 1:
-            junction_type = possible_junctions[0]
-        elif len(possible_junctions) > 1:
-            junction_type = 4
-            # if the feature is located at the end of the sequence, it is most certainly a JLA
-            # NOTE: found exceptions to this rule -> TODO: account for those exceptions
-            if 3 in possible_junctions:
-                if feature.location.start in range(rec_len - 10, rec_len):
-                    identified = True
-                    junction_type = 3
-                else:
-                    # if there is only one other junction type in consideration, pick it
-                    if len(possible_junctions) == 2:
+        if not identified:
+            if any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["hard"]):
+                junction_type = 3
+                identified = True
+            elif any(identifier in feature.qualifiers["note"][0].lower() for identifier in jla_identifiers["soft"]):
+                possible_junctions.append(3)
+
+        if not identified:
+            if len(possible_junctions) == 1:
+                junction_type = possible_junctions[0]
+            elif len(possible_junctions) > 1:
+                junction_type = 4
+                # if the feature is located at the end of the sequence, it is most certainly a JLA
+                # NOTE: found exceptions to this rule -> TODO: account for those exceptions
+                if 3 in possible_junctions:
+                    if feature.location.start in range(rec_len - 10, rec_len):
                         identified = True
-                        junction_type = possible_junctions[0]
-        else:
-            junction_type = -1
+                        junction_type = 3
+                    else:
+                        # if there is only one other junction type in consideration, pick it
+                        if len(possible_junctions) == 2:
+                            identified = True
+                            junction_type = possible_junctions[0]
+            else:
+                junction_type = -1
+    else:
+        junction_type = -1
 
     return junction_type
 
-def adjustFeatureLocation(feature):
-    # Some junctions in genbank format are given as a single base location or "start^end", leading to start and end positions being the same.
-    # Note: When given a single base location as junction feature, it is unclear whether the junction is located before or after the given location.
-    #       Since we cannot know the reasoning of the person who annotated the genome, we simply assume that the junction is after the given location.
+def adjustFeatureLocation(feature, log):
+    # Some junctions in genbank format are given as "start^end", leading to start and end positions being the same.
     if feature:
         if feature.location.start == feature.location.end:
-            feature.location = FeatureLocation(feature.location.start, feature.location.end + 1, strand = feature.strand)
+            feature.location = FeatureLocation(feature.location.start-1, feature.location.end, strand = feature.strand)
+            log.debug("Adjusted FeatureLocation to " + str(feature.location))
     return feature
 
 def constructIRsfromJunctions(rec_len, jlb_feat, jsb_feat, jsa_feat, jla_feat, log):
@@ -164,28 +168,28 @@ def constructIRsfromJunctions(rec_len, jlb_feat, jsb_feat, jsa_feat, jla_feat, l
     IRa = None
     IRb = None
     for junction in [jlb_feat, jsb_feat, jsa_feat, jla_feat]:
-        junction = adjustFeatureLocation(junction)
+        junction = adjustFeatureLocation(junction, log)
 
     if jlb_feat and jsb_feat:
         log.debug("Constructing IRb from found junctions.")
         if jlb_feat.location.start < jsb_feat.location.start:
-            IRb = SeqFeature(FeatureLocation(jlb_feat.location.end-1, jsb_feat.location.start, strand = 1))
+            IRb = SeqFeature(FeatureLocation(jlb_feat.location.end-1, jsb_feat.location.start+1, strand = 1))
         else:
-            IRb = SeqFeature(FeatureLocation(jsb_feat.location.end-1, jlb_feat.location.start, strand = 1))
+            IRb = SeqFeature(FeatureLocation(jsb_feat.location.end-1, jlb_feat.location.start+1, strand = 1))
     if jsa_feat:
         log.debug("Constructing IRa from found junctions.")
         if jla_feat:
             # comparing start locations to see in which order the IRs and SC regions are in the genome
             if jsa_feat.location.start < jla_feat.location.start:
-                IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, jla_feat.location.start, strand = 1))
+                IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, jla_feat.location.start+1, strand = 1))
             else:
-                IRa = SeqFeature(FeatureLocation(jla_feat.location.end-1, jsa_feat.location.start, strand = 1))
+                IRa = SeqFeature(FeatureLocation(jla_feat.location.end-1, jsa_feat.location.start+1, strand = 1))
         elif jsb_feat:
             # If JLA is not given, we assume that the plastid genome is split at the JLA (i.e. start of the JLA is the last position in the sequence, end of the JLA is the first position)
             if jsb_feat.location.start < jsa_feat.location.start:
                 IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, rec_len, strand = 1))
             else:
-                IRa = SeqFeature(FeatureLocation(0, jsa_feat.location.start, strand = 1))
+                IRa = SeqFeature(FeatureLocation(0, jsa_feat.location.start+1, strand = 1))
         else:
             # if JSB is not given either, we assume the plastid genome follows the convention of (start:LSC|IRb|SSC|IRa:end)
             IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, rec_len, strand = 1))
@@ -268,6 +272,11 @@ def getInvertedRepeats(rec, log):
     #   2.1. qualifier note contains identifying information for a junction
     #   2.2. qualifier note contains either "inverted repeat a", "inverted repeat b", "ira", or "irb"
     #   2.3. qualifier note contains either ("inverted" and "repeat") or "IR"
+
+    # TM: We could also check all feature types in question (repeat_region, general misc_feature, junction misc_feature, single-copy misc_feature) for possible IRs,
+    #   and compare the results to pick the most likely candidate.
+    #   As it is, IRs can be misidentified in one feature type even though using another feature type would be more accurate
+    #   (e.g. a general misc_feature that isn't an IR but contains identifying keywords would be picked as IR, even though reliable junction information exists)
 
     IRa = None
     IRb = None
@@ -405,22 +414,25 @@ def getInvertedRepeats(rec, log):
         lsc = None
         ssc_identifiers = ["ssc", "small single copy"]
         lsc_identifiers = ["lsc", "large single copy"]
+        blacklist = ["jlb", "jsb", "jsa", "jla", "junction"]
         if len(all_mf_no_pseudo) == 0:
-            raise Exception("Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).")
+            if IRa is None and IRb is None:
+                raise Exception("Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).")
         i = 0
         for misc_feature in [mf for mf in all_mf_no_pseudo if "note" in mf.qualifiers]:
             i += 1
             log.debug("Checking misc_feature %s/%s (position %s - %s)..." % (str(i), str(len(all_mf_no_pseudo)), str(misc_feature.location.start), str(misc_feature.location.end)))
-            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ssc_identifiers):
+            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ssc_identifiers) and not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
                 log.debug("Found identifier for SSC")
                 ssc = misc_feature
-            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in lsc_identifiers):
+            if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in lsc_identifiers) and not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
                 log.debug("Found identifier for LSC")
                 lsc = misc_feature
         if lsc and ssc:
             IRa, IRb = constructIRsFromSingleCopyRegions(len(rec), ssc, lsc, IRa, IRb, log)
         else:
-            raise Exception("Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.")
+            if IRa is None and IRb is None:
+                raise Exception("Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.")
 
     return IRa, IRb
 
