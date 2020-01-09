@@ -184,7 +184,7 @@ def main(args):
         raise
 
     if os.path.isdir(args.datadir):
-        folders = [os.path.abspath(os.path.join(args.datadir, x)) for x in os.listdir("data") if x in relevant_accessions]
+        folders = [os.path.abspath(os.path.join(args.datadir, x)) for x in os.listdir(args.datadir) if x in relevant_accessions]
     else:
         log.error(args.datadir + " is not a valid directory!")
         raise Exception(args.datadir + " is not a valid directory!")
