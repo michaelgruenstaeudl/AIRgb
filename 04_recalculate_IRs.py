@@ -84,6 +84,10 @@ def main(args):
     if not any(col in list(IRinfo_table.columns) for col in added_columns):
         IRinfo_table = IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
 
+    #IRinfo_table = IRinfo_table.astype({"IRa_CALCULATED": str, "IRa_CALCULATED_START": pd.Int64Dtype(), "IRa_CALCULATED_END": pd.Int64Dtype(), "IRa_CALCULATED_LENGTH": pd.Int64Dtype(), "IRa_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "IRb_CALCULATED": str, "IRb_CALCULATED_START": pd.Int64Dtype(), "IRb_CALCULATED_END": pd.Int64Dtype(), "IRb_CALCULATED_LENGTH": pd.Int64Dtype(), "IRb_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
+
+    IRinfo_table = IRinfo_table.astype({"IRa_CALCULATED": str, "IRb_CALCULATED": str})
+
     '''
     #folders = [os.path.abspath(x) for x in args.data]
     # Check if outfile exists, write headers
@@ -181,14 +185,14 @@ def main(args):
                 IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"] = int(ira_info[0])
                 IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"] = int(irb_info[0])
 
-                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRa_REPORTED_START"] - IRinfo_table.at[accession, "IRa_CALCULATED_START"]
-                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRb_REPORTED_START"] - IRinfo_table.at[accession, "IRb_CALCULATED_START"]
+                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRa_REPORTED_START"]) - int(IRinfo_table.at[accession, "IRa_CALCULATED_START"])
+                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRb_REPORTED_START"]) -int(IRinfo_table.at[accession, "IRb_CALCULATED_START"])
 
-                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRa_REPORTED_END"] - IRinfo_table.at[accession, "IRa_CALCULATED_END"]
-                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRb_REPORTED_END"] - IRinfo_table.at[accession, "IRb_CALCULATED_END"]
+                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRa_REPORTED_END"]) - int(IRinfo_table.at[accession, "IRa_CALCULATED_END"])
+                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRb_REPORTED_END"]) - int(IRinfo_table.at[accession, "IRb_CALCULATED_END"])
 
-                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] - IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"]
-                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] - IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"]
+                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"]) - int(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"])
+                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = int(IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"]) - int(IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"])
 
             else:
                 log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join(out.splitlines()))
@@ -228,8 +232,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-    parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file that contains comparing information on reported vs. inferred IR positions and length")
+    # parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file that contains comparing information on reported vs. inferred IR positions and length")
     parser.add_argument("--repfn", "-r", type=str, required=True, help="path to file that contains information on reported IR positions and length")
-    parser.add_argument("--data", "-d", type=str, required=True, nargs='+', help="List of folder file paths containing FASTA files")
+    parser.add_argument("--data", "-d", type=str, required=True, help="Data folder containing subfolders with FASTA files")
     args = parser.parse_args()
     main(args)
