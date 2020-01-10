@@ -161,7 +161,7 @@ def operations_cmp(accession, log):
     # Numerical comparison via CMP
     log.info("Comparing aligned IRs via Bash function CMP.")
     with open(accession+"_CMP.report", "w") as comparefile:
-        cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
+        cmp_awk = subprocess.Popen("cmp -bl <(sed -n '2p' " + accession + "_IR_aligned_deint.fasta) <(sed -n '4p' " + accession + "_IR_aligned_deint.fasta) | awk '{print $1,$3,$5}'", shell=True, executable="/bin/bash", stdout=comparefile)
         cmp_awk.wait()
     with open(accession+"_CMP.report", "r") as comparefile:
         diff_count = len(comparefile.readlines())
