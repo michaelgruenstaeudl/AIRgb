@@ -8,15 +8,15 @@ OBJECTIVE:
 
 TO DO:
     * Once the IRs are re-calculated, the originally inferred IR length and the newly calculated IR length shall be compared in order to see if previous studies have - on average - overestimated or underestimated the IR length.
-    
+
     * If differences between the originally inferred IR length and the newly calculated IR length are discovered, it will be interesting to see on which side of the IRs (the side that faces the LSC or the side that faces the SSC) the original inference was incorrect (i.e., on which side a bias in the original inference happened).
-    
+
     * The following batch code shall be used to re-calculate the compare the IRs (i.e., the IR file pair) of each record:
         ```
         # Self-blasting of the plastid genome sequence in order to infer the IR length
         blastn -db chloroplastGenome.fasta -query chloroplastGenome.fasta -outfmt 7 -strand 'both' | awk '{ if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}'
         ```
-    
+
     * Also do the inference of the IR via MUMMER (specifically, a self-comparison via dnadiff) so that the IR boundaries as inferred via self-BLASTING are confirmed (i.e., similar to the internal confirmation check of the total number of sequence differences via CMP).
 
 DESIGN:
@@ -62,9 +62,30 @@ def main(args):
     log = logging.getLogger(__name__)
     coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 
-    # STEP 2. Loop though provided folders
-    folders = [os.path.abspath(x) for x in args.input]
-    main_dir = os.getcwd()
+    # STEP 2. Read table from Script02/Script03 and append columns that will be filled in this script
+    try:
+        IRinfo_file = os.path.abspath(args.repfn)
+        IRinfo_table = pd.read_csv(IRinfo_file, index_col=0, sep='\t', encoding="utf-8")
+        relevant_accessions = list(IRinfo_table[(IRinfo_table['IRa_REPORTED']=='yes') & (IRinfo_table['IRb_REPORTED']=='yes')].index)
+    except Exception as err:
+        log.exception("Error reading from %s: %s" % (str(IRinfo_file), str(err)))
+        raise
+
+    if os.path.isdir(args.data):
+        folders = [os.path.abspath(os.path.join(args.data, x)) for x in os.listdir(args.data) if x in relevant_accessions]
+    else:
+        log.error(args.data + " is not a valid directory!")
+        raise Exception(args.data + " is not a valid directory!")
+
+    if len(folders) < len(relevant_accessions):
+        log.warning("Missing data folder for at least one provided accession.")
+
+    added_columns = ["IRa_CALCULATED", "IRa_CALCULATED_START", "IRa_CALCULATED_END", "IRa_CALCULATED_LENGTH", "IRa_START_COMPARED_OFFSET", "IRa_END_COMPARED_OFFSET", "IRa_LENGTH_COMPARED_DIFFERENCE", "IRb_CALCULATED", "IRb_CALCULATED_START", "IRb_CALCULATED_END", "IRb_CALCULATED_LENGTH", "IRb_START_COMPARED_OFFSET", "IRb_END_COMPARED_OFFSET", "IRb_LENGTH_COMPARED_DIFFERENCE"]
+    if not any(col in list(IRinfo_table.columns) for col in added_columns):
+        IRinfo_table = IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
+
+    '''
+    #folders = [os.path.abspath(x) for x in args.data]
     # Check if outfile exists, write headers
     # Raise an error if outfile exists but does not begin with the required headers
     outfn = os.path.abspath(args.outfn)
@@ -85,11 +106,14 @@ def main(args):
         ir_reported = pd.read_csv(reportfile, sep='\t', index_col=0, encoding="utf-8")
     else:
         raise Exception("File not found: " + args.repfn)
+    '''
 
-
+    main_dir = os.getcwd()
     for folder in folders:
         # Init values that will be written to table
         accession = os.path.basename(folder)
+
+        '''
         start_a_orig = None
         start_b_orig = None
         len_a_orig = 0
@@ -122,6 +146,7 @@ def main(args):
                 len_b_orig = int(ir_acc["IRb_REPORTED_LENGTH"])
             except:
                 len_b_orig = 0
+        '''
         # Change to directory containing sequence files
         os.chdir(folder)
         # Calculate IR positions and length
@@ -139,26 +164,61 @@ def main(args):
             awk_subp = subprocess.Popen(awkargs, stdin=blast_subp.stdout, stdout=subprocess.PIPE)
             out, err = awk_subp.communicate()
             if len(out.splitlines()) == 2:
+                # TODO: Look up and verify if the first line is indeed always IRb and the second line IRa
                 ira_info = out.splitlines()[1].split()
                 irb_info = out.splitlines()[0].split()
-                len_a = int(ira_info[0])
-                len_b = int(irb_info[0])
-                start_a = int(ira_info[1])
-                start_b = int(irb_info[1])
+
+                IRinfo_table.at[accession, "IRa_CALCULATED"] = "yes"
+                IRinfo_table.at[accession, "IRb_CALCULATED"] = "yes"
+
+                IRinfo_table.at[accession, "IRa_CALCULATED_START"] = int(ira_info[1])
+                IRinfo_table.at[accession, "IRb_CALCULATED_START"] = int(irb_info[1])
+
+                ''' # TODO: Check which index is for end position
+                IRinfo_table.at[accession, "IRa_CALCULATED_END"] = int(ira_info[2])
+                IRinfo_table.at[accession, "IRb_CALCULATED_END"] = int(irb_info[2])
+                '''
+                IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"] = int(ira_info[0])
+                IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"] = int(irb_info[0])
+
+                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRa_REPORTED_START"] - IRinfo_table.at[accession, "IRa_CALCULATED_START"]
+                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRb_REPORTED_START"] - IRinfo_table.at[accession, "IRb_CALCULATED_START"]
+
+                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRa_REPORTED_END"] - IRinfo_table.at[accession, "IRa_CALCULATED_END"]
+                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRb_REPORTED_END"] - IRinfo_table.at[accession, "IRb_CALCULATED_END"]
+
+                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] - IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"]
+                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] - IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"]
+
             else:
                 log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join(out.splitlines()))
-                len_a = 0
-                len_b = 0
-                start_a = "not identified"
-                start_b = "not identified"
+
+                IRinfo_table.at[accession, "IRa_CALCULATED"] = "no"
+                IRinfo_table.at[accession, "IRb_CALCULATED"] = "no"
+
+                IRinfo_table.at[accession, "IRa_CALCULATED_START"] = "n.a."
+                IRinfo_table.at[accession, "IRb_CALCULATED_START"] = "n.a."
+
+                IRinfo_table.at[accession, "IRa_CALCULATED_END"] = "n.a."
+                IRinfo_table.at[accession, "IRb_CALCULATED_END"] = "n.a."
+
+                IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"] = "n.a."
+                IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"] = "n.a."
+
+                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = "n.a."
+                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = "n.a."
+
+                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = "n.a."
+                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = "n.a."
+
+                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = "n.a."
+                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = "n.a."
                 #raise Exception("Inverted repeat count not == 2")
         except Exception as err:
             log.exception("Error while calculating IRs. %s\n Skipping this accession." % (str(err)))
             continue
         # Write data to outfn
-        with open(outfn, "w") as outfile:
-            # TODO: Add column for start position difference (reported vs. inferred)
-            outfile.write("\t".join([str(accession), str(start_a_orig), str(start_a), str(len_a_orig), str(len_a), str(abs(len_a - len_a_orig)), str(start_b_orig), str(start_b), str(len_b_orig), str(len_b), str(abs(len_b - len_b_orig))]) + "\n")
+        IRinfo_table.to_csv(IRinfo_file, sep='\t', header=True)
         os.chdir(main_dir)
 
 
@@ -170,6 +230,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file that contains comparing information on reported vs. inferred IR positions and length")
     parser.add_argument("--repfn", "-r", type=str, required=True, help="path to file that contains information on reported IR positions and length")
-    parser.add_argument("--input", "-i", type=str, required=True, nargs='+', help="List of folder file paths containing FASTA files")
+    parser.add_argument("--data", "-d", type=str, required=True, nargs='+', help="List of folder file paths containing FASTA files")
     args = parser.parse_args()
     main(args)
