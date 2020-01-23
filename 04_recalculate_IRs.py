@@ -31,9 +31,8 @@ NOTES:
 #####################
 # IMPORT OPERATIONS #
 #####################
-#import xml.etree.ElementTree as ET
 import os.path, subprocess
-import argparse, tarfile
+import argparse
 import pandas as pd
 import coloredlogs, logging
 
@@ -45,7 +44,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Re-calculates the position and length of the IRs for each '\
            'plastid genome record'
-__version__ = '2020.01.23.1220'
+__version__ = '2020.01.23.1500'
 
 #############
 # DEBUGGING #
@@ -65,7 +64,7 @@ def main(args):
     # STEP 2. Read table from Script02/Script03 and append columns that will be filled in this script
     try:
         IRinfo_file = os.path.abspath(args.repfn)
-        IRinfo_table = pd.read_csv(IRinfo_file, index_col=0, sep='\t', encoding="utf-8")
+        IRinfo_table = pd.read_csv(IRinfo_file, index_col=0, sep='\t', encoding="utf-8", na_values="n.a.")
         relevant_accessions = list(IRinfo_table[(IRinfo_table['IRa_REPORTED']=='yes') & (IRinfo_table['IRb_REPORTED']=='yes')].index)
     except Exception as err:
         log.exception("Error reading from %s: %s" % (str(IRinfo_file), str(err)))
@@ -84,9 +83,7 @@ def main(args):
     if not any(col in list(IRinfo_table.columns) for col in added_columns):
         IRinfo_table = IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
 
-    #IRinfo_table = IRinfo_table.astype({"IRa_CALCULATED": str, "IRa_CALCULATED_START": pd.Int64Dtype(), "IRa_CALCULATED_END": pd.Int64Dtype(), "IRa_CALCULATED_LENGTH": pd.Int64Dtype(), "IRa_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "IRb_CALCULATED": str, "IRb_CALCULATED_START": pd.Int64Dtype(), "IRb_CALCULATED_END": pd.Int64Dtype(), "IRb_CALCULATED_LENGTH": pd.Int64Dtype(), "IRb_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
-
-    IRinfo_table = IRinfo_table.astype({"IRa_CALCULATED": str, "IRb_CALCULATED": str})
+    IRinfo_table = IRinfo_table.astype({"IRa_CALCULATED": str, "IRa_CALCULATED_START": pd.Int64Dtype(), "IRa_CALCULATED_END": pd.Int64Dtype(), "IRa_CALCULATED_LENGTH": pd.Int64Dtype(), "IRa_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "IRb_CALCULATED": str, "IRb_CALCULATED_START": pd.Int64Dtype(), "IRb_CALCULATED_END": pd.Int64Dtype(), "IRb_CALCULATED_LENGTH": pd.Int64Dtype(), "IRb_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
 
     '''
     #folders = [os.path.abspath(x) for x in args.data]
@@ -167,11 +164,27 @@ def main(args):
             awkargs = ["awk", "{if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}"]
             awk_subp = subprocess.Popen(awkargs, stdin=blast_subp.stdout, stdout=subprocess.PIPE)
             out, err = awk_subp.communicate()
-            if len(out.splitlines()) == 2:
-                # TODO: Look up and verify if the first line is indeed always IRb and the second line IRa
-                ira_info = out.splitlines()[1].split()
-                irb_info = out.splitlines()[0].split()
+            result_lines = out.splitlines()
+            # Note: BLAST sometimes finds additional regions in the sequence that match the length requirements filtered for in awk. We only want the IRs, and therefore need to pick out the two regions with matching length
+            if len(result_lines) > 2:
+                temp_lines = []
+                for i in range(len(result_lines)-1):
+                    for j in range(i+1,len(result_lines)):
+                        if result_lines[i].split()[1] == result_lines[j].split()[1]:
+                            temp_lines.append(result_lines[i])
+                            temp_lines.append(result_lines[j])
+                            break
+                result_lines = temp_lines
+            if len(result_lines) == 2:
+                # Compare the start positions of the found regions. By default, we assume IRb is located before IRa in the sequence
+                if result_lines[0].split()[1] > result_lines[1].split()[1]:
+                    ira_info = result_lines[0].split()
+                    irb_info = result_lines[1].split()
+                else:
+                    ira_info = result_lines[1].split()
+                    irb_info = result_lines[0].split()
 
+                # Assign calculated info
                 IRinfo_table.at[accession, "IRa_CALCULATED"] = "yes"
                 IRinfo_table.at[accession, "IRb_CALCULATED"] = "yes"
 
@@ -180,48 +193,30 @@ def main(args):
 
                 IRinfo_table.at[accession, "IRa_CALCULATED_END"] = int(ira_info[2])
                 IRinfo_table.at[accession, "IRb_CALCULATED_END"] = int(irb_info[2])
-                
+
                 IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"] = int(ira_info[0])
                 IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"] = int(irb_info[0])
 
-                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_START"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_START"]))
-                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_START"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_START"]))
+                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRa_REPORTED_START"] - IRinfo_table.at[accession, "IRa_CALCULATED_START"]
+                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRb_REPORTED_START"] - IRinfo_table.at[accession, "IRb_CALCULATED_START"]
 
-                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_END"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_END"]))
-                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_END"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_END"]))
+                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRa_REPORTED_END"] - IRinfo_table.at[accession, "IRa_CALCULATED_END"]
+                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = IRinfo_table.at[accession, "IRb_REPORTED_END"] - IRinfo_table.at[accession, "IRb_CALCULATED_END"]
 
-                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"]))
-                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"]))
+                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] - IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"]
+                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] - IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"]
 
             else:
-                log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join([str(line) for line in out.splitlines()]))
+                log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join([str(line).strip() for line in result_lines]))
 
                 IRinfo_table.at[accession, "IRa_CALCULATED"] = "no"
                 IRinfo_table.at[accession, "IRb_CALCULATED"] = "no"
 
-                IRinfo_table.at[accession, "IRa_CALCULATED_START"] = "n.a."
-                IRinfo_table.at[accession, "IRb_CALCULATED_START"] = "n.a."
-
-                IRinfo_table.at[accession, "IRa_CALCULATED_END"] = "n.a."
-                IRinfo_table.at[accession, "IRb_CALCULATED_END"] = "n.a."
-
-                IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"] = "n.a."
-                IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"] = "n.a."
-
-                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = "n.a."
-                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = "n.a."
-
-                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = "n.a."
-                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = "n.a."
-
-                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = "n.a."
-                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = "n.a."
-                #raise Exception("Inverted repeat count not == 2")
         except Exception as err:
             log.exception("Error while calculating IRs. %s\n Skipping this accession." % (str(err)))
             continue
         # Write data to outfn
-        IRinfo_table.to_csv(IRinfo_file, sep='\t', header=True)
+        IRinfo_table.to_csv(IRinfo_file, sep='\t', header=True, na_rep="n.a.")
         os.chdir(main_dir)
 
 
