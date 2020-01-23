@@ -45,7 +45,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Re-calculates the position and length of the IRs for each '\
            'plastid genome record'
-__version__ = '2019.10.17.1530'
+__version__ = '2020.01.23.1220'
 
 #############
 # DEBUGGING #
@@ -178,24 +178,23 @@ def main(args):
                 IRinfo_table.at[accession, "IRa_CALCULATED_START"] = int(ira_info[1])
                 IRinfo_table.at[accession, "IRb_CALCULATED_START"] = int(irb_info[1])
 
-                ''' # TODO: Check which index is for end position
                 IRinfo_table.at[accession, "IRa_CALCULATED_END"] = int(ira_info[2])
                 IRinfo_table.at[accession, "IRb_CALCULATED_END"] = int(irb_info[2])
-                '''
+                
                 IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"] = int(ira_info[0])
                 IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"] = int(irb_info[0])
 
-                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRa_REPORTED_START"]) - int(IRinfo_table.at[accession, "IRa_CALCULATED_START"])
-                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRb_REPORTED_START"]) -int(IRinfo_table.at[accession, "IRb_CALCULATED_START"])
+                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_START"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_START"]))
+                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_START"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_START"]))
 
-                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRa_REPORTED_END"]) - int(IRinfo_table.at[accession, "IRa_CALCULATED_END"])
-                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = int(IRinfo_table.at[accession, "IRb_REPORTED_END"]) - int(IRinfo_table.at[accession, "IRb_CALCULATED_END"])
+                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_END"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_END"]))
+                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_END"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_END"]))
 
-                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"]) - int(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"])
-                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = int(IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"]) - int(IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"])
+                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"]))
+                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"]))
 
             else:
-                log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join(out.splitlines()))
+                log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join([str(line) for line in out.splitlines()]))
 
                 IRinfo_table.at[accession, "IRa_CALCULATED"] = "no"
                 IRinfo_table.at[accession, "IRb_CALCULATED"] = "no"
