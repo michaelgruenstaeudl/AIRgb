@@ -270,7 +270,7 @@ def main(outfn, query, update_only):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
     parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
-    parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000170000[SLEN] : 00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE]", help="(Optional) Entrez query that will replace the standard query")
+    parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 00000170000[SLEN]:00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE] AND 2000/01/01:2019/12/31[PDAT]", help="(Optional) Entrez query that will replace the standard query")
     parser.add_argument("-u", "--update_only", action="store_true", required=False, default=False)
     args = parser.parse_args()
     main(os.path.abspath(args.outfn), args.query, args.update_only)
