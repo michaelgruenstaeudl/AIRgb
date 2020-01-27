@@ -6,9 +6,9 @@ Scripts for evaluating plastome integrity across all available plastid genomes o
 ## EXAMPLE USAGE
 #### On Linux / MacOS
 ```
-TESTFOLDER=testing
+TESTFOLDER=testing_nonangiosperms
 DATE=$(date '+%Y_%m_%d')
-MYQUERY='Magnoliophyta[ORGN] AND 00000100000[SLEN] : 00000210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE]'
+MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] NOT Magnoliophyta[ORGN]'
 AVAILTABLE=plastome_availability_table_${DATE}.tsv
 REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
 
@@ -29,6 +29,15 @@ python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TES
 # SCRIPT 04: Comparing the IRs to generate accurate IR information
 #python3 ../PlastomeIntegrityChecks/03_compare_existing_IRs.py -o align_info.csv -i NC_*.tar.gz
 
+```
+
+#### HELPFUL
+Self-blasting of the plastid genome sequence in order to infer the IR length
+```
+INF=chloroplastGenome.gb
+python gb2fas.py $INF
+blastn -subject ${INF%.gb*}.fas -query ${INF%.gb*}.fas -outfmt 7 -strand 'both' |\
+ awk '{ if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}' >  ${INF%.gb*}_IRs.txt
 ```
 
 <!--
