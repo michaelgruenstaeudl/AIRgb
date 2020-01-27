@@ -447,7 +447,7 @@ def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_featu
     if IRa_feature:
         IRinfo_table.at[accession, "IRa_REPORTED_START"] = str(IRa_feature.location.start+1)
         IRinfo_table.at[accession, "IRa_REPORTED_END"] = str(IRa_feature.location.end)
-        IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = str(abs(IRa_feature.location.start+1 - IRa_feature.location.end))
+        IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = str(len(IRa_feature))
     else:
         IRinfo_table.at[accession, "IRa_REPORTED_START"] = "n.a."
         IRinfo_table.at[accession, "IRa_REPORTED_END"] = "n.a."
@@ -456,7 +456,7 @@ def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_featu
     if IRb_feature:
         IRinfo_table.at[accession, "IRb_REPORTED_START"] = str(IRb_feature.location.start+1)
         IRinfo_table.at[accession, "IRb_REPORTED_END"] = str(IRb_feature.location.end)
-        IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = str(abs(IRb_feature.location.start+1 - IRb_feature.location.end))
+        IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = str(len(IRb_feature))
     else:
         IRinfo_table.at[accession, "IRb_REPORTED_START"] = "n.a."
         IRinfo_table.at[accession, "IRb_REPORTED_END"] = "n.a."
@@ -467,7 +467,7 @@ def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_featu
 
 
 
-def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_feature):
+def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_feature, useRevComp):
     ''' Writes the reported IRs to file in FASTA format '''
 
     if not (IRa_feature is None or IRbRC_feature is None):
@@ -476,7 +476,10 @@ def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_featur
             IRa_fasta.write(str(IRa_feature.extract(rec).seq) + "\n")
         with open(os.path.join(output_folder, accession + "_IRb_revComp.fasta"),"w") as IRb_fasta:
             IRb_fasta.write(">" + str(accession) + "_IRb_revComp\n")
-            IRb_fasta.write(str(IRbRC_feature.extract(rec).seq) + "\n")
+            if useRevComp:
+                IRb_fasta.write(str(IRbRC_feature.extract(rec).seq.reverse_complement()) + "\n")
+            else:
+                IRb_fasta.write(str(IRbRC_feature.extract(rec).seq) + "\n")
     elif not IRa_feature is None and IRbRC_feature is None:
         with open(os.path.join(output_folder, accession + "_IRa.fasta"),"w") as IRa_fasta:
             IRa_fasta.write(">" + str(accession) + "_IRa\n")
@@ -485,7 +488,10 @@ def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_featur
         IRbRC_rec = SeqRecord(IRbRC_feature, str(accession) +'_IRb_revComp', '', '')
         with open(os.path.join(output_folder, accession + "_IRb_revComp.fasta"),"w") as IRb_fasta:
             IRb_fasta.write(">" + str(accession) + "_IRb_revComp\n")
-            IRb_fasta.write(str(IRbRC_feature.extract(rec).seq) + "\n")
+            if useRevComp:
+                IRb_fasta.write(str(IRbRC_feature.extract(rec).seq.reverse_complement()) + "\n")
+            else:
+                IRb_fasta.write(str(IRbRC_feature.extract(rec).seq) + "\n")
 
 
 def main(args):
@@ -575,12 +581,12 @@ def main(args):
 
             try:
                 IRa_feature, IRbRC_feature = getInvertedRepeats(rec, log)
+                useRevComp = False
                 if IRa_feature and IRbRC_feature:
                     score_noRC = fuzz.ratio(IRa_feature.extract(rec).seq, IRbRC_feature.extract(rec).seq)
                     score_RC = fuzz.ratio(IRa_feature.extract(rec).seq, IRbRC_feature.extract(rec).seq.reverse_complement())
                     if score_noRC < score_RC:
-                        # Switching strands should be sufficient
-                        IRbRC_feature.strand = IRbRC_feature.strand * -1
+                        useRevComp = True
 
                 if not (IRa_feature is None or IRbRC_feature is None):
                     log.info("Both IRs (IRa and IRb) detected in accession `%s`." % (str(accession)))
@@ -609,7 +615,7 @@ def main(args):
             writeReportedIRpos(args.outfn, IRinfo_table, str(accession), IRa_feature, IRbRC_feature)
 
             # STEP 3.8. Write IR sequences in FASTA format
-            writeReportedIRseqs(accessionFolder, rec, accession, IRa_feature, IRbRC_feature)
+            writeReportedIRseqs(accessionFolder, rec, accession, IRa_feature, IRbRC_feature, useRevComp)
 
         except Exception as err:
             log.warning(str(err))
