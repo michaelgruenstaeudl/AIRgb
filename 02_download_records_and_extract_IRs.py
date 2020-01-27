@@ -445,8 +445,8 @@ def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_featu
     '''
 
     if IRa_feature:
-        IRinfo_table.at[accession, "IRa_REPORTED_START"] = str(IRa_feature.location.start+1)
-        IRinfo_table.at[accession, "IRa_REPORTED_END"] = str(IRa_feature.location.end)
+        IRinfo_table.at[accession, "IRa_REPORTED_START"] = coerceToExactLocation(IRa_feature.location.start+1)
+        IRinfo_table.at[accession, "IRa_REPORTED_END"] = coerceToExactLocation(IRa_feature.location.end)
         IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = str(len(IRa_feature))
     else:
         IRinfo_table.at[accession, "IRa_REPORTED_START"] = "n.a."
@@ -454,8 +454,8 @@ def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_featu
         IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = "n.a."
 
     if IRb_feature:
-        IRinfo_table.at[accession, "IRb_REPORTED_START"] = str(IRb_feature.location.start+1)
-        IRinfo_table.at[accession, "IRb_REPORTED_END"] = str(IRb_feature.location.end)
+        IRinfo_table.at[accession, "IRb_REPORTED_START"] = coerceToExactLocation(IRb_feature.location.start+1)
+        IRinfo_table.at[accession, "IRb_REPORTED_END"] = coerceToExactLocation(IRb_feature.location.end)
         IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = str(len(IRb_feature))
     else:
         IRinfo_table.at[accession, "IRb_REPORTED_START"] = "n.a."
@@ -493,6 +493,13 @@ def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_featur
             else:
                 IRb_fasta.write(str(IRbRC_feature.extract(rec).seq) + "\n")
 
+def coerceToExactLocation(location):
+    exactLocation = None
+    if '<' in str(location) or '>' in str(location):
+        exactLocation = str(location)[1:]
+    else:
+        exactLocation = str(location)
+    return exactLocation
 
 def main(args):
 
