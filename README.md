@@ -6,12 +6,19 @@ Scripts for evaluating plastome integrity across all available plastid genomes o
 ## EXAMPLE USAGE
 #### On Linux / MacOS
 ```
-TESTFOLDER=testing_nonangiosperms
+# Angiosperms
+TESTFOLDER=testing_angiosperms
 DATE=$(date '+%Y_%m_%d')
-MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] NOT Magnoliophyta[ORGN]'
+MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] AND Magnoliophyta[ORGN])'
 AVAILTABLE=plastome_availability_table_${DATE}.tsv
 REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
 
+# Non-angiosperm landplants
+TESTFOLDER=testing_nonangiosperm_landplants
+DATE=$(date '+%Y_%m_%d')
+MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] NOT Magnoliophyta[ORGN])'
+AVAILTABLE=plastome_availability_table_${DATE}.tsv
+REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
 
 mkdir -p $TESTFOLDER
 
@@ -49,7 +56,7 @@ blastn -subject ${INF%.gb*}.fas -query ${INF%.gb*}.fas -outfmt 7 -strand 'both' 
 
 ## VISUALIZATIONS, GRAPHS & STATISTICAL TESTS
 #### TO DO
-* Please plot the growth in plastid genomes (as done via vizulations script 01), but not with the number of plastid genomes on the y-axis but with the number of unique genera plotted. (This will illustrate if the current growth in plastid genome number is reflective of a better taxonomic survey or of higher sampling in genera and families.)
+* Please plot the growth in plastid genomes (as done via visulations script 01), but not with the number of plastid genomes on the y-axis but with the number of unique genera plotted. (This will illustrate if the current growth in plastid genome number is reflective of a better taxonomic survey or of higher sampling in genera and families.)
 
 * Please conduct statistical test to see if the absence of reported IRs (i.e., "no" in column "IRa_REPORTED") higher for an unpublished status (i.e., "Unpublished" in column "TITLE") and a published status (i.e., any other value in column "TITLE")?
 
