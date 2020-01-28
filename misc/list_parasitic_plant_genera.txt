@@ -1,0 +1,92 @@
+# PARASITIC PLANT GENERA
+# Plant genera with parasitic members starting with letter A
+    Afrothismia
+    Amyema
+    Amylotheca
+    Arachnitis
+    Arceuthobium
+    Atkinsonia
+    Aureolaria
+# Plant genera with parasitic members starting with letter B
+    Bdallophytum
+    Boschniakia
+    Buckleya
+# Plant genera with parasitic members starting with letter C
+    Campylosiphon
+    Cassytha
+    Castilleja
+    Cecarria
+    Cistanche
+    Comandra
+    Corallorhiza
+    Corsia
+    Cuscuta
+    Cymbocarpa
+    Cynomorium
+    Cytinus
+# Plant genera with parasitic members starting with letter D
+    Decaisnina
+    Dendrophthoe
+# Plant genera with parasitic members starting with letter E
+    Epifagus
+# Plant genera with parasitic members starting with letter G
+    Gaiadendron
+    Gastrodia
+    Geosiris
+    Ginalloa
+    Gleadovia
+    Gymnosiphon
+# Plant genera with parasitic members starting with letter H
+    Haplothismia
+    Harveya
+    Helixanthera
+    Hexapterella
+    Hydnora
+# Plant genera with parasitic members starting with letter K
+    Kihansia
+    Korthalsella
+    Kupea
+# Plant genera with parasitic members starting with letter L
+    Lacandonia
+    Leptomeria
+    Lysiana
+# Plant genera with parasitic members starting with letter M
+    Mitrastemon
+    Monotropa
+    Monotropsis
+    Muellerina
+# Plant genera with parasitic members starting with letter N
+    Nuytsia
+# Plant genera with parasitic members starting with letter O
+    Odontites
+    Orobanche
+    Oxygyne
+# Plant genera with parasitic members starting with letter P
+    Pedicularis
+    Pholisma
+    Phoradendron
+    Phthirusa
+    Pilostyles
+    Pityopus
+    Prosopanche
+    Pterospora
+# Plant genera with parasitic members starting with letter R
+    Rafflesia
+    Ramphicarpa
+    Rhinanthus
+    Rhynchocorys
+# Plant genera with parasitic members starting with letter S
+    Sapria
+    Sarcodes
+    Sciaphila
+    Seychellaria
+    Soridium
+    Striga
+# Plant genera with parasitic members starting with letter T
+    Taxillus
+    Thismia
+    Thonningia
+    Tiputinia
+    Triuris
+# Plant genera with parasitic members starting with letter V
+    Viscum
