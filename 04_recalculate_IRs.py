@@ -56,6 +56,15 @@ import ipdb
 #############
 # FUNCTIONS #
 #############
+
+def coerceToExactLocation(location):
+    exactLocation = None
+    if '<' in str(location) or '>' in str(location):
+        exactLocation = str(location)[1:]
+    else:
+        exactLocation = str(location)
+    return exactLocation
+
 def main(args):
     # STEP 1. Set up logger
     log = logging.getLogger(__name__)
@@ -84,71 +93,13 @@ def main(args):
         IRinfo_table = IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
 
     # TODO: IRb_REPORTED_END contains entries that cannot be converted to numeric. Change previous scripts so only numeric data is accepted and saved
-    IRinfo_table = IRinfo_table.astype({"IRa_REPORTED": str, "IRa_REPORTED_START": pd.Int64Dtype(), "IRa_REPORTED_END": pd.Int64Dtype(), "IRa_REPORTED_LENGTH": pd.Int64Dtype(), "IRb_REPORTED": str, "IRb_REPORTED_START": pd.Int64Dtype(), "IRb_REPORTED_END": pd.Int64Dtype(), "IRb_REPORTED_LENGTH": pd.Int64Dtype(), "IRa_CALCULATED": str, "IRa_CALCULATED_START": pd.Int64Dtype(), "IRa_CALCULATED_END": pd.Int64Dtype(), "IRa_CALCULATED_LENGTH": pd.Int64Dtype(), "IRa_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "IRb_CALCULATED": str, "IRb_CALCULATED_START": pd.Int64Dtype(), "IRb_CALCULATED_END": pd.Int64Dtype(), "IRb_CALCULATED_LENGTH": pd.Int64Dtype(), "IRb_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
-
-    '''
-    #folders = [os.path.abspath(x) for x in args.data]
-    # Check if outfile exists, write headers
-    # Raise an error if outfile exists but does not begin with the required headers
-    outfn = os.path.abspath(args.outfn)
-    if not os.path.isfile(outfn):
-        with open(outfn, "w") as outfile:
-            outfile.write("ACCESSION\tSTART_A_ORIG\tSTART_A\tLEN_A_ORIG\tLEN_A\tLEN_A_DIFF\tSTART_B_ORIG\tSTART_B\tLEN_B_ORIG\tLEN_B\tLEN_B_DIFF\n")
-    else:
-        with open(outfn, "r") as outfile:
-            if not outfile.readline() == "ACCESSION\tSTART_A_ORIG\tSTART_A\tLEN_A_ORIG\tLEN_A\tLEN_A_DIFF\tSTART_B_ORIG\tSTART_B\tLEN_B_ORIG\tLEN_B\tLEN_B_DIFF\n":
-                raise Exception('Malformed output file!')
-
-    reportfile = os.path.abspath(args.repfn)
-    if os.path.isfile(reportfile):
-        with open(reportfile) as rep:
-            header = rep.readline()
-            if not header == "\t".join(["ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"]) + "\n":
-                raise Exception("Missing or malformed header in file " + args.repfn)
-        ir_reported = pd.read_csv(reportfile, sep='\t', index_col=0, encoding="utf-8")
-    else:
-        raise Exception("File not found: " + args.repfn)
-    '''
+    IRinfo_table = IRinfo_table.astype({"IRa_REPORTED": str, "IRa_REPORTED_LENGTH": pd.Int64Dtype(), "IRb_REPORTED": str, "IRb_REPORTED_LENGTH": pd.Int64Dtype(), "IRa_CALCULATED": str, "IRa_CALCULATED_START": pd.Int64Dtype(), "IRa_CALCULATED_END": pd.Int64Dtype(), "IRa_CALCULATED_LENGTH": pd.Int64Dtype(), "IRa_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "IRb_CALCULATED": str, "IRb_CALCULATED_START": pd.Int64Dtype(), "IRb_CALCULATED_END": pd.Int64Dtype(), "IRb_CALCULATED_LENGTH": pd.Int64Dtype(), "IRb_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
 
     main_dir = os.getcwd()
     for folder in folders:
         # Init values that will be written to table
         accession = os.path.basename(folder)
 
-        '''
-        start_a_orig = None
-        start_b_orig = None
-        len_a_orig = 0
-        len_b_orig = 0
-        len_a = 0
-        len_b = 0
-        start_a = None
-        start_b = None
-
-        try:
-            ir_acc = ir_reported.loc[accession]
-        except:
-            log.warning("Could not find any reported IR information for accession " + accession + ". Skipping this accession.")
-            continue
-
-        if not ir_acc is None:
-            try:
-                start_a_orig = int(ir_acc["IRa_REPORTED_START"])
-            except:
-                start_a_orig = ir_acc["IRa_REPORTED_START"]
-            try:
-                len_a_orig = int(ir_acc["IRa_REPORTED_LENGTH"])
-            except:
-                len_a_orig = 0
-            try:
-                start_b_orig = int(ir_acc["IRb_REPORTED_START"])
-            except:
-                start_b_orig = ir_acc["IRb_REPORTED_START"]
-            try:
-                len_b_orig = int(ir_acc["IRb_REPORTED_LENGTH"])
-            except:
-                len_b_orig = 0
-        '''
         # Change to directory containing sequence files
         os.chdir(folder)
         # Calculate IR positions and length
@@ -198,14 +149,14 @@ def main(args):
                 IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"] = int(ira_info[0])
                 IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"] = int(irb_info[0])
 
-                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_START"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_START"]))
-                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_START"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_START"]))
+                IRinfo_table.at[accession, "IRa_START_COMPARED_OFFSET"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_REPORTED_START"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_CALCULATED_START"])))
+                IRinfo_table.at[accession, "IRb_START_COMPARED_OFFSET"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_REPORTED_START"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_CALCULATED_START"])))
 
-                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_END"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_END"]))
-                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_END"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_END"]))
+                IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_REPORTED_END"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_CALCULATED_END"])))
+                IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_REPORTED_END"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_CALCULATED_END"])))
 
-                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(float(IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"]) - float(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"]))
-                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = int(float(IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"]) - float(IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"]))
+                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(float(coerceToExactLocationI(Rinfo_table.at[accession, "IRa_REPORTED_LENGTH"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"])))
+                IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"])))
 
             else:
                 log.warning("Could not calculate IRs for accession " + accession + "." + "\n".join([str(line).strip() for line in result_lines]))
