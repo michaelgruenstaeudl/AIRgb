@@ -16,6 +16,7 @@ OBJECTIVE:
     08. the name of the publication (uppermost TITLE line in GB-file), and
     09. the full citation of the publication (see uppermost JOURNAL line in GB-file)
     10. Any note if a REFSEQ accession number exists and to which regular accession number it is equal to.
+    11. the taxonomy
 
 DESIGN:
     There are thousands of plastid genome sequences on GenBank. The parsing of the records is, thus, conducted one by one, not all simultaneously. Specifically, a list of unique identifiers is first obtained and then this list is looped over.
@@ -46,7 +47,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
            'in NCBI GenBank'
-__version__ = '2019.11.12.1900'
+__version__ = '2020.02.17.1100'
 
 #############
 # DEBUGGING #
@@ -171,6 +172,8 @@ def getEntryInfo(uid):
                 note = "The REFSEQ accession `%s` is identical to accession `%s`." % (accession, duplseq)
     fields.append(note)
 
+    fields.append(uidData.find("GBSeq_taxonomy").text)
+
     return fields, accession, duplseq
 
 
@@ -200,7 +203,7 @@ def main(outfn, query, update_only):
     else:
         with open(outfn, "w") as outputFile:
             log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
-            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\n")
+            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\nTAXONOMY\n")
 
 
   # STEP 3. Get all existing UIDs and calculate which to be processed
