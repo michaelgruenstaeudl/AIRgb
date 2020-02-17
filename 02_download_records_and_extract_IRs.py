@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
-    This script takes a list of GenBank accession numbers and - for each accession number - downloads the record 
-    from GenBank, parses it via Biopython, extracts the inverted repeat (IR) regions and saves both their reported 
-    position as well as their reported sequences to files. The IR is hereby identified either explicitly (i.e., via 
-    features with appropriate keywords) or implicitly (i.e., via annotations of the large and small single 
+    This script takes a list of GenBank accession numbers and - for each accession number - downloads the record
+    from GenBank, parses it via Biopython, extracts the inverted repeat (IR) regions and saves both their reported
+    position as well as their reported sequences to files. The IR is hereby identified either explicitly (i.e., via
+    features with appropriate keywords) or implicitly (i.e., via annotations of the large and small single
     copy region and then taking the complement set thereof).
 
     The output shall be a set of files for each GenBank record:
@@ -15,28 +15,28 @@ OBJECTIVE:
     (d) the reported sequence of IRa and IRb (reverse-complemented), both in FASTA format
 
     The downloaded GB record is gzipped and saved in a folder titled "records".
-    The other files generated (i.e., the three FASTA files and the table) are saved in a folder called "data" and, 
+    The other files generated (i.e., the three FASTA files and the table) are saved in a folder called "data" and,
     within that, their own subfolder (named with the accession number)
 
 DESIGN:
-    * The IRs (i.e. IRa and IRb) of a plastid genome record may be annotated in different ways (i.e., via different 
-      features and feature qualifiers), depending on the record. This script is flexible enough to identify the 
+    * The IRs (i.e. IRa and IRb) of a plastid genome record may be annotated in different ways (i.e., via different
+      features and feature qualifiers), depending on the record. This script is flexible enough to identify the
       different naming conventions, yet always extract only a single IR pair per record.
 
-    * This script can also infer the position of the IR implicitly via the position of large (LSC) and small single 
-      copy (SSC) regions. Specifically, it extracts the positions of the LSC and the SSC and calculate the IRs as 
+    * This script can also infer the position of the IR implicitly via the position of large (LSC) and small single
+      copy (SSC) regions. Specifically, it extracts the positions of the LSC and the SSC and calculate the IRs as
       the complement set of the LSC and the SSC, if no explicit annotation information for the IR is present.
 
-    * The plastid genome records on GenBank are inconsistent in their annotations of the reading direction of the 
-      IR. Specifically, the annotations sometimes indicate that one of the IRs is on the opposite strand than its 
-      counterpart (i.e., is reverse-complemented compared to its counterpart), sometimes not. In order to avoid 
-      issues when extracting the IRs in FASTA-format, an explicit check of the IRs per genome, followed by a 
-      reverse-complementing operation (where required), is indicated. The situation is complicated by the fact 
-      that a certain level of non-identity (i.e., up to 10% of all nucleotides) must remain permissible between 
-      the IRs, because the identification of such a non-identity is the overall objective of this investigation. 
-      Consequently, this script explicitly checks for each GenBank record (in function "getInvertedRepeats()") if 
-      one of the IR features of a record must be reverse complemented or not. Specifically, the string conducts 
-      approximate string comparisons and, based on the results, switches the strand information for one of the 
+    * The plastid genome records on GenBank are inconsistent in their annotations of the reading direction of the
+      IR. Specifically, the annotations sometimes indicate that one of the IRs is on the opposite strand than its
+      counterpart (i.e., is reverse-complemented compared to its counterpart), sometimes not. In order to avoid
+      issues when extracting the IRs in FASTA-format, an explicit check of the IRs per genome, followed by a
+      reverse-complementing operation (where required), is indicated. The situation is complicated by the fact
+      that a certain level of non-identity (i.e., up to 10% of all nucleotides) must remain permissible between
+      the IRs, because the identification of such a non-identity is the overall objective of this investigation.
+      Consequently, this script explicitly checks for each GenBank record (in function "getInvertedRepeats()") if
+      one of the IR features of a record must be reverse complemented or not. Specifically, the string conducts
+      approximate string comparisons and, based on the results, switches the strand information for one of the
       IRs where necessary.
 
     * The output files of each record shall be bundled together as a record-specific gzip file.
@@ -174,9 +174,9 @@ def evaluateJunction(feature, rec_len):
 
 def confirmDifferentStartEnd(feature, log):
     '''
-    Checks that start and end position of a feature are not identical; if they are, 
+    Checks that start and end position of a feature are not identical; if they are,
     make start position one bp less than end position; returns the adjusted feature
-    # Some junctions in Genbank format are given as "start^end", leading to start and 
+    # Some junctions in Genbank format are given as "start^end", leading to start and
     # end positions being the same.
     '''
     if feature:
@@ -188,7 +188,7 @@ def confirmDifferentStartEnd(feature, log):
 
 def constructIRsFromJunctions(rec_len, jlb_feat, jsb_feat, jsa_feat, jla_feat, log):
     '''
-    Tries to infer the IR positions from the information provided by the junction features; 
+    Tries to infer the IR positions from the information provided by the junction features;
     returns the IRs as full features
     '''
     IRa = None
@@ -210,14 +210,14 @@ def constructIRsFromJunctions(rec_len, jlb_feat, jsb_feat, jsa_feat, jla_feat, l
             else:
                 IRa = SeqFeature(FeatureLocation(jla_feat.location.end-1, jsa_feat.location.start+1, strand = 1))
         elif jsb_feat:
-            # If JLA is not given, we assume that the plastid genome is split at the JLA 
+            # If JLA is not given, we assume that the plastid genome is split at the JLA
             # (i.e. start of the JLA is the last position in the sequence, end of the JLA is the first position)
             if jsb_feat.location.start < jsa_feat.location.start:
                 IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, rec_len, strand = 1))
             else:
                 IRa = SeqFeature(FeatureLocation(0, jsa_feat.location.start+1, strand = 1))
         else:
-            # if JSB is not given either, we assume the plastid genome follows the 
+            # if JSB is not given either, we assume the plastid genome follows the
             # convention of (start:LSC|IRb|SSC|IRa:end)
             IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, rec_len, strand = 1))
     return IRa, IRb
@@ -225,7 +225,7 @@ def constructIRsFromJunctions(rec_len, jlb_feat, jsb_feat, jsa_feat, jla_feat, l
 
 def constructIRsFromSingleCopyRegions(rec_len, lsc, ssc, IRa, IRb, log):
     '''
-    Tries to infer the IR positions from the information provided by the SC features; 
+    Tries to infer the IR positions from the information provided by the SC features;
     returns the IRs as full features
     '''
     if lsc.location.start < ssc.location.start:
@@ -309,14 +309,14 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
     #   2.3. qualifier note contains either ("inverted" and "repeat") or "IR"
 
     # Note by TM:
-    #     We could also check all feature types in question (repeat_region, general misc_feature, 
-    #     junction misc_feature, single-copy misc_feature) for possible IRs, and compare the results to 
+    #     We could also check all feature types in question (repeat_region, general misc_feature,
+    #     junction misc_feature, single-copy misc_feature) for possible IRs, and compare the results to
     #     pick the most likely candidate.
-    #     As it is, IRs can be misidentified in one feature type even though using another feature type 
-    #     would be more accurate (e.g. a general misc_feature that isn't an IR but contains identifying 
+    #     As it is, IRs can be misidentified in one feature type even though using another feature type
+    #     would be more accurate (e.g. a general misc_feature that isn't an IR but contains identifying
     #     keywords would be picked as IR, even though reliable junction information exists)
     # Reply by MG:
-    #     Good idea, but let us test the current version and see how many false positives, if any, we 
+    #     Good idea, but let us test the current version and see how many false positives, if any, we
     #     currently receive.
     '''
 
@@ -336,7 +336,7 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
         raise Exception("Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).")
     all_qualifiers = [misc_feature.qualifiers for misc_feature in all_mf_no_pseudo]
     # The following line generates a nested list of all keys of all qualifiers found in all misc features
-    keylist = [list(q) for q in all_qualifiers] 
+    keylist = [list(q) for q in all_qualifiers]
     if "note" not in [key for keys in keylist for key in keys]: # Flatten the key list
         raise Exception("Record does not contain any qualifiers for feature `misc_feature` which the IRs are typically named with (i.e., qualifier `note`).")
 
@@ -352,7 +352,7 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
             if len(repeat_feature) > min_IR_len:
                 if "note" in repeat_feature.qualifiers:
                     log.debug("Checking note qualifier for IR identifiers.")
-                    # If the "note" qualifier contains explicit mention of which IR (a/b) we are looking at, assign 
+                    # If the "note" qualifier contains explicit mention of which IR (a/b) we are looking at, assign
                     # it to the appropriate variable.
                     if any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers):
                         log.debug("Found identifier for IRa.")
@@ -360,9 +360,9 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
                     elif any(identifier in repeat_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers):
                         log.debug("Found identifier for IRb.")
                         IRb = repeat_feature
-                    # If the "note" qualifier holds no information on which IR we are looking at, assign 
-                    # the repeat feature to one of the variables that hasn't been initialized yet. IRb 
-                    # gets assigned first, since it is located before IRa in the sequence, so if there 
+                    # If the "note" qualifier holds no information on which IR we are looking at, assign
+                    # the repeat feature to one of the variables that hasn't been initialized yet. IRb
+                    # gets assigned first, since it is located before IRa in the sequence, so if there
                     # is no further information given, the first IR found is assumed to be IRb.
                     elif IRb is None:
                         log.debug("No specific identifier found. Assigned feature as IRb.")
@@ -372,13 +372,13 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
                         log.debug("No specific identifier found. Assigned feature as IRa.")
                         IRa = repeat_feature
                 # If the "note" qualifier does not exist, assign the repeat feature to one of the variables
-                # that hasn't been initialized yet. IRb gets assigned first, since it is located before IRa 
+                # that hasn't been initialized yet. IRb gets assigned first, since it is located before IRa
                 # in the sequence, so if there is no further information given, the first IR found is assumed to be IRb.
                 elif IRb is None:
                     log.debug("No 'note' qualifier found. Assigned feature as IRb.")
                     IRb = repeat_feature
                 # Note: Elif-statement in this context assures that IRa is assigned only if IRb is not None.
-                elif IRa is None: 
+                elif IRa is None:
                     log.debug("No 'note' qualifier found. Assigned feature as IRa.")
                     IRa = repeat_feature
             else:
@@ -402,7 +402,7 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
                     IRb = repeat_feature
                 elif ("inverted" in repeat_feature.qualifiers["note"][0].lower() and "repeat" in repeat_feature.qualifiers["note"][0].lower()) or "IR" in repeat_feature.qualifiers["note"][0]:
                     log.debug("Found general identifier for IRs.")
-                    # IRb gets assigned first, since it is located before IRa in the sequence, so if there 
+                    # IRb gets assigned first, since it is located before IRa in the sequence, so if there
                     # is no further information given, the first IR found is assumed to be IRb.
                     if IRb is None:
                         log.debug("Assign feature as IRb.")
@@ -422,7 +422,7 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
         IRb = None
 
     # STEP 3. Loop through misc_features and attempt to identify IRs
-    # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier; 
+    # Only check misc_features if neither inverted repeat was found through the repeat_region qualifier;
     # if one inverted repeat was tagged as repeat_region, the other probably would have been tagged the same
     if IRa is None or IRb is None:
         log.debug("%s out of 2 IR positions found so far. Checking all misc_features for identifying information in their NOTE QUALIFIERS..." % \
@@ -464,7 +464,7 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
         IRa = None
         IRb = None
 
-    # STEP 4. Inferring the position of the IR implicitly by extracting the positions of the large (LSC) and 
+    # STEP 4. Inferring the position of the IR implicitly by extracting the positions of the large (LSC) and
     # small single copy (SSC) regions and calculating the IRs as the complement set thereof.
     if IRa is None or IRb is None:
         log.debug("%s out of 2 IR positions found so far. Trying to infer the missing IRs by given single-copy region positions..." % \
@@ -499,22 +499,22 @@ def getInvertedRepeats(rec, log, min_IR_len=1000):
 
 
 def writeReportedIRpos(filename, IRinfo_table, accession, IRa_feature, IRb_feature):
-    ''' 
-    Writes the reported start and end positions, as well as the lengths, of the IRs 
-    in a given SeqFeature object as a table. Moreover, Biopython's 0-based location 
+    '''
+    Writes the reported start and end positions, as well as the lengths, of the IRs
+    in a given SeqFeature object as a table. Moreover, Biopython's 0-based location
     coordinates are converted back to GenBank's 1-based location coordinates.
     '''
     if IRa_feature:
-        IRinfo_table.at[accession, "IRa_REPORTED_START"] = coerceToExactLocation(IRa_feature.location.start+1)
-        IRinfo_table.at[accession, "IRa_REPORTED_END"] = coerceToExactLocation(IRa_feature.location.end)
+        IRinfo_table.at[accession, "IRa_REPORTED_START"] = IRa_feature.location.start+1
+        IRinfo_table.at[accession, "IRa_REPORTED_END"] = IRa_feature.location.end
         IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = str(len(IRa_feature))
     else:
         IRinfo_table.at[accession, "IRa_REPORTED_START"] = "n.a."
         IRinfo_table.at[accession, "IRa_REPORTED_END"] = "n.a."
         IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"] = "n.a."
     if IRb_feature:
-        IRinfo_table.at[accession, "IRb_REPORTED_START"] = coerceToExactLocation(IRb_feature.location.start+1)
-        IRinfo_table.at[accession, "IRb_REPORTED_END"] = coerceToExactLocation(IRb_feature.location.end)
+        IRinfo_table.at[accession, "IRb_REPORTED_START"] = IRb_feature.location.start+1
+        IRinfo_table.at[accession, "IRb_REPORTED_END"] = IRb_feature.location.end
         IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"] = str(len(IRb_feature))
     else:
         IRinfo_table.at[accession, "IRb_REPORTED_START"] = "n.a."
@@ -551,14 +551,46 @@ def writeReportedIRseqs(output_folder, rec, accession, IRa_feature, IRbRC_featur
             else:
                 IRb_fasta.write(str(IRbRC_feature.extract(rec).seq) + "\n")
 
+def getValidAccessions(availability_table_fn, blacklistfn, log):
+    '''
+    Matches the genus of each accession against a blacklist of genera
+    '''
+    acc_tax_dict = {}
+    blacklist = []
+    validAccs = []
+    if blacklistfn:
+        log.info("Matching input accessions against taxonomy blacklist...")
 
-def coerceToExactLocation(location):
-    exactLocation = None
-    if '<' in str(location) or '>' in str(location):
-        exactLocation = str(location)[1:]
+        with open(availability_table_fn, "r") as availability_table:
+            lines = [line.rstrip() for line in availability_table.readlines()]
+        for line in lines:
+            # Retrieving Genus of accession: Split the line at tabs, get 10th element(=taxonomy), split that element at semicolons, get the last element(=Genus) and remove the trailing dot
+            acc_tax_dict[line.split("\t")[1]] = ((line.split("\t")[10]).split(";")[-1]).rstrip(".")
+
+        with open(blacklistfn, "r") as blfile:
+            lines = [line.rstrip() for line in blacklistfile.readlines()]
+        for line in lines:
+            if not line.startswith("#"):
+                blacklist.append(line)
+
+        for acc in acc_tax_dict:
+            blacklisted = False
+            i = 0
+            while (not blacklisted) and i < len(blacklist):
+                if acc_tax_dict[acc] == blacklist[i]:
+                    blacklisted = True
+                    log.info("Taxonomic info of accession '%s' matches an entry in the taxon blacklist.")
+                i += 1
+            if not blacklisted:
+                validAccs.append(acc)
+
+        log.info("Filtered out %s blacklisted accessions." % (len(acc_tax_dict) - len(validAccs)))
     else:
-        exactLocation = str(location)
-    return exactLocation
+        with open(availability_table_fn, "r") as availability_table:
+            validAccs = [line.rstrip().split("\t")[1] for line in availability_table.readlines()]
+
+    return validAccs
+
 
 
 def main(args):
@@ -571,25 +603,21 @@ def main(args):
         coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='INFO', logger=log)
 
   # STEP 2. Read in accession numbers to loop over
-    accNumbers = []
-    if args.infn:
-        with open(args.infn, "r") as infile:
-            accNumbers = [line.split('\t')[1] for line in infile.read().splitlines()[1::]]
-    else:
-        accNumbers = args.inlist
+
+    accNumbers = getValidAccessions(args.infn, args.blacklistfn, log)
     if accNumbers:
         # Create records and data folder (unless already existant)
         if not os.path.exists(args.recordsdir):
             os.makedirs(args.recordsdir)
         if not os.path.exists(args.datadir):
             os.makedirs(args.datadir)
-    columns = ["ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", 
-               "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", 
+    columns = ["ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END",
+               "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START",
                "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"]
     # Note: The "additional columns" in the following line are added to the file/table by Script03.
     #       However, if we do not add these columns in the file/table now, we cannot update the file later.
-    additional_columns = ["MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE", 
-                          "CMP_DIFF_COUNT", "CONGRUENCE_MUMMER_CMP"] 
+    additional_columns = ["MUMMER_SNP_COUNT", "MUMMER_INDEL_COUNT", "MUMMER_SIMIL_SCORE",
+                          "CMP_DIFF_COUNT", "CONGRUENCE_MUMMER_CMP"]
     if os.path.isfile(args.outfn):
         with open(args.outfn) as outfile:
             header = outfile.readline()
@@ -624,12 +652,12 @@ def main(args):
             try:
                 rec = SeqIO.read(gbFn, "genbank")
             except Exception as err:
-                raise Exception("Error reading record of accession `%s`: %s. Skipping this accession." % 
+                raise Exception("Error reading record of accession `%s`: %s. Skipping this accession." %
                 (str(accession), str(err)))
                 continue
             # STEP 3.4. Internal check
             recordID = str(rec.id).split('.')[0]
-            # Note: This internal check ensures that we are actually dealing with the record that was 
+            # Note: This internal check ensures that we are actually dealing with the record that was
             # intended to be downloaded via efetch.
             if not recordID == str(accession):
                 log.warning("Accession number mismatch. Expected: `%s`. Retrieved: `%s`. Skipping this accession." % \
@@ -699,12 +727,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
-    EitherOr = parser.add_mutually_exclusive_group(required=True)
-    EitherOr.add_argument("--infn", "-i", type=str, help="path to input file; input is a summary table of NCBI accessions (tab-delimited, accession numbers in second column)")
-    EitherOr.add_argument("--inlist", "-l", type=str, nargs='+', help="List of NCBI nucleotide accession numbers")
+    parser.add_argument("--infn", "-i", type=str, required=True, help="path to input file; input is a summary table of NCBI accessions (tab-delimited, accession numbers in second column)")
     parser.add_argument("--outfn", "-o", type=str, required=True, help="path to output file that contains information on IR positions and length")
     parser.add_argument("--recordsdir", "-r", type=str, required=False, default="./records/", help="path to records directory")
     parser.add_argument("--datadir", "-d", type=str, required=False, default="./data/", help="path to data directory")
     parser.add_argument("--verbose", "-v", action="store_true", required=False, default=False, help="Enable verbose logging.")
+    parser.add_argument("--blacklistfn", "-b", type=str, required=False, help="path to taxonomy blacklist")
     args = parser.parse_args()
     main(args)
