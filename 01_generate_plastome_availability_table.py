@@ -47,7 +47,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
            'in NCBI GenBank'
-__version__ = '2020.02.17.1100'
+__version__ = '2020.02.18.1230'
 
 #############
 # DEBUGGING #
@@ -203,7 +203,7 @@ def main(outfn, query, update_only):
     else:
         with open(outfn, "w") as outputFile:
             log.info(("Summary file `%s` does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
-            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\nTAXONOMY\n")
+            outputFile.write("UID\tACCESSION\tVERSION\tORGANISM\tSEQ_LEN\tCREATE_DATE\tAUTHORS\tTITLE\tREFERENCE\tNOTE\tTAXONOMY\n")
 
 
   # STEP 3. Get all existing UIDs and calculate which to be processed
