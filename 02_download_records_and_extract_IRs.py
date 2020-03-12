@@ -562,13 +562,13 @@ def getValidAccessions(availability_table_fn, blacklistfn, log):
         log.info("Matching input accessions against taxonomy blacklist...")
 
         with open(availability_table_fn, "r") as availability_table:
-            lines = [line.rstrip() for line in availability_table.readlines()]
+            lines = [line.rstrip() for line in availability_table.readlines()[1::]]
         for line in lines:
             # Retrieving Genus of accession: Split the line at tabs, get 10th element(=taxonomy), split that element at semicolons, get the last element(=Genus) and remove the trailing dot
             acc_tax_dict[line.split("\t")[1]] = ((line.split("\t")[10]).split(";")[-1]).rstrip(".")
 
         with open(blacklistfn, "r") as blfile:
-            lines = [line.rstrip() for line in blacklistfile.readlines()]
+            lines = [line.rstrip() for line in blfile.readlines()]
         for line in lines:
             if not line.startswith("#"):
                 blacklist.append(line)

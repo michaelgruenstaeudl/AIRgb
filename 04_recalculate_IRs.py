@@ -93,7 +93,8 @@ def main(args):
         IRinfo_table = IRinfo_table.reindex(columns = list(IRinfo_table.columns) + added_columns)
 
     # TODO: IRb_REPORTED_END contains entries that cannot be converted to numeric. Change previous scripts so only numeric data is accepted and saved
-    IRinfo_table = IRinfo_table.astype({"IRa_REPORTED": str, "IRa_REPORTED_LENGTH": pd.Int64Dtype(), "IRb_REPORTED": str, "IRb_REPORTED_LENGTH": pd.Int64Dtype(), "IRa_CALCULATED": str, "IRa_CALCULATED_START": pd.Int64Dtype(), "IRa_CALCULATED_END": pd.Int64Dtype(), "IRa_CALCULATED_LENGTH": pd.Int64Dtype(), "IRa_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "IRb_CALCULATED": str, "IRb_CALCULATED_START": pd.Int64Dtype(), "IRb_CALCULATED_END": pd.Int64Dtype(), "IRb_CALCULATED_LENGTH": pd.Int64Dtype(), "IRb_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
+    # IRinfo_table = IRinfo_table.astype({"IRa_REPORTED": str, "IRa_REPORTED_LENGTH": pd.Int64Dtype(), "IRb_REPORTED": str, "IRb_REPORTED_LENGTH": pd.Int64Dtype(), "IRa_CALCULATED": str, "IRa_CALCULATED_START": pd.Int64Dtype(), "IRa_CALCULATED_END": pd.Int64Dtype(), "IRa_CALCULATED_LENGTH": pd.Int64Dtype(), "IRa_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRa_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "IRb_CALCULATED": str, "IRb_CALCULATED_START": pd.Int64Dtype(), "IRb_CALCULATED_END": pd.Int64Dtype(), "IRb_CALCULATED_LENGTH": pd.Int64Dtype(), "IRb_START_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_END_COMPARED_OFFSET": pd.Int64Dtype(), "IRb_LENGTH_COMPARED_DIFFERENCE": pd.Int64Dtype(), "MUMMER_SNP_COUNT": pd.Int64Dtype(), "MUMMER_INDEL_COUNT": pd.Int64Dtype(), "MUMMER_SIMIL_SCORE": float, "CMP_DIFF_COUNT": pd.Int64Dtype(), "CONGRUENCE_MUMMER_CMP": str})
+    IRinfo_table = IRinfo_table.astype({"IRa_REPORTED": str, "IRb_REPORTED": str, "IRa_CALCULATED": str, "IRb_CALCULATED": str})
 
     main_dir = os.getcwd()
     for folder in folders:
@@ -130,11 +131,11 @@ def main(args):
             if len(result_lines) == 2:
                 # Compare the start positions of the found regions. By default, we assume IRb is located before IRa in the sequence
                 if result_lines[0].split()[1] > result_lines[1].split()[1]:
-                    ira_info = result_lines[0].split()
-                    irb_info = result_lines[1].split()
-                else:
                     ira_info = result_lines[1].split()
                     irb_info = result_lines[0].split()
+                else:
+                    ira_info = result_lines[0].split()
+                    irb_info = result_lines[1].split()
 
                 # Assign calculated info
                 IRinfo_table.at[accession, "IRa_CALCULATED"] = "yes"
@@ -155,7 +156,7 @@ def main(args):
                 IRinfo_table.at[accession, "IRa_END_COMPARED_OFFSET"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_REPORTED_END"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_CALCULATED_END"])))
                 IRinfo_table.at[accession, "IRb_END_COMPARED_OFFSET"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_REPORTED_END"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_CALCULATED_END"])))
 
-                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(float(coerceToExactLocationI(Rinfo_table.at[accession, "IRa_REPORTED_LENGTH"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"])))
+                IRinfo_table.at[accession, "IRa_LENGTH_COMPARED_DIFFERENCE"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_REPORTED_LENGTH"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRa_CALCULATED_LENGTH"])))
                 IRinfo_table.at[accession, "IRb_LENGTH_COMPARED_DIFFERENCE"] = int(float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_REPORTED_LENGTH"])) - float(coerceToExactLocation(IRinfo_table.at[accession, "IRb_CALCULATED_LENGTH"])))
 
             else:
