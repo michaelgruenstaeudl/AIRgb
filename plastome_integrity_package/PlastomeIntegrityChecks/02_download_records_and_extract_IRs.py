@@ -149,13 +149,18 @@ def main(args):
 										  irb_feature.extract(rec).seq.reverse_complement())
 					if score_noRC < score_RC:
 						rev_comp = True
-				pa.ir_table.loc[accession] = iro.collect_info_from_features(ira_feature, irb_feature)
+				ir_info = iro.collect_info_from_features(ira_feature, irb_feature)
+				pa.ir_table.loc[accession] = ir_info
+				pa.append_ir_info_to_table(ir_info, accession, args.outfn)
 			except Exception as err:
-				pa.ir_table.loc[accession] = iro.collect_info_from_features(ira_feature, irb_feature)
+				ir_info = iro.collect_info_from_features(ira_feature, irb_feature)
+				pa.ir_table.loc[accession] = ir_info
+				pa.append_ir_info_to_table(ir_info, accession, args.outfn)
 				raise Exception("Error while extracting IRs for accession `%s`: %s Skipping further processing of this accession." % (str(accession), str(err)))
 				continue
-			
-			pa.ir_table.loc[accession] = iro.collect_info_from_features(ira_feature, irb_feature)
+			pa.ir_table.loc[accession] = iro.collect_info_from_features(ira_feature, irb_feature)			
+			pa.append_ir_info_to_table(ir_info, accession, args.outfn)
+			# TODO: Currently, nothing is done with the table object, since the file is written entry-wise. Remove full table from use?
 			iro.write_irs_to_fasta(rec, ira_feature, irb_feature, acc_folder, rev_comp)
 		except Exception as err:
 			log.warning(str(err))

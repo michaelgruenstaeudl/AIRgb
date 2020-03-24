@@ -111,12 +111,7 @@ def main(args):
 		pa.entry_table.loc[uid] = parsed_entry
 		if duplseq:
 			pa.duplicates[parsed_entry["ACCESSION"]] = duplseq
-		for key, value in parsed_entry.items():
-			parsed_entry[key] = [value]
-		parsed_entry["UID"] = [uid]
-		temp_df = pd.DataFrame(parsed_entry)
-		temp_df = temp_df.set_index("UID", drop = True)
-		temp_df.to_csv(outfn, sep = '\t', header = False, encoding = 'utf-8', mode = "a")
+		pa.append_entry_to_table(parsed_entry, uid, outfn)
 		
 	# STEP 5. Remove duplicates of REFSEQs and blacklisted entries
 	pa.write_duplicates(fp_duplicates)

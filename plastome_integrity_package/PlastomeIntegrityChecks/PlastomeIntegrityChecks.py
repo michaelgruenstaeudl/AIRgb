@@ -710,23 +710,31 @@ class Plastome_Availability:
 			self.entry_table.to_csv(fp_entry_table, sep = '\t', encoding = 'utf-8', header = False, mode = "a")
 		else:			
 			self.entry_table.to_csv(fp_entry_table, sep = '\t', encoding = 'utf-8', header = True)
-				
-	"""
-	def append_entry_table(self, fp_entry_table, entry):
-		'''
-		Write (append) a single pandas.Series object to output file.
-		Params:
-		 - fp_entry_table: file path to output file
-		 - entry: pandas.Series. The entry
-		'''
-		entry.to_csv(fp_entry_table, sep = '\t', encoding = 'utf-8', header = False, mode = "a")
-	"""
 	
+	def append_entry_to_table(self, entry, uid, fp_entry_table):
+		'''
+		Write information on one GenBank entry to tab-separated file
+		Params:
+		 - entry: dict. Keys are column names
+		 - uid: Unique identifier for this GenBank entry
+		 - fp_entry_table: file path to output file
+		'''
+		if os.path.isfile(fp_entry_table):
+			for key, value in entry.items():
+				entry[key] = [value]
+			entry["UID"] = [uid]
+			temp_df = pd.DataFrame(entry)
+			temp_df = temp_df.set_index("ACCESSION", drop = True)
+			temp_df.to_csv(fp_ir_table, sep = '\t', header = False, encoding = 'utf-8', mode = "a")
+		else:
+			raise Exception("Error trying to append GenBank entry to file '%s': File does not exist!" % (fp_entry_table))
+		
 	def read_ir_table(self, fp_ir_table):
 		'''
 		Read a tab-separated file of information on inverted repeats per GenBank accession
+		If the file doesn't exist yet, create it and write column headers
 		Params:
-		 - fp_ir_table: file path to input file
+		 - fp_ir_table: file path to input file		
 		'''
 		if os.path.isfile(fp_ir_table):
 			self.ir_table = pd.read_csv(fp_ir_table, sep = '\t', index_col = 0, encoding = 'utf-8')
@@ -734,15 +742,36 @@ class Plastome_Availability:
 			columns = ["ACCESSION", "IRa_REPORTED", "IRa_REPORTED_START", "IRa_REPORTED_END", "IRa_REPORTED_LENGTH", "IRb_REPORTED", "IRb_REPORTED_START", "IRb_REPORTED_END", "IRb_REPORTED_LENGTH"]
 			self.ir_table = pd.DataFrame(columns = columns)
 			self.ir_table = self.ir_table.set_index("ACCESSION", drop = True)
+			self.write_ir_table(fp_ir_table)
 			
-	def write_ir_table(self, fp_ir_table):
+	def write_ir_table(self, fp_ir_table, append = False):
 		'''
 		Write a list of per-accession inverted repeat information to tab-separated file
 		Params:
-		 - fp_ir_table: file path to input file
+		 - fp_ir_table: file path to output file
 		'''
-		with open(fp_ir_table, "w") as fh_ir_table:
+		if append:
+			self.ir_table.to_csv(sep = '\t', encoding = 'utf-8', header = False, mode = "a")
+		else:
 			self.ir_table.to_csv(sep = '\t', encoding = 'utf-8', header = True)
+			
+	def append_ir_info_to_table(self, ir_info, accession, fp_ir_table):
+		'''
+		Write information on one accession's inverted repeats to tab-separated file
+		Params:
+		 - ir_info: dict. Keys are column names
+		 - accession: accession number of this record
+		 - fp_ir_table: file path to output file
+		'''
+		if os.path.isfile(fp_ir_table):
+			for key, value in ir_info.items():
+				ir_info[key] = [value]
+			ir_info["ACCESSION"] = [accession]
+			temp_df = pd.DataFrame(ir_info)
+			temp_df = temp_df.set_index("ACCESSION", drop = True)
+			temp_df.to_csv(fp_ir_table, sep = '\t', header = False, encoding = 'utf-8', mode = "a")
+		else:
+			raise Exception("Error trying to append IR info to file '%s': File does not exist!" % (fp_ir_table))
 	
 	def read_blacklist(self, fp_blacklist):
 		'''
