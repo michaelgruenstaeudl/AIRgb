@@ -276,7 +276,7 @@ class IR_Operations:
 			junction_type = -1
 		return junction_type
 
-	def infer_irs_from_junctions(self, all_misc_features):
+	def infer_irs_from_junctions(self, rec_len, all_misc_features):
 		'''
 		Tries to infer the IR positions from the information provided by the junction features;
 		returns the IRs as full features.
@@ -295,7 +295,7 @@ class IR_Operations:
 		for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
 			i += 1
 			self.log.debug("Checking misc_feature %s out of %s (position %s - %s)..." % \
-			  (str(i), str(len(all_mf_no_pseudo)), str(misc_feature.location.start), str(misc_feature.location.end)))
+			  (str(i), str(len(all_misc_features)), str(misc_feature.location.start), str(misc_feature.location.end)))
 			junction_type = self.identify_junction(misc_feature, rec_len)
 			if junction_type == 0: # JLB
 				self.log.debug("Found junction LSC-IRb.")
@@ -341,11 +341,12 @@ class IR_Operations:
 				IRa = SeqFeature(FeatureLocation(jsa_feat.location.end-1, rec_len, strand = 1))
 		return IRa, IRb
 
-	def infer_irs_from_single_copy_regions(self, all_mf_no_pseudo, IRa = None, IRb = None):
+	def infer_irs_from_single_copy_regions(self, rec_len, all_mf_no_pseudo, IRa = None, IRb = None):
 		'''
 		Tries to infer the IR positions from the information provided by the single copy features;
 		returns the IRs as full features
 		Params:
+		 - rec_len: length of the record
 		 - all_mf_no_pseudo: list of "misc_feature" SeqFeatures excluding pseudo features
 		 - IRa: SeqFeature that corresponds to Inverted Repeat A
 		 - IRb: SeqFeature that corresponds to Inverted Repeat B
@@ -370,13 +371,25 @@ class IR_Operations:
 				lsc = misc_feature
 		if lsc and ssc:
 			if lsc.location.start < ssc.location.start:
+				ira_start = ssc.location.end - 1
+				ira_end = lsc.location.start
+				irb_start = lsc.location.end - 1
+				irb_end = ssc.location.start
+				if ira_end == 0:
+					ira_end = rec_len
 				if IRa is None:
 					self.log.debug("Constructing IRa from found single-copy positions.")
-					IRa = SeqFeature(FeatureLocation(ssc.location.end-1, lsc.location.start), type="misc_feature", strand=1)
+					IRa = SeqFeature(FeatureLocation(ira_start, ira_end), type="misc_feature", strand=1)
 				if IRb is None:
 					self.log.debug("Constructing IRb from found single-copy positions.")
-					IRb = SeqFeature(FeatureLocation(lsc.location.end-1, ssc.location.start), type="misc_feature", strand=1)
+					IRb = SeqFeature(FeatureLocation(irb_start, irb_end), type="misc_feature", strand=1)
 			else:
+				ira_start = lsc.location.end - 1
+				ira_end = ssc.location.start
+				irb_start = ssc.location.end - 1
+				irb_end = lsc.location.start
+				if irb_end == 0:
+					irb_end = rec_len
 				if IRa is None:
 					self.log.debug("Constructing IRa from found single-copy positions.")
 					IRa = SeqFeature(FeatureLocation(lsc.location.end-1, ssc.location.start), type="misc_feature", strand=1)
@@ -574,7 +587,7 @@ class IR_Operations:
 		if IRa is None or IRb is None:
 			self.log.debug("%s out of 2 IR positions found so far. Checking all misc_features for JUNCTION INFORMATION..." % \
 			  (str([IRa is None, IRb is None].count(False))))				
-			IRa, IRb = self.infer_irs_from_junctions(all_misc_features)
+			IRa, IRb = self.infer_irs_from_junctions(len(rec), all_misc_features)
 			
 		# Sanity check for IRs selected by the script so far
 		if IRa is not None and len(IRa.extract(rec).seq) < min_IR_len:
@@ -631,9 +644,9 @@ class IR_Operations:
 		fields = {}
 		if ira_feature:
 			fields["IRa_REPORTED"] = "yes"
-			fields["IRa_REPORTED_START"] = IRa_feature.location.start + 1
-			fields["IRa_REPORTED_END"] = IRa_feature.location.end
-			fields["IRa_REPORTED_LENGTH"] = str(len(IRa_feature))
+			fields["IRa_REPORTED_START"] = ira_feature.location.start + 1
+			fields["IRa_REPORTED_END"] = ira_feature.location.end
+			fields["IRa_REPORTED_LENGTH"] = str(len(ira_feature))
 		else:
 			fields["IRa_REPORTED"] = "no"
 			fields["IRa_REPORTED_START"] = "n.a."
@@ -641,9 +654,9 @@ class IR_Operations:
 			fields["IRa_REPORTED_LENGTH"] = "n.a."
 		if irb_feature:
 			fields["IRb_REPORTED"] = "yes"
-			fields["IRb_REPORTED_START"] = IRa_feature.location.start + 1
-			fields["IRb_REPORTED_END"] = IRa_feature.location.end
-			fields["IRb_REPORTED_LENGTH"] = str(len(IRa_feature))
+			fields["IRb_REPORTED_START"] = irb_feature.location.start + 1
+			fields["IRb_REPORTED_END"] = irb_feature.location.end
+			fields["IRb_REPORTED_LENGTH"] = str(len(irb_feature))
 		else:
 			fields["IRb_REPORTED"] = "no"
 			fields["IRb_REPORTED_START"] = "n.a."
@@ -675,6 +688,7 @@ class Plastome_Availability:
 	def read_entry_table(self, fp_entry_table):
 		'''
 		Read a tab-separated file of GenBank entry information.
+		If the file doesn't exist yet, create it and write column headers
 		Params:
 		 - fp_entry_table: file path to input file
 		'''
@@ -684,6 +698,7 @@ class Plastome_Availability:
 			columns = ["UID", "ACCESSION", "VERSION", "ORGANISM", "SEQ_LEN", "CREATE_DATE", "AUTHORS", "TITLE", "REFERENCE", "NOTE", "TAXONOMY"]
 			self.entry_table = pd.DataFrame(columns = columns)
 			self.entry_table = self.entry_table.set_index("UID", drop = True)
+			self.write_entry_table(fp_entry_table)
 	
 	def write_entry_table(self, fp_entry_table, append = False):
 		'''
@@ -758,7 +773,7 @@ class Plastome_Availability:
 		'''
 		with open(fp_duplicates, "w") as fh_duplicates:
 			for d_key in self.duplicates.keys():
-				fh_duplicates.write("%s\t%s\n" % (str(d_key), str(duplicates[d_key])))
+				fh_duplicates.write("%s\t%s\n" % (str(d_key), str(self.duplicates[d_key])))
 				
 	def append_duplicates(self, fp_duplicates):
 		'''
@@ -768,7 +783,7 @@ class Plastome_Availability:
 		'''
 		with open(fp_duplicates, "a") as fh_duplicates:
 			for d_key in self.duplicates.keys():
-				fh_duplicates.write("%s\t%s\n" % (str(d_key), str(duplicates[d_key])))
+				fh_duplicates.write("%s\t%s\n" % (str(d_key), str(self.duplicates[d_key])))
 	
 	#####################
 	# List edit methods #

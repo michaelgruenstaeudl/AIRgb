@@ -90,7 +90,7 @@ def main(args):
 	EI = pic.Entrez_Interaction(log)
   # STEP 2. Read in accession numbers to loop over
 	
-	pa = pic.Plastome_Availability(args.infn, args.outfn, args.blacklist)
+	pa = pic.Plastome_Availability(args.infn, args.outfn, args.blacklistfn)
 	pa.remove_blacklisted_entries()
 	
 	accessions = list(pa.entry_table["ACCESSION"].values)
@@ -140,7 +140,7 @@ def main(args):
 			if not str(accession) in pa.ir_table.index:
 				pa.ir_table = pa.ir_table.append(pd.Series(name=str(accession)))
 			try:
-				ira_feature, irb_feature = pa.identify_inverted_repeats(rec, 1000)
+				ira_feature, irb_feature = iro.identify_inverted_repeats(rec, 1000)
 				rev_comp = False
 				if ira_feature and irb_feature:
 					score_noRC = fuzz.ratio(ira_feature.extract(rec).seq,
