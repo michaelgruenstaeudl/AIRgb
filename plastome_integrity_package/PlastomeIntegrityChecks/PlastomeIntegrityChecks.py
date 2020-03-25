@@ -751,9 +751,9 @@ class Plastome_Availability:
 		 - fp_ir_table: file path to output file
 		'''
 		if append:
-			self.ir_table.to_csv(sep = '\t', encoding = 'utf-8', header = False, mode = "a")
+			self.ir_table.to_csv(fp_ir_table, sep = '\t', encoding = 'utf-8', header = False, mode = "a")
 		else:
-			self.ir_table.to_csv(sep = '\t', encoding = 'utf-8', header = True)
+			self.ir_table.to_csv(fp_ir_table, sep = '\t', encoding = 'utf-8', header = True)
 			
 	def append_ir_info_to_table(self, ir_info, accession, fp_ir_table):
 		'''
