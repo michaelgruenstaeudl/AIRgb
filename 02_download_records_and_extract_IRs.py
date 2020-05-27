@@ -587,7 +587,7 @@ def getValidAccessions(availability_table_fn, blacklistfn, log):
         log.info("Filtered out %s blacklisted accessions." % (len(acc_tax_dict) - len(validAccs)))
     else:
         with open(availability_table_fn, "r") as availability_table:
-            validAccs = [line.rstrip().split("\t")[1] for line in availability_table.readlines()]
+            validAccs = [line.rstrip().split("\t")[1] for line in availability_table.readlines()[1::]]
 
     return validAccs
 
@@ -674,7 +674,7 @@ def main(args):
             IRb_feature = None
             IRbRC_feature = None
             if not str(accession) in IRinfo_table.index:
-                IRinfo_table = IRinfo_table.append(pd.Series(name=str(accession)))
+                IRinfo_table = IRinfo_table.append(pd.Series(name=str(accession), dtype=str))
             try:
                 IRa_feature, IRbRC_feature = getInvertedRepeats(rec, log, 1000)
                 useRevComp = False
