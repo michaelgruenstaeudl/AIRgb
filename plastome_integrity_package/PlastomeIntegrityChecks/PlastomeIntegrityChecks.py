@@ -1,6 +1,7 @@
 import os, subprocess, logging
 import xml.etree.ElementTree as ET
 import pandas as pd
+from datetime import date
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -725,7 +726,7 @@ class Plastome_Availability:
 			entry["UID"] = [uid]
 			temp_df = pd.DataFrame(entry)
 			temp_df = temp_df.set_index("ACCESSION", drop = True)
-			temp_df.to_csv(fp_ir_table, sep = '\t', header = False, encoding = 'utf-8', mode = "a")
+			temp_df.to_csv(fp_entry_table, sep = '\t', header = False, encoding = 'utf-8', mode = "a")
 		else:
 			raise Exception("Error trying to append GenBank entry to file '%s': File does not exist!" % (fp_entry_table))
 		

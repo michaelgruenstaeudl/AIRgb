@@ -15,9 +15,9 @@ if len(sys.argv) > 0:
                     blacklist.add(line)
 
     ncbi = NCBITaxa()
-    if (time.time() - os.path.getmtime(os.path.join(Path.home(), ".etetoolkit/taxa.sqlite"))) > 2628000:
-        print("Local NCBI taxonomy database is older than one month. Updating...")
-        ncbi.update_taxonomy_database()
+#    if (time.time() - os.path.getmtime(os.path.join(Path.home(), ".etetoolkit/taxa.sqlite"))) > 2628000:
+#        print("Local NCBI taxonomy database is older than one month. Updating...")
+#        ncbi.update_taxonomy_database()
 
     print("Getting taxonomy of 'IRL clade'...")
     species_ids = []

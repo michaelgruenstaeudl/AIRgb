@@ -37,6 +37,7 @@ import argparse
 import coloredlogs, logging
 import pandas as pd
 import PlastomeIntegrityChecks as pic
+from datetime import datetime
 
 ###############
 # AUTHOR INFO #
@@ -81,10 +82,10 @@ def main(args):
 		pa.read_duplicates(fp_duplicates)
 	
 	if len(pa.entry_table) > 0:
-		uids_already_processed = list(pa.entry_table["UID"].values)
+		uids_already_processed = list(pa.entry_table.index.values)
 		log.info("Summary file '%s' already exists. Number of UIDs read: %s" % (str(outfn), str(len(uids_already_processed))))
 		if args.update_only:
-			min_date = pa.entry_table["CREATE_DATE"].max()
+			min_date = datetime.strptime(pa.entry_table["CREATE_DATE"].max(), '%Y-%m-%d')
 			log.info("NOTE: Only records more recent than '%s' are being looked for." % (str(min_date)))
 	else:
 		log.info(("Summary file '%s' does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
@@ -135,7 +136,7 @@ def main(args):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
 	parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
-	parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 170000:210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE] AND 2000/01/01:2019/12/31[PDAT]", help="(Optional) Entrez query that will replace the standard query")
+	parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 120000:210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE] AND 2000/01/01:2020/07/31[PDAT]", help="(Optional) Entrez query that will replace the standard query")
 	parser.add_argument("-u", "--update_only", action="store_true", required=False, default=False, help="Will only add entries with more recent creation date than the most recent existing entry.")
 	parser.add_argument("-b", "--blacklist", type=str, required=False, help="path to file of blacklisted genera that will be removed from the retrieved plastid sequences.")
 	args = parser.parse_args()
