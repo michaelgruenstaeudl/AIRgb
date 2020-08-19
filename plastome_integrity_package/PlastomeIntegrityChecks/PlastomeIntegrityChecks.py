@@ -26,7 +26,7 @@ class Entrez_Interaction:
 		efetchargs = ["efetch", "-db", "nucleotide", "-format", "uid"]
 		efetch = subprocess.Popen(efetchargs, stdin=esearch.stdout, stdout=subprocess.PIPE)
 		out, err = efetch.communicate()
-		
+
 		return list(map(int, out.splitlines()))[::-1]
 
 	def fetch_xml_entry(self, uid):
@@ -41,12 +41,12 @@ class Entrez_Interaction:
 		esummary = subprocess.Popen(esummaryargs, stdout=subprocess.PIPE)
 		out, err = esummary.communicate()
 		return ET.fromstring(out)
-	
+
 	def parse_xml_entry(self, entry):
 		'''
 		Parses a GenBank XML entry and returns a dictionary of field name/value pairs
 		Params:
-		 - entry: ElementTree. The XML entry		 
+		 - entry: ElementTree. The XML entry
 		'''
 		# Parse out the relevant info from XML-formatted record summary
 		uid_data = entry.find("GBSeq")
@@ -120,10 +120,10 @@ class Entrez_Interaction:
 		elif os.path.getsize(gbFile) == 0:
 			raise Exception("Error retrieving GenBank flatfile of accession " + str(acc_id))
 		return gbFile
-		
-		
+
+
 class IR_Operations:
-	
+
 	def __init__(self, logger = None):
 		self.log = logger or logging.getLogger(__name__ + ".IR_Operations")
 
@@ -138,14 +138,14 @@ class IR_Operations:
 		rec = None
 		if os.path.isfile(fp_record):
 			accession = os.path.splitext(fp_record)[0]
-			try:			
+			try:
 				rec = SeqIO.read(fp_record, "genbank")
 			except Exception as err:
-				raise Exception("Error reading record of accession `%s`: %s. Skipping this accession." % (str(accession), str(err)))			
+				raise Exception("Error reading record of accession `%s`: %s. Skipping this accession." % (str(accession), str(err)))
 		else:
 			raise Exception("Error reading record: Unable to find '%s'." % (fp_record))
 		return rec
-			
+
 	def write_sequence_to_fasta(self, seq, header, fp_outfile):
 		'''
 		Writes a sequence to a new file in FASTA format
@@ -156,11 +156,11 @@ class IR_Operations:
 		'''
 		if not seq is None:
 			if not header.startswith(">"):
-				header = ">" + header				
+				header = ">" + header
 			with open(fp_outfile, "w") as fh_outfile:
 				fh_outfile.write(header + "\n")
 				fh_outfile.write(seq + "\n")
-				
+
 	def write_irs_to_fasta(self, rec, IRa, IRb, fp_outdir, rev_comp = False):
 		'''
 		Writes the inverted repeat SeqFeatures' sequences to separate files in FASTA format
@@ -174,14 +174,14 @@ class IR_Operations:
 		accession = str(rec.id).split('.')[0]
 		if not (IRa is None or IRb is None):
 			IRa_seq = str(IRa.extract(rec).seq)
-			IRa_header = str(accession) + "_IRa"	
+			IRa_header = str(accession) + "_IRa"
 			IRb_header = str(accession) + "_IRb_revComp"
 			if rev_comp:
-				IRb_seq = str(IRb.extract(rec).seq.reverse_complement())				
+				IRb_seq = str(IRb.extract(rec).seq.reverse_complement())
 			else:
-				IRb_seq = str(IRb.extract(rec).seq)				
-				
-			self.write_sequence_to_fasta(IRa_seq, IRa_header, os.path.join(fp_outdir, accession + "_IRa.fasta"))	
+				IRb_seq = str(IRb.extract(rec).seq)
+
+			self.write_sequence_to_fasta(IRa_seq, IRa_header, os.path.join(fp_outdir, accession + "_IRa.fasta"))
 			self.write_sequence_to_fasta(IRb_seq, IRb_header, os.path.join(fp_outdir, accession + "_IRb_revComp.fasta"))
 		elif not IRa is None and IRb is None:
 			IRa_seq = str(IRa.extract(rec).seq)
@@ -190,9 +190,9 @@ class IR_Operations:
 		elif IRa is None and not IRb is None:
 			IRb_header = str(accession) + "_IRb_revComp"
 			if rev_comp:
-				IRb_seq = str(IRb.extract(rec).seq.reverse_complement())				
+				IRb_seq = str(IRb.extract(rec).seq.reverse_complement())
 			else:
-				IRb_seq = str(IRb.extract(rec).seq)			
+				IRb_seq = str(IRb.extract(rec).seq)
 			self.write_sequence_to_fasta(IRb_seq, IRb_header, os.path.join(fp_outdir, accession + "_IRb_revComp.fasta"))
 
 	##################################
@@ -291,7 +291,7 @@ class IR_Operations:
 		jsb_feat = None
 		jsa_feat = None
 		jla_feat = None
-		
+
 		i = 0
 		for misc_feature in [mf for mf in all_misc_features if "note" in mf.qualifiers]:
 			i += 1
@@ -311,7 +311,7 @@ class IR_Operations:
 				self.log.debug("Found junction IRa-LSC")
 				jla_feat = misc_feature
 			elif junction_type == 4: # Ambiguous
-				self.log.debug("Found a junction but its identifiers are ambiguous.")		
+				self.log.debug("Found a junction but its identifiers are ambiguous.")
 
 		for junction in [jlb_feat, jsb_feat, jsa_feat, jla_feat]:
 			junction = self.adjust_feature_location(junction)
@@ -356,7 +356,7 @@ class IR_Operations:
 		lsc = None
 		ssc_identifiers = ["ssc", "small single copy"]
 		lsc_identifiers = ["lsc", "large single copy"]
-		blacklist = ["jlb", "jsb", "jsa", "jla", "junction"]		
+		blacklist = ["jlb", "jsb", "jsa", "jla", "junction"]
 		i = 0
 		for misc_feature in [mf for mf in all_mf_no_pseudo if "note" in mf.qualifiers]:
 			i += 1
@@ -398,7 +398,7 @@ class IR_Operations:
 					self.log.debug("Constructing IRb from found single-copy positions.")
 					IRb = SeqFeature(FeatureLocation(ssc.location.end-1, lsc.location.start), type="misc_feature", strand=1)
 		return IRa, IRb
-	
+
 	def identify_irs_in_misc_features(self, all_mf_no_pseudo, IRa = None, IRb = None):
 		'''
 		Tries to infer the IR positions from the information provided by the misc_features; returns the IRs as full features
@@ -445,8 +445,8 @@ class IR_Operations:
 							IRa = misc_feature
 					else:
 						self.log.debug("Feature is too short (%s bp) to be an IR." % str(len(misc_feature)))
-		return IRa, IRb	
-		
+		return IRa, IRb
+
 	def identify_irs_in_repeat_features(self, all_repeat_features, IRa = None, IRb = None, min_IR_len = 1000):
 		'''
 		Tries to infer the IR positions from the information provided by the repeat_features; returns the IRs as SeqFeatures
@@ -455,7 +455,7 @@ class IR_Operations:
 		 - IRa: SeqFeature that corresponds to Inverted Repeat A
 		 - IRb: SeqFeature that corresponds to Inverted Repeat B
 		 - min_IR_len: minimum length identified IRs must have.
-		'''		
+		'''
 		ira_identifiers = ["ira", "inverted repeat a"]
 		irb_identifiers = ["irb", "inverted repeat b"]
 		# Loop through repeat_regions and attempt to identify IRs
@@ -532,7 +532,7 @@ class IR_Operations:
 					else:
 						self.log.info("Found a repeat region (%s - %s) without further identifying information. Ignoring this feature." % \
 						  (str(repeat_feature.location.start), str(repeat_feature.location.end)))
-		
+
 		return IRa, IRb
 
 	def identify_inverted_repeats(self, rec, min_IR_len=1000):
@@ -555,13 +555,13 @@ class IR_Operations:
 		# Note: The following line prevents that pseudogenes (or related pseudo-features)
 		#       are used to infer the IR length.
 		all_mf_no_pseudo = [feature for feature in all_misc_features if 'pseudo' not in feature.qualifiers]
-		
+
 		if len(all_repeat_features) == 0 and len(all_misc_features) == 0:
-			raise Exception("Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).")		
+			raise Exception("Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).")
 
 		# STEP 2: Loop through repeat_regions and attempt to identify IRs
 		IRa, IRb = self.identify_irs_in_repeat_features(all_repeat_features, IRa, IRb, min_IR_len)
-		
+
 		# If no valid IRs found, check if the misc_features contain "note" qualifiers necessary for identification
 		if IRa is None and IRb is None:
 			all_qualifiers = [misc_feature.qualifiers for misc_feature in all_misc_features]
@@ -569,13 +569,13 @@ class IR_Operations:
 			keylist = [list(q) for q in all_qualifiers]
 			if "note" not in [key for keys in keylist for key in keys]: # Flatten the key list
 				raise Exception("Record does not contain any qualifiers for feature `misc_feature` which the IRs are typically named with (i.e., qualifier `note`).")
-		
+
 		# STEP 3. Loop through misc_features and attempt to identify IRs
 		if IRa is None or IRb is None:
 			self.log.debug("%s out of 2 IR positions found so far. Checking all misc_features for identifying information in their NOTE QUALIFIERS..." % \
 			  (str([IRa is None, IRb is None].count(False))))
 			IRa, IRb = self.identify_irs_in_misc_features(all_mf_no_pseudo, IRa, IRb)
-		
+
 		# Sanity check for IRs selected by the script so far
 		if IRa is not None and len(IRa.extract(rec).seq) < min_IR_len:
 			self.log.warning("Selected IRa is too short to be a genuine IR and has been discarded.")
@@ -583,13 +583,13 @@ class IR_Operations:
 		if IRb is not None and len(IRb.extract(rec).seq) < min_IR_len:
 			self.log.warning("Selected IRb is too short to be a genuine IR and has been discarded.")
 			IRb = None
-			
+
 		# STEP 4. Loop through misc_features and attempt to identify junctions from which to infer the IRs
 		if IRa is None or IRb is None:
 			self.log.debug("%s out of 2 IR positions found so far. Checking all misc_features for JUNCTION INFORMATION..." % \
-			  (str([IRa is None, IRb is None].count(False))))				
+			  (str([IRa is None, IRb is None].count(False))))
 			IRa, IRb = self.infer_irs_from_junctions(len(rec), all_misc_features)
-			
+
 		# Sanity check for IRs selected by the script so far
 		if IRa is not None and len(IRa.extract(rec).seq) < min_IR_len:
 			self.log.warning("Selected IRa is too short to be a genuine IR and has been discarded.")
@@ -607,7 +607,7 @@ class IR_Operations:
 				if IRa is None and IRb is None:
 					raise Exception("Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).")
 			IRa, IRb = self.infer_irs_from_single_copy_regions(len(rec), all_mf_no_pseudo, IRa, IRb)
-			
+
 		# Sanity check for IRs selected by the script so far
 		if IRa is not None and len(IRa.extract(rec).seq) < min_IR_len:
 			self.log.warning("Selected IRa is too short to be a genuine IR and has been discarded.")
@@ -615,12 +615,12 @@ class IR_Operations:
 		if IRb is not None and len(IRb.extract(rec).seq) < min_IR_len:
 			self.log.warning("Selected IRb is too short to be a genuine IR and has been discarded.")
 			IRb = None
-			
+
 		if IRa is None and IRb is None:
 			raise Exception("Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.")
-		
+
 		return IRa, IRb
-	
+
 
 	########
 	# MISC #
@@ -640,7 +640,7 @@ class IR_Operations:
 				feature.location = FeatureLocation(feature.location.start-1, feature.location.end, strand = feature.strand)
 				self.log.debug("Adjusted FeatureLocation to %s" % str(feature.location))
 		return feature
-	
+
 	def collect_info_from_features(self, ira_feature, irb_feature):
 		fields = {}
 		if ira_feature:
@@ -664,28 +664,28 @@ class IR_Operations:
 			fields["IRb_REPORTED_END"] = "n.a."
 			fields["IRb_REPORTED_LENGTH"] = "n.a."
 		return fields
-		
+
 class Plastome_Availability:
 
-	def __init__(self, fp_entry_table, fp_ir_table = None, fp_blacklist = None, fp_duplicates = None):	
+	def __init__(self, fp_entry_table, fp_ir_table = None, fp_blacklist = None, fp_duplicates = None):
 		self.entry_table = None
 		self.duplicates = {}
 		self.ir_table = None
 		self.blacklist = []
-		
-		self.read_entry_table(os.path.abspath(fp_entry_table))		
-		
+
+		self.read_entry_table(os.path.abspath(fp_entry_table))
+
 		if fp_ir_table:
 			self.read_ir_table(os.path.abspath(fp_ir_table))
 		if fp_blacklist:
 			self.read_blacklist(os.path.abspath(fp_blacklist))
 		if fp_duplicates:
 			self.read_duplicates(os.path.abspath(fp_duplicates))
-	
+
 	###############
 	# I/O methods #
 	###############
-		
+
 	def read_entry_table(self, fp_entry_table):
 		'''
 		Read a tab-separated file of GenBank entry information.
@@ -700,7 +700,7 @@ class Plastome_Availability:
 			self.entry_table = pd.DataFrame(columns = columns)
 			self.entry_table = self.entry_table.set_index("UID", drop = True)
 			self.write_entry_table(fp_entry_table)
-	
+
 	def write_entry_table(self, fp_entry_table, append = False):
 		'''
 		Write a list of GenBank entry information to tab-separated file.
@@ -709,9 +709,9 @@ class Plastome_Availability:
 		'''
 		if append:
 			self.entry_table.to_csv(fp_entry_table, sep = '\t', encoding = 'utf-8', header = False, mode = "a")
-		else:			
+		else:
 			self.entry_table.to_csv(fp_entry_table, sep = '\t', encoding = 'utf-8', header = True)
-	
+
 	def append_entry_to_table(self, entry, uid, fp_entry_table):
 		'''
 		Write information on one GenBank entry to tab-separated file
@@ -729,13 +729,13 @@ class Plastome_Availability:
 			temp_df.to_csv(fp_entry_table, sep = '\t', header = False, encoding = 'utf-8', mode = "a")
 		else:
 			raise Exception("Error trying to append GenBank entry to file '%s': File does not exist!" % (fp_entry_table))
-		
+
 	def read_ir_table(self, fp_ir_table):
 		'''
 		Read a tab-separated file of information on inverted repeats per GenBank accession
 		If the file doesn't exist yet, create it and write column headers
 		Params:
-		 - fp_ir_table: file path to input file		
+		 - fp_ir_table: file path to input file
 		'''
 		if os.path.isfile(fp_ir_table):
 			self.ir_table = pd.read_csv(fp_ir_table, sep = '\t', index_col = 0, encoding = 'utf-8')
@@ -744,7 +744,7 @@ class Plastome_Availability:
 			self.ir_table = pd.DataFrame(columns = columns)
 			self.ir_table = self.ir_table.set_index("ACCESSION", drop = True)
 			self.write_ir_table(fp_ir_table)
-			
+
 	def write_ir_table(self, fp_ir_table, append = False):
 		'''
 		Write a list of per-accession inverted repeat information to tab-separated file
@@ -755,7 +755,7 @@ class Plastome_Availability:
 			self.ir_table.to_csv(fp_ir_table, sep = '\t', encoding = 'utf-8', header = False, mode = "a")
 		else:
 			self.ir_table.to_csv(fp_ir_table, sep = '\t', encoding = 'utf-8', header = True)
-			
+
 	def append_ir_info_to_table(self, ir_info, accession, fp_ir_table):
 		'''
 		Write information on one accession's inverted repeats to tab-separated file
@@ -773,7 +773,7 @@ class Plastome_Availability:
 			temp_df.to_csv(fp_ir_table, sep = '\t', header = False, encoding = 'utf-8', mode = "a")
 		else:
 			raise Exception("Error trying to append IR info to file '%s': File does not exist!" % (fp_ir_table))
-	
+
 	def read_blacklist(self, fp_blacklist):
 		'''
 		Read a file of blacklisted genera.
@@ -781,10 +781,10 @@ class Plastome_Availability:
 		 - fp_blacklist: file path to input file
 		'''
 		with open(fp_blacklist, "r") as fh_blacklist:
-			for line in [l.rstrip() for l in fh_blacklist.readlines()]:
+			for line in [l.strip() for l in fh_blacklist.readlines()]:
 				if not line.startswith("#"):
 					self.blacklist.append(line)
-				
+
 	def read_duplicates(self, fp_duplicates):
 		'''
 		Read a tab-separated file of UIDs, corresponding RefSeq accession numbers and duplicate accession numbers.
@@ -794,7 +794,7 @@ class Plastome_Availability:
 		with open(fp_duplicates, "r") as fh_duplicates:
 			for dup_tup in [line.rstrip().split('\t') for line in fh_duplicates.readlines()]:
 				self.duplicates[dup_tup[0]] = [dup_tup[1], dup_tup[2]]
-		
+
 	def write_duplicates(self, fp_duplicates):
 		'''
 		Write a list of UIDs, corresponding RefSeq accession numbers and duplicate accession numbers to tab-separated file.
@@ -804,7 +804,7 @@ class Plastome_Availability:
 		with open(fp_duplicates, "w") as fh_duplicates:
 			for d_key in self.duplicates.keys():
 				fh_duplicates.write("%s\t%s\t%s\n" % (str(d_key), str(self.duplicates[d_key][0]), str(self.duplicates[d_key][1])))
-				
+
 	def append_duplicates(self, fp_duplicates):
 		'''
 		Append a list of UIDs, corresponding RefSeq accession numbers and duplicate accession numbers to tab-separated file.
@@ -814,15 +814,15 @@ class Plastome_Availability:
 		with open(fp_duplicates, "a") as fh_duplicates:
 			for d_key in self.duplicates.keys():
 				fh_duplicates.write("%s\t%s\t%s\n" % (str(d_key), str(self.duplicates[d_key][0]), str(self.duplicates[d_key][1])))
-	
+
 	#####################
 	# List edit methods #
 	#####################
-					
+
 	def remove_blacklisted_entries(self):
 		'''
 		Remove entries from entry table that match blacklisted genera.
-		'''		
+		'''
 		for genus in self.blacklist:
 			# TM: The next line took a while to figure out, so for the sake of my own and future contributers' sanities, here's a breakdown of what it does:
 			# self.entry_table["TAXONOMY"].str provides the whole taxonomy column for elementwise(i.e. rowwise) string operations. Since our TAXONOMY information is semicolon-separated, each row is split.
@@ -832,13 +832,10 @@ class Plastome_Availability:
 			self.entry_table.drop(self.entry_table.loc[[(entry[-1].rstrip('.') == genus) for entry in self.entry_table["TAXONOMY"].str.split(';')]].index, inplace = True)
 		if len(self.blacklist) == 0:
 			self.log.info("Blacklist is empty. No entries removed.")
-	
+
 	def remove_duplicates(self):
 		'''
 		Remove entries from entry table that match duplicate accession numbers
 		'''
 		for d_key in self.duplicates.keys():
 			self.entry_table.drop(self.entry_table.loc[self.entry_table["ACCESSION"] == self.duplicates[d_key][0]].index, inplace = True)
-			
-		
-		

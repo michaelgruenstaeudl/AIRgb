@@ -1,34 +1,163 @@
-import os.path, time
+import re
+import os.path
+import argparse
+import coloredlogs, logging
+import time
 import sys
 import PlastomeIntegrityChecks as pic
+import fetchpubmed
 from ete3 import NCBITaxa
 from pathlib import Path
+from datetime import datetime
 
-if len(sys.argv) > 0:
+def fetch_pubmed_articles(mail, query):
+    articles = None
+    cond = entrezpy.conduit.Conduit(mail)
+    fetch_pubmed = cond.new_pipeline()
+    sid = fetch_pubmed.add_search({'db': 'pubmed', 'term': query, 'rettype': 'count'})
+    fid = fetch_pubmed.add_fetch({'retmode':'xml'}, dependency=sid, analyzer=fetchpubmed.PubMedAnalyzer())
+    a = cond.run(fetch_pubmed)
+    result = a.get_result()
+    if result.size() >= 1:
+        articles = result.pubmed_records
+    return articles
 
-    blacklist = set()
-    if os.path.isfile(sys.argv[1]):
-        print("Reading existing blacklist %s ..." % sys.argv[1])
-        with open(sys.argv[1], "r") as fh_blacklist:
-            for line in [l.rstrip() for l in fh_blacklist.readlines()]:
-                if not line.startswith("#"):
-                    blacklist.add(line)
+'''
+def fetch_pmc_articles(mail, query):
+    articles = None
+    cond = entrezpy.conduit.Conduit(mail)
+    fetch_pmc = cond.new_pipeline()
+    sid = fetch_pmc.add_search({'db': 'pmc', 'term': query, 'rettype': 'count'})
+    fid = fetch_pmc.add_fetch({'retmode':'xml'}, dependency=sid, analyzer=fetchpmc.PMCAnalyzer())
+    a = cond.run(fetch_pmc)
+    result = a.get_result()
+    if result.size() >= 1:
+        articles = result.pmc_records
+    return articles
+'''
 
-    ncbi = NCBITaxa()
-#    if (time.time() - os.path.getmtime(os.path.join(Path.home(), ".etetoolkit/taxa.sqlite"))) > 2628000:
-#        print("Local NCBI taxonomy database is older than one month. Updating...")
-#        ncbi.update_taxonomy_database()
+def get_abstract_text(article):
+    text = ""
+    for elem in article.findall(".//AbstractText"):
+        text += elem.text + "\n"
+    return text
 
-    print("Getting taxonomy of 'IRL clade'...")
+def get_article_keywords(article):
+    keywords = []
+    for elem in article.findall(".//Keyword"):
+        keywords.append(elem.text)
+    return keywords
+
+def get_species_from_pubmed_article(article, ncbi):
+    '''
+    Parses a pubmed article for species names
+    '''
+    species = set()
+    abstract_text = get_abstract_text(article)
+    keywords = get_article_keywords(article)
+    for keyword in keywords:
+        abstract_text += keyword + "\n"
+    ncbi_query_results = ncbi.get_name_translator(construct_species_query(abstract_text))
+    for name, id in ncbi_query_results.items():
+        # We're only interested in species-rank taxons
+        if ncbi.get_rank([id]) == "species":
+            species.add(name)
+
+    return species
+
+def construct_species_query(text):
+    '''
+    Constructs a string for every two adjacent words in the text and returns them as a list.
+    '''
+    species_queries = []
+    taxonomic_expressions = ["sp.", "x", "var.", "subsp.", "f."]
+    words = text.split()
+    for i in range(0,len(words)-2):
+        # Since not all species names are simply two words, we need to account for these cases.
+        # Below is an attempt to account for the cases that were detected by a brief look at existing names
+        # We're also removing all characters that cannot(should not?) occur in taxonomy (e.g. a species name might be in parentheses)
+        if words[i+1] in taxonomic_expressions:
+            # "sp." is preceded by one word and is usually followed by one word, but we also found a case with two following words
+            if words[i+1] == "sp.":
+                if i < len(words)-3:
+                    species_queries.append(re.sub(r'[^a-zA-Z0-9.\-:]+', '', words[i] + " " + words[i+1] + " " + words[i+2]))
+                    if i < len(words)-4:
+                        species_queries.append(re.sub(r'[^a-zA-Z0-9.\-:]+', '', words[i] + " " + words[i+1] + " " + words[i+2] + " " + words[i+3]))
+            if words[i+1] == "var." or words[i+1] == "f.":
+                # "var." and "f." are preceded by two words and followed by one word
+                if i < len(words)-3 and i > 0:
+                    species_queries.append(re.sub(r'[^a-zA-Z0-9.\-:]+', '', words[i-1] + " " + words[i] + " " + words[i+1] + " " + words[i+2]))
+            if words[i+1] == "subsp.":
+                # "subsp." is preceded by two words and is usually followed by one word, but we also found a case with two following words
+                if i < len(words)-3 and i > 0:
+                    species_queries.append(re.sub(r'[^a-zA-Z0-9.\-:]+', '', words[i-1] + " " + words[i] + " " + words[i+1] + " " + words[i+2]))
+                    if i < len(words)-4:
+                        species_queries.append(re.sub(r'[^a-zA-Z0-9.\-:]+', '', words[i-1] + " " + words[i] + " " + words[i+1] + " " + words[i+2] + " " + words[i+3]))
+            if words[+1] == "x":
+                # "x" is preceded by two words and followed by two words
+                if i < len(words)-4 and i > 0:
+                    species_queries.append(re.sub(r'[^a-zA-Z0-9.\-:]+', '', words[i-1] + " " + words[i] + " " + words[i+1] + " " + words[i+2] + " " + words[i+3]))
+        else:
+            species_queries.append(re.sub(r'[^a-zA-Z0-9.\-:]+', '', words[i] + " " + words[i+1]))
+    return species_queries
+
+def get_irl_clade_species(ncbi):
     species_ids = []
     irl_clade_tree = ncbi.get_topology([ncbi.get_name_translator(['IRL clade'])['IRL clade'][0]])
     for leaf in irl_clade_tree.iter_leaves():
          species_ids.append(int(leaf.name))
     species = set(ncbi.translate_to_names(species_ids))
-    print("Merging 'IRL clade' species with blacklist...")
-    blacklist = blacklist.union(species)
+    return species
 
-    print("Writing blacklist to %s." % sys.argv[1])
-    with open(sys.argv[1], "w") as fh_blacklist:
-        for species in blacklist:
-            fh_blacklist.write(species + "\n")
+def read_blacklist(fp_blacklist):
+    '''
+    Read a file of blacklisted genera/species.
+    Params:
+     - fp_blacklist: file path to input file
+    '''
+    blacklist = set()
+    with open(fp_blacklist, "r") as fh_blacklist:
+        for line in [l.strip() for l in fh_blacklist.readlines()]:
+            if not line.startswith("#"):
+                blacklist.add(line)
+    return blacklist
+
+def append_blacklist(fp_blacklist, blacklist):
+    with open(fp_blacklist, "a") as fh_blacklist:
+        fh_blacklist.write("# Update on %s\n" % datetime.now().strftime("%Y-%m-%d, %H:%M"))
+        for entry in blacklist:
+            fh_blacklist.write(entry)
+
+def main(args):
+    # TODO: replace static mail address (maybe with a simple username@hostname ?)
+    mail = "tilmanmehl@fu-berlin.de"
+
+    ncbi = NCBITaxa()
+    blacklist = set()
+    blacklist_existing = set()
+    # Read blacklist if the file already exists
+    if os.path.isfile(args.file_blacklist):
+        blacklist_existing = read_blacklist(args.file_blacklist)
+    # Gather species names of species in "IRL clade"
+    irl_clade_species = get_irl_clade_species(ncbi)
+    # Add found species to blacklist (minus species that are already in the blacklist)
+    blacklist = irl_clade_species.difference(blacklist_existing)
+    # Fetch PubMed articles for analysis
+    articles = fetch_pubmed_articles(mail, args.query)
+    for article in articles:
+        # Gather species names ocurring in article abstract
+        article_species = get_species_from_pubmed_article(article, ncbi)
+        # Add found species to blacklist (minus species that are already in the blacklist)
+        blacklist = blacklist.union(article_species.difference(blacklist_existing))
+    # Append newly found species to blacklist
+    append_blacklist(args.file_blacklist, blacklist)
+
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
+	parser.add_argument("-f", "--file_blacklist", type=str, required=True, help="path to blacklist file")
+    parser.add_argument("-q", "--query", type=str, required=False, default="inverted[TITLE] AND repeat[TITLE] AND loss[TITLE]", help="query used to fetch PMC articles that will be scanned for species with missing IRs")
+	args = parser.parse_args()
+    main(args)
