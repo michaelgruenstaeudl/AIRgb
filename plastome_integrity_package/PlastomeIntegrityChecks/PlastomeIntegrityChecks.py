@@ -787,33 +787,33 @@ class Plastome_Availability:
 				
 	def read_duplicates(self, fp_duplicates):
 		'''
-		Read a tab-separated file of RefSeq accession numbers and corresponding duplicate accession numbers.
+		Read a tab-separated file of UIDs, corresponding RefSeq accession numbers and duplicate accession numbers.
 		Params:
 		 - fp_duplicates: file path to input file
 		'''
 		with open(fp_duplicates, "r") as fh_duplicates:
 			for dup_tup in [line.rstrip().split('\t') for line in fh_duplicates.readlines()]:
-				self.duplicates[dup_tup[0]] = dup_tup[1]
+				self.duplicates[dup_tup[0]] = [dup_tup[1], dup_tup[2]]
 		
 	def write_duplicates(self, fp_duplicates):
 		'''
-		Write a list of RefSeq accession numbers and corresponding duplicate accession numbers to tab-separated file.
+		Write a list of UIDs, corresponding RefSeq accession numbers and duplicate accession numbers to tab-separated file.
 		Params:
 		 - fp_duplicates: file path to output file
 		'''
 		with open(fp_duplicates, "w") as fh_duplicates:
 			for d_key in self.duplicates.keys():
-				fh_duplicates.write("%s\t%s\n" % (str(d_key), str(self.duplicates[d_key])))
+				fh_duplicates.write("%s\t%s\t%s\n" % (str(d_key), str(self.duplicates[d_key][0]), str(self.duplicates[d_key][1])))
 				
 	def append_duplicates(self, fp_duplicates):
 		'''
-		Append a list of RefSeq accession numbers and corresponding duplicate accession numbers to tab-separated file.
+		Append a list of UIDs, corresponding RefSeq accession numbers and duplicate accession numbers to tab-separated file.
 		Params:
 		 - fp_duplicates: file path to output file
 		'''
 		with open(fp_duplicates, "a") as fh_duplicates:
 			for d_key in self.duplicates.keys():
-				fh_duplicates.write("%s\t%s\n" % (str(d_key), str(self.duplicates[d_key])))
+				fh_duplicates.write("%s\t%s\t%s\n" % (str(d_key), str(self.duplicates[d_key][0]), str(self.duplicates[d_key][1])))
 	
 	#####################
 	# List edit methods #
@@ -838,7 +838,7 @@ class Plastome_Availability:
 		Remove entries from entry table that match duplicate accession numbers
 		'''
 		for d_key in self.duplicates.keys():
-			self.entry_table.drop(self.entry_table.loc[self.entry_table["ACCESSION"] == self.duplicates[d_key]].index, inplace = True)
+			self.entry_table.drop(self.entry_table.loc[self.entry_table["ACCESSION"] == self.duplicates[d_key][0]].index, inplace = True)
 			
 		
 		

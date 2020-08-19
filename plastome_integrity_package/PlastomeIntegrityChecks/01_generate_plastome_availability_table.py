@@ -111,7 +111,7 @@ def main(args):
 		duplseq = parsed_entry.pop("DUPLSEQ")
 		pa.entry_table.loc[uid] = parsed_entry
 		if duplseq:
-			pa.duplicates[parsed_entry["ACCESSION"]] = duplseq
+			pa.duplicates[uid] = [parsed_entry["ACCESSION"], duplseq]
 		pa.append_entry_to_table(parsed_entry, uid, outfn)
 		
 	# STEP 5. Remove duplicates of REFSEQs and blacklisted entries
