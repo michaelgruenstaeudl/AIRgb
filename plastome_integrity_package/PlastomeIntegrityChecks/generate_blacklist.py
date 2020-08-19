@@ -70,7 +70,7 @@ def get_species_from_pubmed_article(article, ncbi):
     ncbi_query_results = ncbi.get_name_translator(construct_species_query(abstract_text))
     for name, id in ncbi_query_results.items():
         # We're only interested in species-rank taxons
-        if ncbi.get_rank(id) == "species":
+        if ncbi.get_rank(id)[id[0]] == "species":
             species.add(name)
 
     return species
