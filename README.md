@@ -41,7 +41,15 @@ python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TES
 
 ```
 
-#### HELPFUL
+#### OTHER COMMANDS
+
+##### Updating blacklist on IR loss
+Updating blacklist on IR loss using accompanying script
+```
+python generate_blacklist.py -f BLACKLIST__IR_loss__genera.txt
+```
+
+##### Identifying IR length
 Self-blasting of the plastid genome sequence in order to infer the IR length
 ```
 INF=chloroplastGenome.gb

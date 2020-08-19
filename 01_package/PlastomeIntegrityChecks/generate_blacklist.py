@@ -4,7 +4,7 @@ import argparse
 import coloredlogs, logging
 import time
 import sys
-import PlastomeIntegrityChecks as pic
+#import PlastomeIntegrityChecks as pic
 import fetchpubmed
 import entrezpy.conduit
 from ete3 import NCBITaxa
