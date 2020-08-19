@@ -1,10 +1,9 @@
-*PlastomeIntegrityChecks*
-=========================
-
-Scripts for evaluating plastome integrity across all available plastid genomes on NCBI
+*PIRPy*: Plastid IR presence checks via Python
+==============================================
+A Python package for checking the presence of inverted repeats across plastid genomes on NCBI
 
 ## EXAMPLE USAGE
-#### On Linux / MacOS
+#### SCRIPT 01: Generating plastome availability table
 ```
 # Angiosperms
 TESTFOLDER=testing_angiosperms
@@ -22,14 +21,18 @@ REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
 
 mkdir -p $TESTFOLDER
 
-# SCRIPT 01: Generating plastome availability table
 python 01_generate_plastome_availability_table.py -q "$MYQUERY" -o $TESTFOLDER/$AVAILTABLE 1>>$TESTFOLDER/Script01_${DATE}.runlog 2>&1
+```
 
-# SCRIPT 02: Downloading records and extracting IR information
+#### SCRIPT 02: Downloading records and extracting IR information
+```
 mkdir -p $TESTFOLDER/records_${DATE}
 mkdir -p $TESTFOLDER/data_${DATE}
 python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TESTFOLDER/records_${DATE}/ -d $TESTFOLDER/data_${DATE}/ -o $TESTFOLDER/$REPRTDSTAT 1>>$TESTFOLDER/Script02_${DATE}.runlog 2>&1
+```
 
+#### FUTURE: SCRIPTS 03 and 04
+```
 # SCRIPT 03: Comparing the reported IR information
 #python3 ../PlastomeIntegrityChecks/02_download_records_and_extract_aspects.py -l $(awk 'NR > 1 {print $2}' summaries.tsv) -o .
 
