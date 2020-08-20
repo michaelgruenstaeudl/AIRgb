@@ -123,3 +123,2669 @@ Triuris
 Vavilovia
 Vicia
 Viscum
+# Update on 2020-08-20, 16:35
+Astragalus mollissimus var. mollissimus
+Astragalus semiglabricarpus
+Trifolium striatum
+Onobrychis montana subsp. transsilvanica
+Oxytropis hypsophila
+Oxytropis spicata
+Oxytropis evenorum
+Trifolium velenovskyi
+Trifolium cernuum
+Glycyrrhiza sp. NCNPR 12160
+Ononis antennata subsp. antennata
+Astragalus effusus
+Melilotus italicus
+Astragalus temirensis
+Sulla spinosissima subsp. spinosissima
+Vicia sativa subsp. nigra
+Lathyrus cicera
+Ebenus stellata
+Oxytropis neorechingeriana
+Trifolium aureum
+Astragalus scholerianus
+Oxytropis hidakamontana
+Astragalus jolderensis
+Astragalus heterodoxus
+Astragalus pelecinus subsp. leiocarpus
+Astragalus woodruffii
+Trifolium globosum
+Lathyrus aureus
+Onobrychis transcaucasica
+Hedysarum theinum
+Hedysarum glabrifoliolatum
+Erophaca baetica subsp. baetica
+Vicia ochroleuca
+Trifolium isthmocarpum
+Taverniera aegyptiaca
+Astragalus craibianus
+Onobrychis meshhedensis
+Astragalus megalotropis
+Astragalus cruckshanksii
+Astragalus ledinghamii
+Astragalus askius
+Taverniera glauca
+Astragalus sclerocarpus
+Cicer multijugum
+Trifolium latinum
+Onobrychis nummularia
+Lathyrus komarovii
+Astragalus capito
+Vicia hirsuta
+Astragalus alopecurus
+Oxytropis kobukensis
+Astragalus pediculariformis
+Trigonella sp. PMD-2014
+Lathyrus alpestris
+Vavilovia formosa
+Oxytropis semiglobosa
+Vicia baicalensis
+Astragalus pauperiflorus
+Onobrychis humilis
+Carmichaelia sp. JJD-2001
+Astragalus wagneri
+Vicia variabilis
+Hedysarum hedysaroides subsp. arcticum
+Melilotus spicatus
+Oxytropis intermedia
+Trifolium berytheum
+Oxytropis caraganetorum
+Astragalus inchebroonensis
+Medicago huberi
+Astragalus sp. PMD-2014
+Pisum abyssinicum
+Vicia taipaica
+Tibetia yunnanensis
+Colutea arborescens
+Astragalus camptodontus
+Onobrychis hohenackeriana
+Astragalus bisulcatus var. haydenianus
+Astragalus lunatus
+Onobrychis elata
+Oxytropis almaatensis
+Astragalus vegetus
+Glycyrrhiza sp. NCNPR 2919
+Trifolium acaule
+Trigonella maritima
+Cicer kermanense
+Cicer tragacanthoides
+Lathyrus pannonicus f. glaber
+Hedysarum persicum
+Astragalus douglasii
+Trifolium microdon
+Astragalus balearicus
+Astragalus xerophilus
+Astragalus latifolius
+Astragalus akmanii
+Astragalus sirinicus subsp. genargenteus
+Astragalus polhillii
+Trifolium ochroleucon
+Astragalus wootonii
+Lathyrus polyphyllus
+Astragalus striatus
+Oxytropis salangensis
+Astragalus alaschanus
+Alhagi sparsifolia
+Astragalus sympileicalycinus
+Astragalus talimansurensis
+Vicia linearifolia
+Astragalus dolichochaete
+Lathyrus venetus
+Onobrychis depauperata var. depauperata
+Trifolium howellii
+Astragalus griffithii
+Taxus chinensis
+Lathyrus pauciflorus
+Astragalus tabrizianus
+Astragalus nothoxys
+Oxytropis campestris var. gracilis
+Oxytropis chionobia
+Oxytropis candicans
+Astragalus lepsensis
+Astragalus darrehbidensis
+Medicago phrygia
+Oxytropis arctica var. barnebyana
+Trifolium strictum
+Astragalus mesogitanus
+Gueldenstaedtia verna subsp. multiflora
+Oxytropis azerbaijanica
+Astragalus campylosema
+Astragalus sabulonum
+Trifolium pichisermollii
+Trifolium calocephalum
+Trifolium apertum
+Ononis mogadorensis
+Astragalus campylanthus
+Glycyrrhiza inflata
+Caragana ussuriensis
+Caragana crassispina
+Astragalus compositus
+Astragalus megalocystis
+Chesneya rytidosperma
+Lathyrus odoratus
+Astragalus remotiflorus subsp. melanogramma
+Astragalus sympileicarpus
+Glycyrrhiza sp. NCNPR E037
+Carmichaelia kirkii
+Trifolium affine
+Astragalus monumentalis
+Gueldenstaedtia stenophylla
+Astragalus robbinsii var. harringtonii
+Astragalus laxmannii var. robustior
+Astragalus pseudorhacodes
+Glycyrrhiza yunnanensis
+Oxytropis interposita
+Chesneya polystichoides
+Tibetia liangshanensis
+Hedysarum chaiyrakanicum
+Hedysarum polybotrys
+Medicago rotata
+Astragalus xylobasis
+Trifolium praetermissum
+Oxytropis retusa
+Astragalus casei
+Trigonella grandiflora
+Ononis christii
+Vicia sp. OPC-2018
+Swainsona phacoides
+Lathyrus pusillus
+Chesneya kschtutica
+Lathyrus saxatilis
+Astragalus oxyglottis
+Chesneya hissarica
+Astragalus fuliginosus
+Caragana bicolor
+Astragalus glochideus
+Astragalus peregrinus subsp. peregrinus
+Oxytropis sp. TS-2017
+Caragana roborovskyi
+Astragalus retamocarpus
+Ononis villosissima
+Glycyrrhiza xanthioides
+Caragana brevifolia
+Oxytropis takhti-soleimanii
+Glycyrrhiza pallidiflora
+Astragalus lagopodioides
+Hedysarum stenophyllum
+Vicia nipponica
+Trifolium longipes subsp. elmeri
+Astragalus goktschaicus
+Caragana rosea var. rosea
+Tibetia tongolensis
+Astragalus arpilobus
+Oxytropis bicornis
+Lathyrus gmelinii
+Lathyrus dielsianus
+Cicer reticulatum
+Lathyrus longipes
+Astragalus zacharensis
+Trifolium arvense
+Vicia multicaulis
+Trifolium phleoides
+Astragalus dasyanthus
+Vicia ramuliflora
+Lathyrus incurvus
+Astragalus borealimongolicus
+Astragalus nutzotinensis
+Astragalus cryptobotrys
+Astragalus ibrahimianus
+Medicago syriaca
+Oxytropis uralensis
+Vicia villosa subsp. pseudocracca
+Astragalus bijarensis
+Astragalus subglaberrimus
+Ononis pubescens
+Oxytropis gracillima
+Trigonella mesopotamica
+Astragalus kentrophyta var. implexus
+Trifolium stolzii
+Astragalus oniciformis
+Astragalus anserinifolius
+Lathyrus gloeosperma
+Oxytropis foucaudii
+Astragalus subulatus
+Astragalus cusickii var. sterilis
+Trifolium ambiguum
+Lathyrus elongatus
+Trifolium fucatum
+Astragalus purshii var. tinctus
+Medicago monantha
+Ononis angustissima subsp. longifolia
+Astragalus tetrapterus
+Oxytropis shahvarica
+Medicago rhodopea
+Lathyrus suevicus
+Hedysarum hyrcanum
+Medicago sauvagei
+Caragana polourensis
+Ononis hirta
+Astragalus deickianus
+Astragalus pseudoarvatensis
+Astragalus sanguinolentus
+Ononis spinosa subsp. masquillierii
+Lathyrus pannonicus subsp. pannonicus
+Cicer oxyodon
+Trigonella caelesyriaca
+Oxytropis mandshurica
+Astragalus akhundzadahensis
+Trifolium montanum subsp. montanum
+Lathyrus luteus
+Vicia faba var. minor
+Caragana laeta
+Caragana fruticosa
+Lessertia annularis
+Hedysarum pabulare
+Oxytropis andersii
+Oxytropis heratensis
+Onobrychis saravschanica
+Astragalus sparsus
+Astragalus robbinsii var. minor
+Astragalus pseudorobustus
+Trigonella cretica
+Astragalus corrugatus
+Astragalus yatungensis
+Oxytropis merkensis
+Glycyrrhiza sp. NCNPR 9171
+Onobrychis chorassanica
+Hedysarum singarense
+Caragana leveillei
+Onobrychis radiata
+Astragalus astrachanicus
+Onobrychis atropatana
+Astragalus krauseanus
+Trifolium tumens
+Oxytropis roaldii
+Swainsona murrayana
+Astragalus dolichophyllus
+Ononis aurasiaca
+Gueldenstaedtia taihangensis
+Oxytropis ochrocephala
+Ginkgo biloba
+Trifolium willdenovii
+Ononis reclinata subsp. reclinata
+Trigonella gladiata
+Caragana microphylla f. cinerea
+Astragalus rubyi
+Astragalus sp. AB-2016e
+Astragalus holopsilus
+Oxytropis cinerea
+Caragana grandiflora
+Astragalus forrestii
+Medicago sativa subsp. caerulea
+Vicia epetiolaris
+Oxytropis monticola
+Astragalus propinquus
+Trifolium dichroanthum
+Astragalus oleifolius
+Hedysarum plumosum
+Astragalus reshadensis
+Astragalus oplites
+Cicer stapfianum
+Lathyrus rigidus
+Onobrychis splendida
+Swainsona campylantha
+Medicago tenoreana
+Oxytropis halleri subsp. velutina
+Cicer pungens
+Onobrychis iranensis
+Astragalus montis-nacarouzii
+Pisum sativum subsp. asiaticum
+Vicia gregaria
+Trigonella stellata
+Astragalus sp. Kh118
+Glycyrrhiza squamulosa
+Hedysarum nagarzense
+Alhagi maurorum
+Astragalus inyoensis
+Astragalus glycyphyllos subs. glycyphyllos
+Astragalus heydei
+Parochetus communis
+Greuteria argyrea
+Oxytropis deflexa var. sericea
+Medicago sativa subsp. glomerata
+Astragalus macrocarpus
+Lathyrus setifolius
+Medicago popovii
+Lathyrus eucosmus
+Oxytropis bryophila
+Lathyrus davidii
+Lathyrus sulphureus
+Astragalus sp. A66
+Astragalus zachlensis
+Vicia caroliniana
+Astragalus robbinsii var. occidentalis
+Astragalus williamsii
+Trifolium velebiticum
+Astragalus zaraensis
+Astragalus linifolius
+Astragalus viridissimus
+Astragalus sealei
+Astragalus sp. AB-2016a
+Chesneya gracilis
+Ononis cossoniana
+Trifolium glanduliferum
+Onobrychis bobrovii
+Trifolium dubium
+Vicia kotschyana
+Ononis minutissima
+Melilotus hirsutus
+Trifolium bifidum
+Hedysarum wrightianum
+Trifolium petitianum
+Trifolium glomeratum
+Ononis spinosa subsp. spinosa
+Vicia unijuga var. kaussanensis
+Astragalus asymmetricus
+Astragalus hemiphaca
+Astragalus tarchankuticus
+Astragalus monbeigii
+Astragalus aureus
+Oxytropis calcareorum
+Hedysarum sangilense
+Astragalus olurensis
+Astragalus sohrevardianus
+Trigonella cylindracea
+Astragalus oxyphysus
+Melilotus speciosus
+Astragalus tener
+Onobrychis mazanderanica
+Astragalus chinensis
+Astragalus botryophorus
+Astragalus xiphidium
+Trifolium ligusticum
+Astragalus urmiensis
+Oxytropis pilosa
+Medicago tuberculata
+Trifolium medium subsp. medium
+Lathyrus hygrophilus
+Lathyrus pratensis subsp. pratensis
+Vicia villosa subsp. microphylla
+Astragalus platytropis
+Oxytropis williamsii
+Caragana pumila
+Colutea gracilis
+Astragalus pachypus
+Astragalus monoensis
+Oxytropis aellenii
+Astragalus halicacabus
+Oxytropis karjaginii
+Oxytropis parasericeopetala
+Caragana turkestanica
+Astragalus collinus
+Medicago muricoleptis
+Trifolium virginicum
+Astragalus arenarius
+Trifolium simense
+Oxytropis lupinoides
+Medicago laxispira
+Astragalus distans
+Vicia nummularia
+Trifolium physanthum
+Astragalus nephtonensis
+Oxytropis engizekensis
+Astragalus commixtus
+Ononis macrosperma
+Astragalus clavatus
+Hedysarum campylocarpon
+Calophaca pskemica
+Astragalus baharensis
+Trifolium nigrescens subsp. meneghinianum
+Oxytropis helvetica
+Oxytropis campestris var. columbiana
+Trifolium haussknechtii
+Oxytropis sericea
+Astragalus biserrula
+Astragalus membranaceus var. membranaceus
+Vicia nigra
+Vicia chinensis
+Caragana camilloi-schneideri
+Astragalus argentocalyx
+Oxytropis podlechii
+Trifolium retusum
+Astragalus aduncus
+Vicia lilacina
+Astragalus echinatus
+Hedysarum candidissimum
+Carmichaelia torulosa
+Astragalus neurophyllus
+Hedysarum dahuricum
+Vicia dennesiana
+Medicago secundiflora
+Astragalus shultziorum
+Astragalus kastamonuensis
+Ononis pusilla subsp. pusilla
+Caragana korshinskii
+Astragalus scopiformis
+Trifolium meduseum
+Astragalus hendersonii
+Oxytropis submutica
+Trifolium chilense
+Astragalus woronowii
+Hedysarum micropterum
+Hedysarum parvum
+Astragalus peckii
+Astragalus angulosus
+Astragalus haesitabundus
+Astragalus ponticus
+Astragalus lentiginosus var. wilsonii
+Trifolium lupinaster var. purpurascens
+Astragalus danicus
+Trifolium bejariense
+Oxytropis altaica
+Astragalus leiophyllus
+Meristotropis xanthioides
+Trigonella glabra
+Onobrychis microptera
+Medicago polymorpha
+Astragalus speirocarpus
+Astragalus scapiger
+Caragana tibetica
+Vicia ferreirensis
+Lathyrus pisiformis
+Oxytropis podocarpa
+Onobrychis talagonica
+Medicago medicaginoides
+Oxytropis chankaensis
+Oxytropis kunashiriensis
+Taverniera lappacea
+Astragalus fasciculifolius
+Astragalus storozhevae
+Oxytropis platonychia
+Oxytropis indurata
+Astragalus pectinatus
+Astragalus kohrudicus
+Lathyrus woronowii
+Astragalus emarginatus
+Trifolium pratense subsp. pratense
+Lathyrus sphaericus
+Astragalus sesameus
+Astragalus hirticalyx
+Astragalus berteroanus
+Astragalus versicolor
+Onobrychis bungei
+Erophaca baetica subsp. orientalis
+Pisum sativum var. ponderosum
+Oncidium sphacelatum
+Astragalus bodinii
+Astragalus siahcheshmehensis
+Oxytropis humifusa
+Onobrychis aurea
+Astragalus sosnowskyi
+Astragalus xiphidiopsis
+Oxytropis sylvatica
+Oxytropis deflexa subsp. foliolosa
+Astragalus psoraloides
+Astragalus cinereus
+Oxytropis afghanica
+Vicia capreolata
+Swainsona kingii
+Vicia latibracteolata
+Onobrychis cyri var. cyri
+Caragana potaninii
+Oxytropis ammophila
+Onobrychis marandensis
+Astragalus asciocalyx
+Onobrychis iranshahrii
+Lathyrus paranensis
+Astragalus tugarinovi
+Astragalus koschukensis
+Astragalus newberryi
+Astragalus sesamoides
+Astragalus hemsleyi
+Onobrychis sojakii
+Oxytropis riparia
+Astragalus oophorus
+Astragalus macrocephalus subsp. macrocephalus
+Ononis repens
+Astragalus chartostegius
+Astragalus pickeringii
+Astragalus macrobotrys
+Oxytropis fominii
+Caragana sp. US:3541335
+Oxytropis lambertii var. lambertii
+Lathyrus laxiflorus
+Astragalus stenolepis
+Astragalus trifoliolatus
+Trifolium sp. PI 655923
+Lathyrus vernus
+Vicia sativa subsp. amphicarpa
+Astragalus mongholicus var. dahuricus
+Hedysarum falconeri
+Vicia peregrina
+Swainsona oligophylla
+Glycyrrhiza echinata
+Medicago ovalis
+Astragalus duplostrigosus
+Astragalus jodostachys
+Oxytropis oreophila var. juniperina
+Oxytropis bellii
+Trifolium douglasii
+Trifolium israeliticum
+Astragalus xanthomeloides
+Medicago sativa subsp. x tunetana
+Gueldenstaedtia henryi
+Medicago sp. ASM-2014
+Oxytropis griffithii
+Melilotus officinalis subsp. suaveolens
+Caragana bongardiana
+Astragalus melanocarpus
+Astragalus hirsutissimus
+Medicago disciformis
+Trifolium appendiculatum
+Lens culinaris subsp. tomentosus
+Caragana ambigua
+Pisum sativum var. choresmicum
+Hedysarum johartchii
+Carmichaelia arborea
+Astragalus arthurii
+Hedysarum damghanicum
+Lathyrus cirrhosus
+Astragalus sp. A110
+Ononis talaverae
+Lathyrus glandulosus
+Oxytropis urumovii
+Astragalus leucargyreus
+Onobrychis ptychophylla
+Astragalus victoriae
+Vicia hyaeniscyamus
+Trifolium alexandrinum
+Trifolium chilaloense
+Astragalus bounophilus
+Vicia megalotropis
+Astragalus cysticalyx
+Astragalus austrokhorasanicus
+Vicia sojakii
+Ononis speciosa
+Swainsona stenodonta
+Onobrychis mozaffarianii
+Medicago rigidula
+Astragalus stevenianus
+Astragalus sp. Kh132
+Vicia faba var. major
+Astragalus keratensis
+Astragalus juratzkanus
+Astragalus uraniolimneus
+Astragalus tragacantha
+Astragalus austriacus
+Astragalus pauxillis
+Lens nigricans
+Pisum sativum subsp. transcaucasicum
+Astragalus drummondii
+Vicia balansae
+Glycyrrhiza aspera
+Astragalus nummularius
+Oxytropis varians
+Vicia humilis
+Astragalus citrinus
+Astragalus longicuspis
+Onobrychis iberica
+Astragalus layneae
+Astragalus bethlehemiticus
+Astragalus contortuplicatus
+Astragalus icmadophilus
+Astragalus sutchuenensis
+Oxytropis sverdrupii
+Hedysarum pogonocarpum
+Vicia claessensii
+Trifolium sp. PI 655636
+Chesneya tribuloides
+Ononis cristata subsp. cristata
+Caragana leucophloea
+Glycyrrhiza uralensis
+Astragalus lydius
+Astragalus yunnanensis
+Trifolium dasyurum
+Trifolium obscurum
+Astragalus serenoi var. serenoi
+Trifolium canescens
+Astragalus cephalotes
+Astragalus cymbostegis
+Astragalus plagiophacos
+Onobrychis acaulis
+Trifolium grandiflorum
+Oxytropis cachemiriana
+Onobrychis merxmuelleri
+Trifolium philistaeum
+Onobrychis cyri var. angustifolia
+Hedysarum chinense
+Medicago rugosa
+Trifolium carolinianum
+Astragalus allochrous var. allochrous
+Astragalus salavatabadensis
+Onobrychis michauxii
+Colutea porphyrogramma
+Melilotus infestus
+Chesneya acaulis
+Astragalus johannis
+Onobrychis schugnanica
+Astragalus ladakensis
+Astragalus susianus
+Vicia aintabensis
+Astragalus nuttallii
+Glycyrrhiza acanthocarpa
+Astragalus robbinsii var. fernaldii
+Calophaca soongorica
+Astragalus doghrunensis
+Chesneya botschantzevii
+Astragalus laristanicus
+Astragalus turkmenensis
+Cicer anatolicum
+Astragalus lumsdenianus
+Ononis oligophylla
+Lathyrus sp. DRC-2004
+Medicago carstiensis
+Astragalus miser
+Vicia menziesii
+Astragalus neoassadianus
+Astragalus karamasicus
+Astragalus corniculatus
+Astragalus tricholobus subsp. tricholobus
+Trigonella bicolor
+Swainsona purpurea
+Lens culinaris subsp. culinaris
+Astragalus mozaffarianii
+Hedysarum elbursense
+Trigonella ornithopodioides
+Astragalus ajubensis
+Vicia monantha
+Trifolium incarnatum subsp. molinerii
+Astragalus sp. 1 Kh118
+Vicia cuspidata
+Chesneya mongolica
+Astragalus hispanicus
+Astragalus arguricus
+Oxytropis chrysocarpa
+Astragalus acmonotrichus
+Astragalus mercklinii subsp. mercklinii
+Vicia sativa var. sativa
+Chesneya parviflora
+Trifolium occidentale
+Hedysarum varium
+Astragalus masanderanus
+Astragalus macrocephalus subsp. finitimus
+Trifolium schimperi
+Astragalus nervistipulus
+Pisum fulvum
+Vicia sp. HS1176
+Ononis viscosa subsp. breviflora
+Vicia venosa var. stolonifera
+Montigena novae-zelandiae
+Hedysarum syriacum
+Vicia iranica
+Astragalus flavus
+Lathyrus inconspicuus
+Oxytropis carpatica
+Caragana aurantiaca
+Astragalus djenarensis
+Chesneya borissovae
+Astragalus spinosus
+Astragalus agrestis
+Glycyrrhiza sp. NCNPR 5217
+Hedysarum boreale var. gremiale
+Astragalus macropus
+Astragalus sp. AB-2016r
+Hedysarum alamutense
+Lathyrus pubescens
+Astragalus cornutus
+Medicago doliata
+Trifolium resupinatum
+Onobrychis tournefortii
+Astragalus saharae
+Astragalus siccaneus
+Astragalus gracilipes
+Trifolium rueppellianum
+Lathyrus nevadensis
+Vicia villosa subsp. dasycarpa
+Astragalus gueruenensis
+Swainsona decurrens
+Astragalus praeteritus
+Trifolium semipilosum
+Oxytropis shirkuhi
+Astragalus densifolius subsp. amasiensis
+Caragana kansuensis
+Astragalus atrokurdicus
+Astragalus sublaguriformis
+Sulla coronaria
+Glycyrrhiza asymmetrica
+Lathyrus transsylvanicus
+Vicia disperma
+Astragalus lotiflorus
+Onobrychis petraea
+Ononis atlantica
+Astragalus tungensis
+Glycyrrhiza sp. NCNPR 15003
+Vicia sp. YX-2018
+Astragalus cusickii var. packardiae
+Oxytropis vvedenskyi
+Medicago edgeworthii
+Astragalus semnanensis
+Astragalus hartvigii
+Oxytropis aurea
+Glycyrrhiza sp. NCNPR E038
+Astragalus bhotanensis
+Oxytropis bakhtiarica
+Astragalus pseudonobilis
+Astragalus bifoliolatus
+Astragalus nubicola
+Trifolium alpestre
+Sphaerophysa salsula
+Astragalus baraftabensis
+Onobrychis echidna
+Medicago citrina
+Glycyrrhiza sp. NCNPR 553
+Onobrychis szovitsii
+Ononis serotina
+Astragalus piptocephalus
+Astragalus sciureus
+Astragalus macrostachys
+Astragalus chaborasicus
+Lathyrus phaselitanus
+Astragalus beypazaricus
+Vicia benghalensis
+Trifolium pannonicum
+Astragalus lasioglottis
+Astragalus cariensis
+Astragalus patagonicus
+Astragalus spachianiformis
+Astragalus robustus
+Astragalus pinetorum subsp. pinetorum
+Astragalus chrysostachys var. dolichourus
+Vicia garinensis
+Lathyrus sylvestris
+Hedysarum sulphurescens
+Trifolium pacificum
+Astragalus rollovi
+Trifolium nigrescens subsp. petrisavii
+Lathyrus ledebourii
+Astragalus vesicarius subsp. carniolicus
+Vicia pinetorum
+Vicia caesarea
+Oxytropis leucantha
+Melilotus sp. 3 KS-2019
+Ononis pusilla subsp. saxicola
+Astragalus hakkianus
+Oxytropis surmandehi
+Astragalus praelongus
+Cicer echinospermum
+Astragalus curvicaulis
+Calophaca wolgarica
+Astragalus dictyolobus
+Astragalus allochrous var. playanus
+Glycyrrhiza sp. NCNPR 15002
+Hedysarum halophilum
+Trifolium suffocatum
+Astragalus sumbari
+Onobrychis avajensis
+Astragalus borysthenicus
+Lathyrus variabilis
+Oxytropis strobilacea
+Astragalus cobrensis
+Astragalus capax
+Halimodendron halodendron
+Ebenus sibthorpii
+Lathyrus nissolia
+Lathyrus jepsonii
+Onobrychis micrantha
+Lathyrus hallersteinii
+Lathyrus neurolobus
+Astragalus tolmaczevii
+Colutea uniflora
+Astragalus bombycinus
+Astragalus tawilicus
+Vicia nataliae
+Hedysarum ussuriense
+Astragalus australis var. glabriusculus
+Astragalus umbraticus
+Astragalus melanostictus
+Carmichaelia muritai
+Astragalus vesicarius subsp. albidus
+Calophaca tianschanica
+Astragalus peterfii
+Caragana brachypoda
+Medicago orbicularis
+Astragalus campylorhynchus
+Astragalus sp. TS-2017
+Medicago crassipes
+Vicia cinerea
+Vicia malosana
+Trifolium tembense
+Chesneya kopetdaghensis
+Oxytropis tananensis
+Trifolium dalmaticum
+Glycyrrhiza sp. NCNPR 9439
+Hedysarum criniferum
+Astragalus sieberi
+Astragalus cottonianus
+Trifolium sp. PI 655933
+Astragalus ochrochlorus
+Hedysarum tanguticum
+Lathyrus roseus
+Swainsona disjuncta
+Carmichaelia sp. DRC-2004
+Astragalus callichrous
+Astragalus diphtherites
+Glycyrrhiza laxissima
+Alhagi persarum
+Colutea triphylla
+Astragalus holmgreniorum
+Trifolium scutatum
+Lathyrus holochlorus
+Trifolium obtusiflorum
+Astragalus elezgensis
+Glycyrrhiza glandulifera
+Astragalus saetiger
+Astragalus glaux
+Astragalus hissaricus
+Astragalus brevidens
+Astragalus pseudoparalurges
+Vicia hirticalycina
+Astragalus ansinii
+Glycyrrhiza sp. NCNPR 13142
+Onobrychis oshnaviyehensis
+Astragalus saganlugensis
+Trifolium longipes subsp. longipes
+Ononis angustissima subsp. angustissima
+Onobrychis viciifolia
+Medicago constricta
+Astragalus brachypetalus
+Astragalus lycioides
+Trifolium argentinense
+Astragalus vicarius
+Astragalus gypsocola
+Astragalus lentiginosus var. lentiginosus
+Glycyrrhiza sp. NCNPR 13164
+Astragalus anguranensis
+Trifolium barbeyi
+Onobrychis heterophylla
+Onobrychis arenaria subsp. sibirica
+Vicia tetrasperma
+Astragalus impexus
+Oxytropis falcata
+Onobrychis tavernierifolia
+Astragalus hololeios
+Oxytropis verticillaris
+Astragalus mollissimus var. bigelovii
+Chesneya darvasica
+Hedysarum krylovii
+Trifolium mutabile
+Trifolium neurophyllum
+Clianthus puniceus
+Medicago platycarpos
+Vicia noeana
+Astragalus jessenii
+Astragalus czorochensis
+Trifolium rusbyi subsp. rusbyi
+Oxytropis scheludjakovae
+Hedysarum papillosum
+Astragalus pish-chakensis
+Oxytropis campestris subsp. johannensis
+Hedysarum jinchuanense
+Vicia pectinata
+Onobrychis plantago
+Galega orientalis
+Vicia pannonica subsp. striata
+Onobrychis grandis
+Astragalus persicus
+Cicer arietinum x Cicer echinospermum
+Vavilovia aucheri
+Astragalus subbrevidens
+Lathyrus rotundifolius
+Trifolium echinatum
+Astragalus palenae var. grandiflora
+Hedysarum grandiflorum
+Trifolium sp. PI 655632
+Melilotus sp. 2 KS-2019
+Ononis cephalotes
+Glycyrrhiza astragalina
+Medicago saxatilis
+Glycyrrhiza sp. NCNPR D048
+Trifolium constantinopolitanum
+Ononis viscosa subsp. crotalarioides
+Trigonella elliptica
+Lathyrus torreyi
+Hedysarum longigynophorum
+Onobrychis maassoumii
+Hedysarum bojnordense
+Medicago polyceratia
+Trifolium africanum
+Astragalus devesae
+Vicia multijuga
+Trifolium cyathiferum
+Oxytropis todomoshiriensis
+Swainsona cyclocarpa
+Lathyrus gorgoni
+Vicia sericocarpa
+Trifolium patulum
+Astragalus umbellatus
+Oxytropis zangolehensis
+Astragalus kirrindicus
+Onobrychis melanotricha var. melanotricha
+Hedysarum kumaonense
+Astragalus ghashghaicus
+Lathyrus czeczottianus
+Astragalus dipsaceus
+Vicia kulingana
+Oxytropis revoluta
+Astragalus flavovirens
+Ononis tridentata subsp. tridentata
+Astragalus austrotaromensis
+Oxytropis racemosa
+Caragana alpina
+Lathyrus aphaca
+Vicia articulata
+Vicia paucijuga
+Astragalus rufescens
+Vicia sepium
+Vicia incisa
+Podlechiella vogelii subsp. vogelii
+Corethrodendron lignosum var. laeve
+Ononis verae
+Corethrodendron scoparium
+Trifolium longidentatum
+Astragalus tarumensis
+Astragalus pseudoibicinus
+Oxytropis adamsiana
+Pisum sativum var. macrocarpum
+Astragalus onobrychis
+Oxytropis vassilczenkoi
+Astragalus barbatus
+Astragalus vernaculus
+Vicia exigua
+Astragalus hypoglottis subsp. gremlii
+Astragalus prattii
+Trigonella spinosum
+Hedysarum wakhanicum
+Trifolium phitosianum
+Oxytropis pumilio
+Trifolium peruvianum
+Lathyrus quinquenervius
+Astragalus baalbekensis
+Vicia angustipinnata
+Sartoria hedysaroides
+Astragalus lepidanthus
+Lathyrus magellanicus
+Glycyrrhiza sp. NCNPR 9330
+Melilotus sp. CP352
+Colutea melanocalyx
+Astragalus neopodlechii
+Medicago pamphylica
+Oxytropis lapponica
+Hedysarum sericeum
+Onobrychis galegifolia
+Astragalus dipelta
+Astragalus semiromensis
+Astragalus chehreganii
+Oxytropis anertii
+Astragalus asterias
+Trifolium baccarinii
+Hedysarum truncatum
+Glycyrrhiza sp. NCNPR 4983
+Vicia altissima
+Astragalus ovinus
+Glycyrrhiza sp. NCNPR 12136
+Astragalus incanus subsp. incurvus
+Astragalus lentiginosus var. pohlii
+Chesneya quinata
+Vicia barbazitae
+Galega lindblomii
+Onobrychis sintenisii
+Astragalus tegulensis
+Astragalus spaldingii
+Caragana kozlowii
+Vicia picta
+Astragalus pravitzii
+Astragalus oropolitanus
+Colutea nepalensis
+Medicago biflora
+Pisum sativum var. tibetanicum
+Glycyrrhiza sp. NCNPR 11640
+Medicago turbinata
+Oxytropis purpurea
+Lathyrus sativus
+Astragalus anthylloides
+Trigonella anguina
+Hedysarum occidentale
+Ononis biflora
+Astragalus oncotrichus
+Medicago pironae
+Astragalus eremiticus
+Astragalus amphioxys
+Astragalus chrysostachys var. khorasanicus
+Oxytropis halleri subsp. halleri
+Astragalus uniflorus
+Astragalus jaskensis
+Astragalus mollissimus var. matthewsii
+Trifolium sp. PI 597507
+Taverniera multinoda
+Vicia faba var. faba
+Vicia fauriae
+Astragalus shelkovnikovii
+Hedysarum kalatense
+Onobrychis sosnowskyi
+Astragalus tumbatsica
+Lathyrus spathulatus
+Medicago heyniana
+Astragalus clusii
+Astragalus dipodurus
+Astragalus sp. A20
+Astragalus divandarrehensis
+Astragalus tibetanus
+Medicago papillosa
+Melilotus sulcatus
+Onobrychis schahuensis
+Trifolium fragiferum
+Vicia melanops
+Astragalus remotispicatus
+Onobrychis altissima
+Oxytropis inschanica
+Astragalus obscurus
+Hedysarum dentatoalatum
+Astragalus humillimus
+Oxytropis campestris/Oxytropis splendens mixed EST library
+Astragalus mongholicus var. nakaianus
+Trifolium longipes var. hansenii
+Astragalus alvordensis
+Astragalus reduncus
+Onobrychis verae var. rechingeri
+Astragalus sheldonii
+Trifolium parryi
+Vicia villosa subsp. villosa
+Oxytropis iridum
+Oxytropis glabra var. tenuis
+Astragalus semitarius
+Lathyrus emodi
+Medicago laciniata
+Astragalus americanus
+Vicia sativa subsp. macrocarpa
+Melilotus neapolitanus
+Astragalus variabilis
+Medicago prostrata
+Astragalus riouxii
+Medicago bonarotiana
+Astragalus pseudoglaucus
+Swainsona galegifolia
+Oxytropis filiformis
+Astragalus misellus
+Hedysarum citrinum
+Cicer bijugum
+Oxytropis latibracteata
+Astragalus lilacinus
+Astragalus scopulorum
+Oxytropis kopetdaghensis
+Astragalus sp. AB-2016m
+Astragalus hymenostegis
+Oxytropis lagopus var. conjugans
+Astragalus aquilanus
+Astragalus basineri
+Astragalus meiliensis
+Astragalus bakaliensis
+Astragalus achundovii
+Swainsona thompsoniana
+Astragalus compactus
+Oxytropis gilgitensis
+Astragalus pseudonigrescens
+Medicago rigiduloides
+Medicago lesinsii
+Glycyrrhiza sp. EM378
+Astragalus catacamptus
+Ononis sicula subsp. sicula
+Lathyrus karsianus
+Phyllolobium balfourianum
+Astragalus davuricus
+Oxytropis kuchanensis
+Lens culinaris subsp. odemensis
+Astragalus cymbicarpos
+Swainsona canescens var. horniana
+Astragalus vesicarius subsp. vesicarius
+Astragalus lobophorus
+Oxytropis triflora
+Lathyrus ochroleucus
+Medicago lunata
+Astragalus magistratus
+Onobrychis aucheri subsp. aucheri
+Caragana purdomii
+Astragalus raswendicus
+Hedysarum astragaloides
+Astragalus helmii
+Trifolium pallidum
+Trifolium owyheense
+Astragalus simakanensis
+Onobrychis biebersteinii
+Trifolium heldreichianum
+Astragalus expetitus
+Ononis serrata
+Trifolium setiferum
+Oxytropis sp. US:3540307
+Astragalus zangelanus
+Astragalus taochius
+Astragalus oligophyllus
+Trifolium masaiense
+Ononis striata
+Astragalus tigridis
+Astragalus prodigiosus
+Trifolium gordejevii
+Astragalus kashmarensis
+Astragalus christianus subsp. christianus
+Lathyrus amphicarpos
+Vicia michauxii var. stenophylla
+Caragana pekinensis
+Hedysarum songaricum
+Vicia perelegans
+Astragalus peregrinus subsp. warionis
+Vicia serratifolia
+Ononis dentata
+Halimodendron sp. Fayvush 25
+Trifolium prophetarum
+Astragalus joharchii
+Hedysarum malurense
+Onobrychis eubrychidea
+Trifolium macrocephalum
+Astragalus lentiginosus var. variabilis
+Agathis dammara
+Oxytropis immersa
+Astragalus echidna
+Astragalus oocalycis
+Onobrychis argentea subsp. hispanica
+Hedysarum kotschyi
+Trifolium purseglovei
+Vicia amurensis
+Medicago astroites
+Astragalus lentiginosus var. macrolobus
+Corethrodendron multijugum
+Onobrychis andalanica
+Glycyrrhiza sp. EM373
+Lathyrus strictus
+Ebenus laguroides
+Oxytropis hippolyti
+Trifolium sp. W6 36926
+Astragalus recognitus
+Oxytropis borealis var. hudsonica
+Lathyrus grandiflorus
+Astragalus wolgensis
+Onobrychis carduchorum
+Hedysarum huetii
+Caragana versicolor
+Astragalus malacus
+Trifolium subterraneum subsp. yanninicum
+Onobrychis kuchanensis
+Oxytropis czukotica
+Astragalus nigricans
+Hedysarum consanguineum
+Caragana sibirica
+Astragalus norvegicus
+Vicia tigridis
+Medicago tetraprostrata
+Ononis reuteri
+Cicer arietinum x Cicer reticulatum
+Glycyrrhiza sp. MP 715
+Astragalus falcatus
+Caragana acanthophylla
+Trifolium jokerstii
+Onobrychis haussknechtii
+Vicia kurdica
+Vicia dionysiensis
+Vicia alpestris subsp. hypoleuca
+Astragalus velenovskyi
+Caragana ordosica
+Glycyrrhiza lepidota
+Medicago fischeriana
+Astragalus curvirostris subsp. curvirostris
+Medicago archiducis-nicolai
+Ononis tournefortii
+Vicia pseudo-orobus
+Oxytropis kamtschatica
+Medicago littoralis
+Medicago rostrata
+Astragalus vexilliflexus
+Lathyrus parodii
+Hedysarum glomeratum
+Glycyrrhiza glabra x Glycyrrhiza uralensis
+Oxytropis mertensiana
+Trifolium lucanicum
+Clianthus maximus
+Oxytropis leptophylla
+Astragalus oreganus
+Astragalus leptynticus
+Onobrychis sp. SKO-2018
+Astragalus quinquefoliolatus
+Trifolium brutium
+Chesneya turkestanica
+Astragalus nigrifructus
+Podlechiella vogelii subsp. fatimensis
+Ononis alopecuroides subsp. alopecuroides
+Astragalus teheranicus
+Astragalus siliquosus
+Oxytropis sabzavarensis
+Lathyrus cyaneus
+Swainsona microphylla subsp. glabrescens
+Vicia bifolia
+Eversmannia subspinosa
+Astragalus confusus
+Astragalus guttatus
+Oxytropis ochrantha
+Astragalus gilviflorus var. gilviflorus
+Astragalus annularis
+Hedysarum cuonanum
+Astragalus meridionalis
+Trifolium rusbyi subsp. oreganum
+Taverniera spartea
+Astragalus cicer
+Astragalus paposanus
+Oxytropis savellanica
+Astragalus lentiginosus var. floribundus
+Oxytropis borealis var. borealis
+Lathyrus pseudocicera
+Pisum sativum var. arvense
+Vicia ciliatula
+Astragalus macropelmatus subsp. macropelmatus
+Hedysarum callithrix
+Trifolium andersonii var. andersonii
+Astragalus hamosus
+Vicia leucantha
+Melilotus sp. 4 KS-2019
+Astragalus sikokianus
+Lathyrus clymenum var. articulatus
+Hedysarum elegans
+Lathyrus sp. HS1215
+Onobrychis aequidentata
+Onobrychis ptolemaica
+Astragalus verrucosus
+Colutea armena
+Astragalus coccineus
+Astragalus trachyacanthos
+Astragalus sulcatus
+Trifolium stellatum
+Lathyrus tukhtensis
+Vicia japonica
+Astragalus straussii
+Oxytropis carinthiaca
+Oxytropis rishiriensis
+Swainsona oroboides
+Trifolium squamosum
+Phyllolobium donianum
+Caragana qingheensis
+Astragalus podocarpus
+Astragalus subrecognitus
+Onobrychis takhtajanii
+Astragalus nurensis
+Astragalus intercedens
+Onobrychis subacaulis
+Oxytropis microphylla
+Trifolium triaristatum
+Oxytropis arctica var. arctica
+Cicer nuristanicum
+Oxytropis nana
+Vicia filicaulis
+Trifolium micranthum
+Lessertia capitata
+Vicia ervilia
+Oxytropis pseudosuavis
+Trifolium leibergii
+Cicer spiroceras
+Astragalus ruscifolius
+Glycyrrhiza sp. NCNPR 14929
+Tibetia himalaica
+Medicago sinskiae
+Ononis arvensis
+Astragalus cornu-bovis
+Astragalus barbidens
+Trifolium albopurpureum
+Hedysarum caucasicum
+Astragalus melanophrurius
+Sulla aculeolata subsp. aculeolata
+Trifolium usambarense
+Oxytropis sachalinensis
+Astragalus pseudopersicus
+Astragalus monozyx
+Astragalus aucheri
+Ebenus armitagei
+Trifolium purpureum
+Astragalus neosytinii
+Astragalus gaubae
+Trifolium nigrescens subsp. nigrescens
+Astragalus chlorostachys
+Taverniera diffusa
+Trifolium macraei
+Cicer flexuosum
+Astragalus lentiginosus var. araneosus
+Glycyrrhiza sp. NCNPR 1083
+Glycyrrhiza foetida
+Vicia persica
+Onobrychis heliocarpa
+Hedysarum erythroleucum
+Caragana boisii
+Vicia tenuifolia subsp. dalmatica
+Sobralia callosa
+Ononis megalostachys
+Trifolium calcaricum
+Trifolium pilulare
+Astragalus ghamishluensis
+Astragalus whitneyi var. confusus
+Astragalus crassispinus
+Hedysarum alpinum var. americanum
+Trifolium subterraneum subsp. subterraneum
+Trifolium angulatum
+Lathyrus brachypterus
+Vicia kioshanica
+Lathyrus mulkak
+Ononis mitissima
+Chesneya nubigena
+Astragalus procerus
+Oxytropis sordida
+Oxytropis mongolica
+Vicia leucophaea
+Vicia nigricans subsp. gigantea
+Trifolium boissieri
+Astragalus leucothrix
+Astragalus mesopotamicus
+Astragalus amatus
+Astragalus campylotrichus
+Carmichaelia australis
+Hedysarum semenovii
+Trifolium pseudostriatum
+Astragalus arnottianus
+Pisum sativum subsp. jomardii
+Medicago suffruticosa subsp. leiocarpa
+Caragana sinica
+Vicia villosa subsp. eriocarpa
+Trifolium brandegei
+Astragalus sp. A3
+Hedysarum macranthum
+Astragalus dianat-nejadii
+Astragalus pluriflorus
+Oxytropis guilanica
+Ononis pinnata
+Astragalus vulcanicus
+Trifolium sp. PI 655786
+Trifolium amabile
+Vicia sativa var. angustifolia
+Astragalus turgidocarpus
+Caragana tragacanthoides
+Astragalus hymenocalyx
+Astragalus vaginans
+Astragalus pendulus
+Lathyrus bijugatus
+Astragalus leucocephalus
+Astragalus acantherioceras
+Astragalus pallescens
+Astragalus cellatus
+Medicago daghestanica
+Astragalus blattneri
+Astragalus bradosticus
+Medicago shepardii
+Trifolium polymorphum
+Medicago monspeliaca
+Ononis hesperia
+Trifolium pignantii
+Astragalus utahensis
+Trifolium campestre
+Vicia grandiflora
+Vicia leavenworthii
+Astragalus obtusifolius
+Astragalus peltatus
+Astragalus jaegerianus
+Astragalus keredjensis
+Vicia paucifolia
+Hedysarum paucifoliolatum
+Oxytropis panjshirica
+Trifolium billardierei
+Astragalus juladakensis
+Astragalus gummifer
+Phyllolobium milingense
+Onobrychis elymaitica
+Astragalus lentiginosus var. platyphyllidius
+Astragalus ferruminatus
+Melilotus indicus
+Trifolium pallescens
+Astragalus supervisus
+Astragalus xiphidioides
+Astragalus curvicarpus
+Caragana frutex
+Trifolium eximium
+Astragalus berytheus
+Trifolium repens
+Trigonella corniculata
+Vicia biennis
+Astragalus pelecinus subsp. pelecinus
+Astragalus pseudobrachystachys
+Astragalus brachyodontus
+Caragana changduensis
+Glycyrrhiza triphylla
+Astragalus beckwithii
+Hedysarum gypsophilum
+Astragalus nalbandanicus
+Astragalus camptoceras
+Medicago murex
+Astragalus rijabensis
+Astragalus gossypinus
+Ononis filicaulis
+Medicago truncatula f. tricycla
+Astragalus fragrans
+Astragalus sp. AB-2016g
+Oxytropis kansuensis
+Astragalus scorpiurus
+Ononis nuristanica
+Astragalus nivicola
+Ononis zygantha
+Astragalus coelicolor
+Trigonella coerulescens
+Oxytropis argentata
+Astragalus angustifoliolatus
+Astragalus suberosus subsp. haarbachii
+Astragalus nankotaizanensis
+Astragalus bazarganii
+Oxytropis erecta
+Oxytropis arctica var. koyukukensis
+Astragalus cremnophylax var. hevronii
+Vicia onobrychioides
+Oxytropis coerulea
+Astragalus zerdanus
+Astragalus zarjabadensis
+Glycyrrhiza korshinskyi
+Oxytropis giraldii
+Medicago arborea
+Onobrychis melanotricha var. villosa
+Nageia nagi
+Astragalus abnormalis
+Astragalus cedreticola
+Ebenus boisseri
+Lathyrus tingitanus
+Astragalus fagh-soleimanensis
+Lathyrus alamutensis
+Melilotus wolgicus
+Astragalus odoratus
+Trifolium bocconei
+Chesneya neplii
+Astragalus apricus
+Astragalus brunsianus
+Oxytropis jabalambrensis
+Astragalus yildirimlii
+Lessertia herbacea
+Trigonella schlumbergeri
+Eremosparton flaccidum
+Vicia montevidensis
+Cycas revoluta
+Hedysarum neglectum
+Astragalus tribulifolius
+Astragalus depressus
+Astragalus schelichowii
+Trifolium wentzelianum
+Astragalus avicennicus
+Astragalus veiskaramii
+Onobrychis hajastana
+Trifolium polyphyllum
+Trifolium lappaceum
+Trifolium lupinaster var. albiflorum
+Vicia hybrida
+Astragalus drusorum
+Vicia lunata
+Onobrychis caput-galli
+Astragalus verus
+Astragalus chardinii
+Oxytropis exserta
+Onobrychis stewartii
+Lathyrus blepharicarpus
+Trifolium uniflorum
+Hedysarum poncinsii
+Astragalus maarofii
+Trifolium burchellianum
+Trifolium sylvaticum
+Vicia qatmensis
+Ebenus pinnata
+Caragana erinacea
+Vicia cappadocica
+Onobrychis major
+Astragalus sp. AB-2016l
+Astragalus asper
+Astragalus saxorum
+Astragalus pseudosinaicus
+Astragalus thermensis
+Caragana sukiensis
+Astragalus speciosus
+Astragalus medius
+Oxytropis czekanowskii
+Astragalus monticola
+Hedysarum formosum
+Trifolium dichotomum
+Trifolium decorum
+Astragalus balkaricus
+Astragalus pseudotataricus
+Chesneya macrantha
+Oxytropis myriophylla
+Astragalus caprinus subsp. caprinus
+Astragalus hamadanus
+Ononis pseudoserotina
+Hedysarum taipeicum
+Ononis spinosa subsp. leiosperma
+Onobrychis neychalanensis
+Astragalus remotijugus
+Astragalus zanjanensis
+Trifolium mattirolianum
+Cicer pinnatifidum
+Astragalus submaculatus
+Astragalus lycius
+Astragalus sp. AB-2016k
+Astragalus gueldenstaedtiae
+Onobrychis gontscharowii
+Astragalus himalayanus
+Astragalus mucronifolius
+Swainsona formosa
+Cicer subaphyllum
+Onobrychis cornuta
+Astragalus ochreatus
+Astragalus nuttallianus var. nuttallianus
+Vicia lutea subsp. vestita
+Astragalus gevashensis
+Trifolium caucasicum
+Lathyrus pterocaulos
+Medicago brachycarpa
+Lathyrus laetiflorus
+Oxytropis podoloba
+Oxytropis arctobia
+Astragalus kavirensis
+Astragalus sp. A16
+Hedysarum renzii
+Trifolium longipes subsp. pygmaeum
+Oxytropis glandulosa
+Astragalus altiusculus
+Astragalus kahiricus
+Gueldenstaedtia forrestii
+Astragalus mollissimus var. thompsoniae
+Astragalus frigidus
+Hedysarum denticulatum
+Caragana jubata
+Melilotus elegans
+Astragalus glycyphylloides
+Astragalus ehdenensis
+Astragalus coluteocarpus
+Onobrychis psoraleifolia var. psoraleifolia
+Vicia mollis
+Caragana bungei
+Astragalus molybdenus
+Astragalus tanguticus
+Cicer macracanthum
+Lathyrus angulatus
+Astragalus karl-heinzii
+Astragalus olchonensis
+Oxytropis jacquinii
+Medicago intertexta
+Astragalus kapherrianus
+Ebenus cretica
+Trifolium gymnocarpon
+Astragalus lehmannianus
+Oxytropis litwinowi
+Trifolium sp. PI 655635
+Medicago hypogaea
+Swainsona laciniata
+Trigonella macrorrhyncha
+Pisum sativum var. pumilio
+Astragalus levieri
+Astragalus khoshjailensis
+Astragalus armatus subsp. numidicus
+Astragalus boeticus
+Astragalus retusifoliatus
+Astragalus varius
+Oxytropis muricata
+Onobrychis crista-galli var. trilophocarpa
+Trifolium leucanthum
+Oxytropis pallasii
+Vicia kalakhensis
+Ononis varelae
+Lathyrus linnaei
+Astragalus herbertii
+Ononis pendula subsp. pendula
+Cicer canariense
+Astragalus sp. AB-2016f
+Trigonella gracilis
+Glycyrrhiza sp. Shihezi
+Caragana pruinosa
+Astragalus vexillaris
+Caragana franchetiana
+Trifolium diffusum
+Astragalus lamprocarpus
+Oxytropis cabulica
+Glycyrrhiza erythrocarpa
+Onobrychis alba subsp. laconica
+Colutea komarovii
+Taiwania cryptomerioides
+Astragalus membranaceus f. pallidipurpureus
+Astragalus dendroproselius
+Astragalus homandicus
+Astragalus kirpicznikovii
+Oxytropis shennongjiaensis
+Astragalus paralipomenus
+Astragalus australis var. aboriginorum
+Astragalus tenellus
+Astragalus bibullatus
+Vicia narbonensis var. narbonensis
+Astragalus dactylocarpus subsp. dactylocarpus
+Glycyrrhizopsis flavescens
+Trifolium tomentosum
+Trigonella suavissima
+Trifolium lemmonii
+Vicia floridana
+Astragalus murinus subsp. bornmuelleri
+Onobrychis aucheri subsp. teheranica
+Trifolium bilineatum
+Lathyrus decaphyllus
+Onobrychis sp. SaS-2012b
+Ebenus reesei
+Astragalus ernestii
+Trifolium quartinianum
+Oreophysa microphylla
+Hedysarum marandense
+Astragalus raddei
+Lathyrus lycius
+Trifolium wigginsii
+Oxytropis bargusinensis
+Caragana stenophylla
+Astragalus robbinsii var. jesupii
+Astragalus callistachys
+Astragalus chamaemeniscus
+Astragalus subuliformis
+Astragalus schizopterus
+Astragalus beckii
+Onobrychis huetiana
+Astragalus vereskensis
+Trifolium cherleri
+Caragana arborescens
+Vicia glauca
+Astragalus cephalanthus
+Astragalus eriosphaerus
+Onobrychis dealbata
+Vicia tenuifolia subsp. tenuifolia
+Astragalus sp. A108
+Ebenus cappadocica
+Caragana decorticans
+Oxytropis fetisowii
+Astragalus uliginosus
+Astragalus hauarensis
+Astragalus kentrophyta var. tegetarius
+Oxytropis pseudoglandulosa
+Oxytropis neglecta
+Oxytropis ambigua
+Trifolium macilentum
+Astragalus sanbilingensis
+Hedysarum razoumovianum
+Astragalus melilotoides
+Trigonella sp. Steele 179
+Astragalus sahendi
+Vicia galilaea
+Medicago granadensis
+Astragalus eriostomus
+Astragalus brahuicus
+Astragalus sangonensis
+Vicia ciceroidea
+Trifolium somalense
+Astragalus peristereus
+Astragalus meyeri
+Astragalus lentiginosus var. wahweapensis
+Trifolium palmeri
+Oxytropis adenophylla
+Vicia pisiformis
+Swainsona villosa
+Oxytropis avisoides
+Astragalus sesquiflorus
+Astragalus atricapillus
+Hedysarum boveanum subsp. europaeum
+Astragalus angustifolius
+Lathyrus digitatus
+Astragalus aretioides
+Vicia sicula
+Trifolium lanceolatum
+Astragalus lentiginosus var. australis
+Astragalus sigmoideus
+Astragalus scabrifolius
+Astragalus gigantirostratus
+Astragalus ebenoides subsp. naghadehensis
+Vicia hirta
+Astragalus pullus
+Caragana gobica
+Medicago lanigera
+Astragalus daenensis
+Trifolium aintabense
+Astragalus ovatus
+Onobrychis transcaspica
+Astragalus caraganae
+Colutea sp. CHSL-2012
+Astragalus yilmazii
+Astragalus bicolor
+Hedysarum pestalozzae
+Astragalus trichopterus
+Oxytropis campestris var. jordalii
+Vicia vicina
+Astragalus palenae var. palenae
+Astragalus stalinskyi
+Astragalus tennesseensis
+Lathyrus crassipes
+Astragalus looseri
+Onobrychis arenaria subsp. tommasinii
+Ononis aragonensis
+Caragana opulens
+Astragalus rubrostriatus
+Vicia hololasia
+Chesneya linczevskyi
+Cicer montbretii
+Hedysarum lehmannianum
+Lathyrus armenus
+Lathyrus niger subsp. jordanii
+Lathyrus pallescens
+Astragalus peterae
+Oxytropis sivehensis
+Astragalus flexuosus
+Onobrychis araxina
+Trifolium bolanderi
+Vicia scandens
+Cicer isauricum
+Sulla flexuosa
+Medicago italica
+Meristotropis bucharica
+Astragalus jesdianus
+Astragalus sungpanensis
+Astragalus viciifolius
+Astragalus coronilla
+Swainsona parviflora
+Melilotus sp. HO-2018
+Onobrychis pallasii
+Onobrychis squarrosa
+Lathyrus ochrus
+Lathyrus littoralis
+Astragalus oxyodon
+Astragalus ornithopodioides
+Astragalus demonstratus
+Eremosparton songoricum
+Astragalus cusickii var. flexilipes
+Glycyrrhiza glabra x Glycyrrrhiza uralensis
+Onobrychis shahpurensis
+Galega officinalis
+Astragalus brachycalyx
+Hedysarum bucharicum
+Hedysarum turczaninovii
+Astragalus safavii
+Hedysarum kopetdaghi
+Astragalus maabudii
+Glycyrrhiza sp. NCNPR 5008
+Astragalus frickii
+Medicago minima
+Astragalus vegliensis
+Lathyrus hirsutus
+Astragalus huthianus
+Glycyrrhiza sp. CCMB H66
+Lessertia benguellensis
+Vicia cassubica
+Vicia venosa subsp. cuspidata
+Astragalus subsecundus
+Trifolium wormskioldii
+Oxytropis aciphylla
+Vicia incana
+Astragalus cerussatus
+Taverniera cuneifolia
+Astragalus lindheimeri
+Astragalus germanicopolitanus
+Sciadopitys verticillata
+Trigonella emodi
+Vicia sativa subsp. cordata
+Onobrychis pulchella
+Vicia ludoviciana
+Vicia cracca
+Astragalus eburneus
+Trigonella kotschyi
+Astragalus arizonicus
+Onobrychis persica
+Medicago persica
+Lathyrus belinensis
+Astragalus turbinatus
+Oxytropis campanulata
+Vicia montbretii
+Astragalus cancellatus
+Astragalus microcephalus
+Vicia americana var. minor
+Trigonella spruneriana
+Astragalus glaucophyllus
+Astragalus sp. AB-2016t
+Vicia koeieana
+Lathyrus heterophyllus
+Hedysarum austrosibiricum
+Medicago tornata
+Trifolium reflexum
+Vicia freyniana
+Ononis afghanica
+Astragalus schmalhausenii
+Astragalus sericophyllus
+Vicia sylvatica
+Astragalus caspicus
+Trifolium bullatum
+Astragalus sp. A109
+Oxytropis hirta
+Astragalus lentiginosus var. diphysus
+Hedysarum cappadocicum
+Astragalus lentiginosus var. palans
+Oxytropis diversifolia
+Lathyrus hasslerianus
+Astragalus caryolobus
+Medicago soleirolii
+Vicia parviflora
+Astragalus echinops
+Chesneya elegans
+Astragalus fridae
+Astragalus cryptocarpos
+Astragalus facetus
+Astragalus solandri
+Vicia orobus
+Lens ervoides
+Colutea istria
+Astragalus cruentiflorus
+Ononis hebecarpa
+Lathyrus macrostachys
+Trifolium thompsonii
+Hedysarum elymaiticum
+Trifolium buckwestiorum
+Astragalus stocksii
+Clianthus sp. JP4
+Onobrychis arnacantha
+Smirnowia turkestana
+Onobrychis ornata
+Astragalus platyphyllus
+Astragalus sp. AB-2016i
+Astragalus macropterus
+Vicia amoena var. angusta
+Astragalus schimperi
+Astragalus ehrenbergii
+Carmichaelia exsul
+Lathyrus sessilifolius
+Caragana licentiana
+Astragalus globiflorus
+Astragalus leptocarpus
+Vicia cirrhosa
+Glycyrrhiza sp. EM399
+Astragalus sp. A2
+Barnebyella calycina
+Astragalus incertus
+Astragalus missouriensis
+Astragalus elongatus
+Caragana pygmaea
+Trifolium riograndense
+Astragalus viridis
+Vicia cassia
+Trifolium subterraneum subsp. brachycalycinum
+Astragalus biovulatus
+Oxytropis parryi
+Trifolium polyodon
+Astragalus paucifoliolatus
+Trifolium sp. PI 655634
+Hedysarum garinense
+Astragalus spatulatus
+Astragalus micrancistrus
+Colutea atlantica
+Corethrodendron fruticosum var. mongolicum
+Astragalus raphaelis
+Hedysarum vanense
+Vicia narbonensis var. salmonea
+Oxytropis arctobia/Oxytropis maydelliana mixed EST library
+Astragalus microcystis
+Astragalus spruneri
+Astragalus schistocalyx
+Astragalus oldenburgii
+Sulla pallida
+Trifolium breweri
+Hedysarum volkii
+Oxytropis trichophysa
+Trifolium caudatum
+Astragalus subkohrudicus
+Astragalus malacophyllus
+Medicago rhytidiocarpa
+Melilotus dentatus
+Trifolium latifolium
+Vicia sibthorpii
+Astragalus chrysanthus
+Onobrychis aucheri subsp. psammophila
+Trifolium steudneri
+Astragalus reventus
+Astragalus dieterlei
+Astragalus acaulis
+Astragalus brevitomentosus
+Hedysarum vicioides
+Cicer chorassanicum
+Chesneya ternata
+Astragalus hypoglottis subsp. hypoglottis
+Oxytropis multiceps
+Trigonella sp. TU 33879
+Astragalus gaeobotrys
+Swainsona pterostylis
+Astragalus bashmaghensis
+Onobrychis susiana
+Hedysarum gmelinii subsp. setigerum
+Astragalus macrosemius
+Astragalus hancockii
+Ononis rosea
+Astragalus strictus
+Chesneya purpurea
+Onobrychis argyrea
+Carmichaelia stevensonii
+Ononis polysperma
+Medicago sativa subsp. x varia
+Melilotus polonicus
+Lathyrus subandinus
+Astragalus mareoticus
+Trifolium erubescens
+Onobrychis amoena subsp. amoena
+Astragalus demavendicus
+Trifolium physodes
+Lathyrus multiceps var. setiger
+Medicago sativa subsp. x gaetula
+Vicia narbonensis var. jordanica
+Ononis baetica
+Trifolium miegeanum
+Trifolium andinum
+Astragalus triradiatus
+Astragalus cerasocrenus
+Vicia assyriaca
+Onobrychis subnitens
+Oxytropis maydelliana
+Lathyrus laevigatus
+Onobrychis gracilis
+Vicia dichroantha
+Medicago praecox
+Lathyrus tuberosus
+Astragalus pakravaniae
+Medicago orthoceras
+Astragalus submitis
+Astragalus onobrychioides
+Vicia bungei
+Astragalus glumaceus
+Ononis paralias
+Oxytropis hirsutiuscula
+Melilotus tauricus
+Astragalus husseinovii
+Astragalus sp. Sanderson 2509
+Caragana brevispina
+Trifolium sintenisii
+Lathyrus clymenum var. clymenum
+Vicia johannis var. johannis
+Astragalus gebleri
+Astragalus lalesarensis
+Trifolium balansae
+Astragalus microphysa
+Ononis natrix subsp. prostrata
+Astragalus milingensis
+Astragalus rubriflorus
+Astragalus rhizanthus subsp. candolleanus
+Carmichaelia williamsii
+Lathyrus altaicus
+Oxytropis compacta
+Carmichaelia juncea
+Hedysarum longipedunculatum
+Oxytropis rhodontha
+Melilotus segetalis
+Astragalus griseus
+Caragana altaica
+Trifolium eriosphaerum
+Trifolium variegatum
+Vicia venulosa
+Paphiopedilum armeniacum
+Vicia pyrenaica
+Trifolium ciliolatum
+Hedysarum boveanum subsp. boveanum
+Astragalus neuquenensis
+Lathyrus cassius
+Astragalus erwinii-gaubae
+Astragalus greuteri
+Astragalus rubrolineatus
+Vicia amoena var. sericea
+Astragalus acutirostris
+Astragalus assadabadensis
+Lathyrus pulcher
+Onobrychis dasycephala
+Medicago arabica
+Lathyrus venosus
+Astragalus sp. AB-2016j
+Astragalus robbinsii var. alpiniformis
+Lathyrus chloranthus
+Ononis spinosa subsp. antiquorum
+Astragalus touranicus
+Oxytropis triphylla
+Oxytropis masanderanensis
+Astragalus tenuiramosus
+Astragalus marivanensis
+Trifolium amoenum
+Astragalus vanillae
+Sphaerophysa kotschyana
+Streblorrhiza speciosa
+Trifolium depauperatum
+Oxytropis amethystea
+Astragalus tribuloides
+Vicia variegata
+Astragalus seidabadensis
+Trifolium palaestinum
+Astragalus coluteopsis
+Trifolium sp. SYC
+Trifolium noricum
+Vicia hyrcanica
+Glycyrrhiza sp. EM409
+Astragalus fissuralis
+Sulla carnosa
+Astragalus yazdii
+Astragalus makuensis
+Astragalus sinaicus
+Trigonella geminiflora
+Ononis maweana
+Astragalus qeydarnabiensis
+Astragalus aksuensis
+Astragalus camptodontoides
+Trifolium michelianum
+Vicia anatolica
+Caragana chinghaiensis
+Vicia bithynica
+Caragana gerardiana
+Astragalus polycladus
+Astragalus acutifolius
+Astragalus curvipes
+Astragalus tortuosus
+Calophaca sinica
+Astragalus longirostratus
+Astragalus mollissimus var. earlei
+Astragalus subarcuatus
+Hedysarum dasycarpum
+Astragalus hispidulus
+Astragalus alamliensis
+Hedysarum fallacinum
+Swainsona flavicarinata
+Medicago lupulina
+Ononis leucotricha
+Astragalus szovitsii
+Oxytropis lazica
+Trifolium ornithopodioides
+Ononis variegata
+Onobrychis arenaria subsp. arenaria
+Astragalus alopecuroides
+Oxytropis ciliata
+Chesneya astragalina
+Astragalus dumetorum
+Vicia pubescens
+Oxytropis splendens
+Astragalus cyclophyllon
+Astragalus eremophilus subsp. eremophilus
+Astragalus johnstonii
+Vicia aucheri
+Onobrychis crista-galli var. crista-galli
+Astragalus mercklinii subsp. farsicus
+Astragalus neochaldoranicus
+Chesneya badachschanica
+Astragalus cedreti
+Colutea buhsei
+Astragalus antalyensis
+Trifolium cryptopodium
+Medicago coronata
+Astragalus austromahneshanensis
+Astragalus filipes
+Astragalus grammocalyx
+Astragalus nigrohirsutus
+Astragalus gracilis
+Colutea cilicica
+Trifolium andricum
+Caragana zahlbruckneri
+Trifolium vesiculosum
+Oxytropis pyrenaica
+Cicer floribundum
+Trifolium trichocephalum
+Astragalus atropilosulus var. venosus
+Onobrychis scrobiculata
+Astragalus salmonis
+Ononis ramosissima
+Oxytropis jordalii
+Oxytropis iranica
+Vicia abbreviata
+Trifolium trichocalyx
+Astragalus chrysostachys var. parisiensis
+Taverniera nummularia
+Trifolium isodon
+Sutherlandia humilis
+Astragalus neglectus
+Lathyrus delnorticus
+Astragalus obcordatus
+Astragalus mulfordiae
+Alhagi graecorum
+Astragalus biarjmandicus
+Onobrychis reuteri
+Astragalus stereocalyx
+Taverniera abyssinica
+Astragalus terraccianoi
+Astragalus aktiubensis
+Astragalus ceramicus
+Oxytropis grandiflora
+Astragalus sp. AB-2019a
+Lathyrus latifolius
+Oxytropis densa
+Chesneya crassipes
+Astragalus albicaulis
+Trigonella calliceras
+Caragana conferta
+Astragalus iranicus
+Carmichaelia astonii
+Astragalus yushensis
+Parochetus africanus
+Trifolium pinetorum
+Astragalus curviflorus
+Glycyrrhiza glabra
+Astragalus schahrudensis
+Astragalus leontinus
+Vicia chosenensis
+Astragalus trichopodus
+Astragalus oligoflorus
+Astragalus jacobsii
+Calophaca grandiflora
+Lathyrus pannonicus subsp. longestipulatus
+Oxytropis bicolor
+Astragalus memoriosus
+Astragalus aegobromus
+Astragalus naftabensis
+Trifolium spadiceum
+Chesneya sp. US:3540374
+Trifolium barbigerum
+Astragalus pastorius var. linearibracteatus
+Astragalus versipilus
+Hedysarum boutignyanum
+Medicago truncatula var. longiaculeata
+Astragalus perpexus
+Trifolium plumosum
+Astragalus adsurgens
+Astragalus chrysochlorus
+Astragalus leonardii
+Astragalus phlomoides
+Medicago cancellata
+Astragalus longidentatus
+Astragalus alyssoides
+Trifolium rubens
+Astragalus thlaspi
+Astragalus sp. AB-2016h
+Trifolium hybridum
+Vicia monardii
+Hedysarum cisdarvasicum
+Melilotus altissimus
+Colutea paulsenii
+Astragalus artvinensis
+Astragalus incanus subsp. incanus
+Astragalus scaberrimus
+Oxytropis javaherdehi
+Oxytropis capusii
+Trifolium rytidosemium
+Trifolium oliganthum
+Lens orientalis
+Astragalus ammodendron
+Astragalus toquimanus
+Trifolium plebeium
+Astragalus sinicus
+Trifolium clypeatum
+Trifolium thalii
+Astragalus laguriformis
+Chesneya dshungarica
+Oxytropis oxyphylla
+Medicago schischkinii
+Oxytropis stukovii
+Astragalus kuhidashtehensis
+Astragalus spachianus
+Onobrychis lunata
+Oxytropis caespitosa
+Oxytropis sojakii
+Oxytropis scammaniana
+Astragalus bezudensis
+Caragana dasyphylla
+Chesneya kotschyi
+Trigonella hamosa
+Astragalus bodeanus
+Trigonella foenum-graecum
+Astragalus sieversianus
+Vicia semiglabra
+Lathyrus pannonicus subsp. multijugus
+Trifolium microcephalum
+Trifolium trichopterum
+Ononis peyerimhoffii
+Tibetia yadongensis
+Astragalus bojnurdensis
+Hedysarum wangii
+Trifolium monanthum
+Caragana soongorica
+Astragalus eucosmus
+Lessertia sp. LL-2016
+Astragalus penduliflorus var. sericeocanus
+Trifolium haydenii
+Trifolium pauciflorum
+Oxytropis szovitsii
+Astragalus ophiocarpus
+Trifolium spumosum
+Ononis laxiflora
+Glycyrrhiza sp. NCNPR 2472
+Astragalus ahangarensis
+Lathyrus linifolius
+Trifolium nanum
+Astragalus yoder-williamsii
+Astragalus kermanschahensis
+Ononis cintrana
+Oxytropis suavis
+Astragalus bachmarensis
+Onobrychis meschetica
+Astragalus ulodjensis
+Astragalus longisubulatus
+Trifolium beckwithii
+Astragalus sp. A52
+Ononis natrix subsp. arganietorum
+Astragalus congdonii
+Trifolium patens
+Onobrychis kermanensis
+Trifolium gracilentum
+Astragalus hallii var. fallax
+Medicago sp. TRCL-2018
+Vicia crocea
+Cicer rechingeri
+Onobrychis sp. FG-2012a
+Astragalus pulchellus
+Cicer songaricum
+Oxytropis carduchorum
+Astragalus lagurus
+Trifolium angustifolium
+Astragalus convallarius
+Hedysarum inundatum
+Astragalus penetratus
+Melilotus messanensis
+Lathyrus pannonicus subsp. varius
+Astragalus subalpinus
+Astragalus polaris
+Astragalus dictyocarpus
+Astragalus inopinatus
+Oxytropis kusnetzovii
+Medicago blancheana
+Astragalus edmonstonei
+Astragalus scorpioides
+Astragalus richardsonii
+Astragalus edulis
+Hedysarum aculeatum
+Medicago hybrida
+Vicia minutiflora
+Caragana stipitata
+Vicia subvillosa
+Onobrychis megataphros
+Caragana pleiophylla
+Astragalus multijugus
+Astragalus longicaulis
+Vicia sp. HV60
+Glycyrrhiza iconica
+Astragalus lasaensis
+Oxytropis rechingeri
+Onobrychis inermis
+Oxytropis squammulosa
+Astragalus abditus
+Astragalus qoturensis
+Glycyrrhiza sp. NCNPR 144
+Mitostemma brevifilis
+Astragalus saxifractor
+Astragalus chaetopodus
+Astragalus kerkukiensis
+Astragalus migpo
+Astragalus coluteoides
+Oxytropis binaludensis
+Medicago ciliaris
+Ononis alba subsp. alba
+Astragalus glaucacanthos
+Astragalus canadensis var. brevidens
+Oxytropis kordkoyensis
+Astragalus brevipes
+Trifolium litwinowii
+Sutherlandia montana
+Astragalus leptaleus
+Astragalus karakugensis
+Astragalus sphaeranthus
+Hedysarum xizangense
+Oxytropis ruthenica
+Oxytropis albana
+Onobrychis pyrenaica
+Onobrychis gypsicola
+Trigonella spicata
+Astragalus ovalis
+Astragalus brachylobus
+Astragalus paralurges
+Trifolium squarrosum
+Onobrychis laxiflora subsp. taftanica
+Vicia tibetica
+Hedysarum cisbaicalense
+Astragalus calycosus
+Ononis polyphylla
+Cicer graecum
+Lessertia frutescens
+Trifolium multinerve
+Astragalus pindreensis
+Astragalus didymocarpus var. dispermus
+Astragalus vesiculosus
+Onobrychis gaubae
+Astragalus macrourus
+Lathyrus filiformis
+Vicia lathyroides
+Astragalus curvirostris subsp. psilocarpus
+Dilkea retusa
+Astragalus anacamptus
+Astragalus pycnocephalus
+Vicia chaetocalyx
+Astragalus lentiginosus var. maricopae
+Onobrychis kachetica
+Trifolium dasyphyllum
+Astragalus biabanensis
+Oxytropis pumila
+Trifolium stoloniferum
+Cicer yamashitae
+Vicia villosa subsp. varia
+Caragana tangutica
+Astragalus vogelii
+Astragalus skythropos
+Astragalus ucrainicus
+Onobrychis buhseana
+Vicia mexicana
+Trigonella arabica
+Astragalus hystrix
+Astragalus eremophilus subsp. makranicus
+Astragalus sp. A65
+Astragalus saadatabadensis
+Vicia galeata
+Vicia sp. BSh-2011
+Vicia oroboides
+Hedysarum hemithamnoides
+Chesneya trijuga
+Medicago noeana
+Lathyrus graminifolius
+Oxytropis middendorffii
+Ononis diffusa
+Astragalus filicaulis
+Chesneya cuneata
+Oxytropis kotschyana
+Vicia vicioides
+Swainsona lessertiifolia
+Astragalus punctatus
+Astragalus racemosus
+Onobrychis oxyptera
+Medicago cretacea
+Astragalus ackerbergensis
+Astragalus podoloboides
+Hedysarum algidum
+Astragalus caricinus
+Hedysarum atropatanum
+Astragalus sp. A35
+Astragalus mollissimus var. mogollonicus
+Lathyrus meridensis
+Onobrychis supina
+Trigonella caerulea
+Caragana tekesiensis
+Trifolium salmoneum
+Lathyrus boissieri
+Astragalus exscapus
+Ononis vaginalis
+Astragalus paradoxus
+Lathyrus hierosolymitanus
+Medicago plicata
+Astragalus zoshkensis
+Chesneya depressa
+Vicia ohwiana
+Astragalus ischredensis
+Oxytropis selengensis
+Medicago ruthenica
+Medicago sphaerocarpos
+Trifolium gemellum
+Astragalus hymenocystis
+Ononis fruticosa
+Trifolium medium subsp. sarosiense
+Oxytropis liliputa
+Astragalus qorvehensis
+Oxytropis volkii
+Chesneya ferganensis
+Trifolium polystachyum
+Astragalus nezaketiae
+Lathyrus vinealis
+Astragalus brandegeei
+Vicia palaestina
+Astragalus parvarensis
+Astragalus melanocalyx
+Medicago scutellata
+Hedysarum cachemirianum
+Trigonella tianschanica
+Astragalus chiwensis
+Astragalus howellii
+Chesneya sp. MZ-2016
+Astragalus thurberi
+Astragalus lonchocarpus
+Trifolium argutum
+Caragana densa
+Hedysarum boreale var. boreale
+Vicia akhmaganica
+Astragalus suberosus subsp. suberosus
+Cicer incisum
+Cephalotaxus wilsoniana
+Vicia johannis var. procumbens
+Astragalus paysonii
+Swainsona swainsonioides
+Astragalus bifidus
+Vicia larissae
+Astragalus zohrabi
+Oxytropis tompudae
+Astragalus moyanoi
+Onobrychis rechingerorum
+Ononis spinosa subsp. maritima
+Calophaca hovenii
+Cicer cuneatum
+Corethrodendron krassnowii
+Astragalus trifoliastrum
+Carmichaelia sp. 'Lavin 6201'
+Astragalus oreades
+Astragalus pseudocyclophyllus
+Oxytropis varlakovii
+Lens cyanea
+Caragana spinosa
+Hedysarum ibericum
+Trifolium badium
+Onobrychis alamutensis
+Astragalus ciloensis
+Caragana hololeuca
+Astragalus brachycarpus
+Astragalus sp. AAR-2019a
+Medicago radiata
+Lens lamottei
+Caragana davazamcii
+Colutea persica
+Astragalus solitarius
+Hedysarum ucrainicum
+Medicago marina
+Ebenus longipes
+Astragalus kaufmannii
+Melilotus sp. 1 KS-2019
+Astragalus sevangensis
+Trigonella strangulata
+Trigonella balansae
+Astragalus argyroides
+Astragalus crenatus
+Astragalus garbancillo
+Astragalus crotalariae
+Astragalus brevidentatus
+Astragalus gudrunensis
+Hedysarum monophyllum
+Astragalus cibarius
+Oxytropis persica
+Astragalus farsicus
+Astragalus karelinianus
+Glycyrrhiza macedonica
+Glycyrrhiza sp. NCNPR 6475
+Astragalus aestimabilis
+Lathyrus vaniotii
+Oxytropis czapandaghi
+Cicer judaicum
+Astragalus rostratus
+Vicia cypria
+Astragalus rhodosemius
+Cicer microphyllum
+Astragalus agnicidus
+Astragalus minutulus
+Lathyrus annuus
+Oxytropis huddelsonii
+Astragalus rattanii
+Astragalus horridus
+Medicago strasseri
+Oxytropis alpina
+Astragalus sitiens
+Astragalus brevicalycinus
+Vicia eristalioides
+Astragalus croaticus
+Astragalus bourgovii
+Hedysarum brachypterum
+Trifolium cheranganiense
+Oxytropis lanata
+Vicia venosa var. yamanakae
+Astragalus podolobus
+Colutea abyssinica
+Astragalus russanovii
+Lathyrus nervosus
+Astragalus epiglottis
+Trifolium montanum subsp. humboldtianum
+Ononis spinosa subsp. arvensis
+Ononis tazaensis
+Trifolium hirtum
+Astragalus crassicarpus
+Trifolium batmanicum
+Oxytropis sericopetala
+Onobrychis sp. FG-2012b
+Oxytropis borealis var. viscida
+Oxytropis nigrescens
+Astragalus sufianicus
+Ononis incisa
+Lathyrus japonicus subsp. maritimus
+Astragalus dorudensis
+Trigonella filipes
+Hedysarum tibeticum
+Lathyrus vestitus
+Vicia costata
+Lathyrus zionis
+Trifolium lugardii
+Astragalus floccosus
+Ebenus barbigera
+Onobrychis sp. SaS-2012
+Trifolium scabrum
+Lathyrus lanszwertii
+Vicia pulchella
+Ononis ornithopodioides
+Carmichaelia crassicaulis
+Colutea gifana
+Astragalus refractus
+Vicia stenophylla
+Astragalus regestus
+Onobrychis argentea subsp. africana
+Greuteria membranacea
+Hedysarum ferganense
+Oxytropis gorodkovii
+Medicago aurantiaca
+Astragalus peduncularis
+Meristotropis sp. LD-2020
+Astragalus gladiatus
+Lathyrus parvifolius
+Ononis thomsonii
+Vicia rechingeri
+Astragalus pseudobuchtormensis
+Trifolium vernum
+Onobrychis cadmea
+Medicago falcata subsp. falcata
+Astragalus geyeri var. geyeri
+Vicia sparsiflora
+Lessertia acanthorhachis
+Astragalus nitens
+Onobrychis verae var. verae
+Astragalus alpinus
+Hedysarum minjanense
+Trifolium alpinum
+Astragalus pereshkhoranicus
+Astragalus echidniformis
+Astragalus austrosibiricus
+Trifolium clusii
+Trifolium vavilovii
+Astragalus lentiginosus var. stramineus
+Astragalus pehuenches
+Oxytropis besseyi var. ventosa
+Hedysarum boreale var. mackenziei
+Astragalus nigrolineatus
+Hedysarum armenium
+Astragalus dasycarpus
+Astragalus squarrosus
+Astragalus beketowii
+Vicia sp. 'telaponensis'
+Oxytropis melanocalyx
+Ononis hispida subsp. hispida
+Astragalus pellitus
+Oxytropis argyroleuca
+Astragalus algarbiensis
+Carnegiea gigantea
+Oxytropis ochotensis
+Astragalus kurnet-es-saudae
+Vicia acutifolia
+Lathyrus bauhinii
+Caragana kirghisorum
+Calophaca sericea
+Astragalus pentanthus
+Onobrychis lanata
+Oxytropis mahneshanensis
+Ononis adenotricha
+Astragalus cusickii var. cusickii
+Astragalus vagus
+Astragalus preussii
+Lathyrus pannonicus subsp. collinus
+Melilotus albus
+Melilotus sp. MP 711
+Ononis rotundifolia
+Trifolium parnassii
+Trifolium kingii var. productum
+Oxytropis salukensis
+Hedysarum sikkimense
+Astragalus simonii
+Vicia dumetorum
+Oxytropis aucherii
+Astragalus asclepiadoides
+Oxytropis sata-kandaonensis
+Astragalus hoantchy subsp. dschimensis
+Astragalus psilodontius
+Astragalus monophyllus
+Cicer arietinum
+Astragalus persepolitanus
+Onobrychis afghanica
+Oxytropis suprajenissejensis
+Lathyrus palustris subsp. pilosus
+Astragalus complanatus
+Astragalus vesicarius subsp. pastellianus
+Astragalus stella
+Masdevallia coccinea
+Vicia cretica
+Chesneya villosa
+Trifolium spananthum
+Astragalus villosus
+Trifolium saxatile
+Astragalus darumbium
+Astragalus monspessulanus
+Astragalus ancistrocarpus
+Chesneya spinosa
+Carmichaelia nana
+Trifolium eriocephalum var. eriocephalum
+Astragalus foliosus
+Hedysarum praticola
+Lathyrus humilis
+Ononis alba subsp. monophylla
+Vicia esdraelonensis
+Astragalus paralurgiformis
+Astragalus zingeri
+Astragalus alopecias
+Hedysarum zundukii
+Hedysarum sauzakense
+Oxytropis tatarica
+Hedysarum petrovii
+Chesneya tadzhikistana
+Glycyrrhiza sp. NCNPR 13165
+Oxytropis floribunda
+Hedysarum biebersteinii
+Lathyrus splendens
+Phragmipedium longifolium
+Astragalus sclerocladus
+Glycyrrhiza eurycarpa
+Lessertia brachystachya
+Vicia venosa var. glabristyla
+Astragalus austrotibetanus
+# Update on 2020-08-20, 16:37

@@ -11,10 +11,9 @@ from ete3 import NCBITaxa
 from pathlib import Path
 from datetime import datetime
 
-# If the issue with ete3 were version-dependent
-#import pkg_resources
-#pkg_resources.require("ete3<3.1.1")
-#from ete3 import NCBITaxa
+# For suppressing console output
+import io
+from contextlib import redirect_stdout
 
 ###############
 # AUTHOR INFO #
@@ -23,7 +22,13 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
              'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Create or append a list of species names that are proven to lack one or more inverted repeats in their plastid genome'
-__version__ = '2020.08.20.1400'
+__version__ = '2020.08.20.1800'
+
+#############
+# DEBUGGING #
+#############
+import ipdb
+# ipdb.set_trace()
 
 def fetch_pubmed_articles(mail, query):
     articles = None
@@ -145,32 +150,44 @@ def append_blacklist(fp_blacklist, blacklist):
             fh_blacklist.write(entry + "\n")
 
 def main(args):
+
+    ## STEP 1. Initialize variables
     # TODO: replace static mail address (maybe with a simple username@hostname ?)
     mail = "tilmanmehl@fu-berlin.de"
-
     ncbi = NCBITaxa()
     blacklist = set()
     blacklist_existing = set()
-    # Read blacklist if the file already exists
+
+    ## STEP 2. Read blacklist if the file already exists
     if os.path.isfile(args.file_blacklist):
-        print("Reading existing blacklist...")
+        print("Reading existing blacklist ...")
         blacklist_existing = read_blacklist(args.file_blacklist)
-    print("Gather species names of species in 'IRL clade'")
+
+    ## STEP 3. Assemble species names of IRL clade of Fabaceae
+    print("\nFetching species names of taxa in 'IRL clade' of Fabaceae ...")
     irl_clade_species = get_irl_clade_species(ncbi)
-    print("Add found species to blacklist (minus species that are already in the blacklist)")
+    print("  Adding new species names to blacklist ...")
     blacklist = irl_clade_species.difference(blacklist_existing)
-    print("Fetch PubMed articles for analysis")
-    articles = fetch_pubmed_articles(mail, args.query)
-    print("Found %s articles." % str(len(articles)))
+
+    ## STEP 4. Assemble species names of active search
+    print("\nSearching for matching PubMed articles ...")
+    # Suppressing console output by entrezpy.conduit.Conduit.new_pipeline()
+    # Source: https://codingdose.info/2018/03/22/supress-print-output-in-python/
+    trap = io.StringIO()
+    with redirect_stdout(trap):
+        articles = fetch_pubmed_articles(mail, args.query)
+    print("  Number of matching articles found: %s" % str(len(articles)))
+
+    print("\nIterating through matching articles ...")
     for article in articles:
-        print("Gather species names ocurring in article abstract")
+        print("\n  Fetching species names of article: %s" % str(article.xml.findall(".//ArticleTitle")[0].text))
         article_species = get_species_from_pubmed_article(article, ncbi)
-        print("Add found species to blacklist (minus species that are already in the blacklist). Found %s species." % str(len(article_species)))
+        print("  Number of species names parsed: %s" % str(len(article_species)))
         blacklist = blacklist.union(article_species.difference(blacklist_existing))
-    print("Append newly found species to blacklist")
+
+    ## STEP 5. Append only new taxon names to blacklist
+    print("\nCalculating and appending species names not previously in blacklist ...")
     append_blacklist(args.file_blacklist, blacklist)
-
-
 
 
 if __name__ == "__main__":
