@@ -7,12 +7,14 @@ import sys
 #import PlastomeIntegrityChecks as pic
 import fetchpubmed
 import entrezpy.conduit
+from ete3 import NCBITaxa
 from pathlib import Path
 from datetime import datetime
 
-import pkg_resources
-pkg_resources.require("ete3<3.1.1")
-from ete3 import NCBITaxa
+# If the issue with ete3 were version-dependent
+#import pkg_resources
+#pkg_resources.require("ete3<3.1.1")
+#from ete3 import NCBITaxa
 
 ###############
 # AUTHOR INFO #
