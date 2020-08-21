@@ -90,11 +90,11 @@ def main(args):
 	else:
 		coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='INFO', logger=log)
 
-	iro = pic.IR_Operations(log)
-	EI = pic.Entrez_Interaction(log)
+	iro = pic.IR_Operations.IR_Operations(log)
+	EI = pic.Entrez_Interaction.Entrez_Interaction(log)
   # STEP 2. Read in accession numbers to loop over
 
-	tio = pic.Table_IO(args.infn, args.outfn, args.blacklistfn, log)
+	tio = pic.Table_IO.Table_IO(args.infn, args.outfn, args.blacklistfn, log)
 	tio.remove_blacklisted_entries()
 
 	accessions = list(tio.entry_table["ACCESSION"].values)
@@ -173,7 +173,7 @@ def main(args):
 			tar.close()
 			os.remove(fp_entry)
 
-	am = pic.Article_Mining(log)
+	am = pic.Article_Mining.Article_Mining(log)
 	articles = EI.fetch_pubmed_articles(args.mail, args.query)
 	ncbi = NCBITaxa()
 	# Update database if it is older than 1 month
