@@ -81,7 +81,7 @@ def main(args):
 	fp_duplicates = os.path.join(os.path.dirname(outfn), os.path.basename(outfn) + ".duplicates")
 	if os.path.isfile(fp_duplicates):
 		tio.read_duplicates(fp_duplicates)
-		uids_already_processed.extend(tio.duplicates.keys())
+		uids_already_processed.extend(map(int, tio.duplicates.keys()))
 
 	if len(tio.entry_table) > 0:
 		uids_already_processed.extend(list(tio.entry_table.index.values))
