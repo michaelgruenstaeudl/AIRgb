@@ -55,7 +55,10 @@ from Bio import SeqIO
 from fuzzywuzzy import fuzz
 from ete3 import NCBITaxa
 from pathlib import Path
-import PlastomeIntegrityChecks as pic
+from PlastomeIntegrityChecks import Entrez_Interaction
+from PlastomeIntegrityChecks import Table_IO
+from PlastomeIntegrityChecks import Article_Mining
+from PlastomeIntegrityChecks import IR_Operations
 import pandas as pd
 import os, argparse
 import tarfile, coloredlogs, logging
@@ -90,11 +93,11 @@ def main(args):
 	else:
 		coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='INFO', logger=log)
 
-	iro = pic.IR_Operations.IR_Operations(log)
-	EI = pic.Entrez_Interaction.Entrez_Interaction(log)
+	iro = IR_Operations.IR_Operations(log)
+	EI = Entrez_Interaction.Entrez_Interaction(log)
   # STEP 2. Read in accession numbers to loop over
 
-	tio = pic.Table_IO.Table_IO(args.infn, args.outfn, args.blacklistfn, log)
+	tio = Table_IO.Table_IO(args.infn, args.outfn, args.blacklistfn, log)
 	tio.remove_blacklisted_entries()
 
 	accessions = list(tio.entry_table["ACCESSION"].values)
@@ -173,7 +176,7 @@ def main(args):
 			tar.close()
 			os.remove(fp_entry)
 
-	am = pic.Article_Mining.Article_Mining(log)
+	am = Article_Mining.Article_Mining(log)
 	articles = EI.fetch_pubmed_articles(args.mail, args.query)
 	ncbi = NCBITaxa()
 	# Update database if it is older than 1 month

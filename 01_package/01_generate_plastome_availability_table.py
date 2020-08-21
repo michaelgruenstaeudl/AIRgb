@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+tio.#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
 OBJECTIVE:
@@ -36,7 +36,8 @@ import os.path
 import argparse
 import coloredlogs, logging
 import pandas as pd
-import PlastomeIntegrityChecks as pic
+from PlastomeIntegrityChecks import Entrez_Interaction
+from PlastomeIntegrityChecks import Table_IO
 from datetime import datetime
 
 ###############
@@ -61,35 +62,35 @@ import ipdb
 
 
 def main(args):
-	
+
   # STEP 1. Set up logger
 	log = logging.getLogger(__name__)
 	coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
-	
-	EI = pic.Entrez_Interaction(log)
-	
+
+	EI = Entrez_Interaction.Entrez_Interaction(log)
+
   # STEP 2. Check if output file already exists, read existing UIDs, infer mindate
 	uids_already_processed = []
 	min_date = None
 	outfn = os.path.abspath(args.outfn)
-	
+
 	if args.blacklist:
-		pa = pic.Plastome_Availability(outfn, fp_blacklist = args.blacklist)
+		tio = Table_IO.Table_IO(outfn, fp_blacklist = args.blacklist)
 	else:
-		pa = Plastome_Availability(outfn)
+		tio = Table_IO(outfn)
 	fp_duplicates = os.path.join(os.path.dirname(outfn), os.path.basename(outfn) + ".duplicates")
 	if os.path.isfile(fp_duplicates):
-		pa.read_duplicates(fp_duplicates)
-	
-	if len(pa.entry_table) > 0:
-		uids_already_processed = list(pa.entry_table.index.values)
+		tio.read_duplicates(fp_duplicates)
+
+	if len(tio.entry_table) > 0:
+		uids_already_processed = list(tio.entry_table.index.values)
 		log.info("Summary file '%s' already exists. Number of UIDs read: %s" % (str(outfn), str(len(uids_already_processed))))
 		if args.update_only:
-			min_date = datetime.strptime(pa.entry_table["CREATE_DATE"].max(), '%Y-%m-%d')
+			min_date = datetime.strptime(tio.entry_table["CREATE_DATE"].max(), '%Y-%m-%d')
 			log.info("NOTE: Only records more recent than '%s' are being looked for." % (str(min_date)))
 	else:
 		log.info(("Summary file '%s' does not exist; generating new file. Thus, no UIDs read." % (str(outfn))))
-	
+
 	# STEP 3. Get all existing UIDs and calculate which to be processed
 	try:
 		uids_new = EI.retrieve_uids(args.query, min_date)
@@ -98,7 +99,7 @@ def main(args):
 	log.info(("Number of UIDs on NCBI: %s" % (str(len(uids_new)))))
 	uids_to_process = set(uids_new) - set(uids_already_processed)
 	log.info(("Number of UIDs to be processed: %s" % (str(len(uids_to_process)))))
-	
+
 	# STEP 4. Parse all entries, append entry-wise to file
 	for uid in uids_to_process:
 		log.info(("Reading and parsing UID '%s', writing to '%s'." % (str(uid), str(outfn))))
@@ -109,25 +110,25 @@ def main(args):
 			log.exception("Error retrieving info for UID " + str(uid) + ": " + str(err) + "\nSkipping this accession.")
 			continue
 		duplseq = parsed_entry.pop("DUPLSEQ")
-		pa.entry_table.loc[uid] = parsed_entry
+		tio.entry_table.loc[uid] = parsed_entry
 		if duplseq:
-			pa.duplicates[uid] = [parsed_entry["ACCESSION"], duplseq]
-		pa.append_entry_to_table(parsed_entry, uid, outfn)
-		
+			tio.duplicates[uid] = [parsed_entry["ACCESSION"], duplseq]
+		tio.append_entry_to_table(parsed_entry, uid, outfn)
+
 	# STEP 5. Remove duplicates of REFSEQs and blacklisted entries
-	pa.write_duplicates(fp_duplicates)
-	pa.remove_duplicates()
-	pa.remove_blacklisted_entries()
+	tio.write_duplicates(fp_duplicates)
+	tio.remove_duplicates()
+	tio.remove_blacklisted_entries()
 	'''
 	# Alternative way (i.e. with logs) to remove duplicates
-	for refseq, dup in pa.duplicates.items():		
+	for refseq, dup in tio.duplicates.items():
 		try:
-			pa.entry_table.drop(pa.entry_table.loc[pa.entry_table["ACCESSION"] == dup].index, inplace = True)
+			tio.entry_table.drop(tio.entry_table.loc[tio.entry_table["ACCESSION"] == dup].index, inplace = True)
 			log.info("Removed accession '%s' from '%s' because it is a duplicate of REFSEQ '%s'." % (dup, str(os.path.basename(outfn)), refseq))
 		except: # If the duplicate doesn't exist, nothing happens (except for a log message)
 			log.info("Could not find accession '%s' when trying to remove it." % str(dup))
-	'''	
-	pa.write_entry_table(outfn)
+	'''
+	tio.write_entry_table(outfn)
 
 ########
 # MAIN #
