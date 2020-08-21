@@ -62,6 +62,7 @@ from PlastomeIntegrityChecks import IR_Operations
 import pandas as pd
 import os, argparse
 import tarfile, coloredlogs, logging
+import time
 
 ###############
 # AUTHOR INFO #
@@ -92,12 +93,13 @@ def main(args):
 		coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 	else:
 		coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='INFO', logger=log)
-
+	mail = "tilmanmehl@fu-berlin.de" #args.mail
+	query = args.query
 	iro = IR_Operations.IR_Operations(log)
 	EI = Entrez_Interaction.Entrez_Interaction(log)
   # STEP 2. Read in accession numbers to loop over
 
-	tio = Table_IO.Table_IO(args.infn, args.outfn, args.blacklistfn, log)
+	tio = Table_IO.Table_IO(args.infn, args.outfn, args.blacklistfn, logger = log)
 	tio.remove_blacklisted_entries()
 
 	accessions = list(tio.entry_table["ACCESSION"].values)
@@ -177,11 +179,11 @@ def main(args):
 			os.remove(fp_entry)
 
 	am = Article_Mining.Article_Mining(log)
-	articles = EI.fetch_pubmed_articles(args.mail, args.query)
+	articles = EI.fetch_pubmed_articles(mail, query)
 	ncbi = NCBITaxa()
 	# Update database if it is older than 1 month
 	if (time.time() - os.path.getmtime(os.path.join(Path.home(), ".etetoolkit/taxa.sqlite"))) > 2592000:
-        ncbi.update_taxonomy_database()
+		ncbi.update_taxonomy_database()
 	article_genera = set()
 	for article in articles:
 		article_genera.union(am.get_genera_from_pubmed_article(article, ncbi))
@@ -201,7 +203,7 @@ if __name__ == "__main__":
 	parser.add_argument("--datadir", "-d", type=str, required=False, default="./data/", help="path to data directory")
 	parser.add_argument("--verbose", "-v", action="store_true", required=False, default=False, help="Enable verbose logging.")
 	parser.add_argument("--blacklistfn", "-b", type=str, required=False, help="path to taxonomy blacklist")
-	#parser.add_argument("--query", "-q", type=str, required=False, default="inverted[TITLE] AND repeat[TITLE] AND loss[TITLE]" help="query to find pubmed articles describing inverted repeat loss")
+	parser.add_argument("--query", "-q", type=str, required=False, default="inverted[TITLE] AND repeat[TITLE] AND loss[TITLE]", help="query to find pubmed articles describing inverted repeat loss")
 	#parser.add_argument("--mail", "-m", type=str, required=False, help="Mail account for entrez search")
 	args = parser.parse_args()
 	#if bool(args.query) ^ bool(args.mail):

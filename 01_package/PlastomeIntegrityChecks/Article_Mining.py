@@ -3,10 +3,10 @@ import re
 
 class Article_Mining:
 
-    def __init__(self):
+    def __init__(self, logger):
         self.log = logger or logging.getLogger(__name__ + ".Article_Mining")
 
-    def get_abstract_text(article):
+    def get_abstract_text(self, article):
         '''
         Parses a pubmed article for its abstract text
         '''
@@ -15,7 +15,7 @@ class Article_Mining:
             text += elem.text + "\n"
         return text
 
-    def get_article_keywords(article):
+    def get_article_keywords(self, article):
         '''
         Parses a pubmed article for its keywords
         '''
@@ -25,16 +25,16 @@ class Article_Mining:
         #self.log.debug("Found %s keywords." % str(len(keywords)))
         return keywords
 
-    def get_species_from_pubmed_article(article, ncbi):
+    def get_species_from_pubmed_article(self, article, ncbi):
         '''
         Parses a pubmed article for species names
         '''
         species = set()
-        abstract_text = get_abstract_text(article)
-        keywords = get_article_keywords(article)
+        abstract_text = self.get_abstract_text(article)
+        keywords = self.get_article_keywords(article)
         for keyword in keywords:
             abstract_text += keyword + "\n"
-        ncbi_query_results = ncbi.get_name_translator(construct_species_query(abstract_text))
+        ncbi_query_results = ncbi.get_name_translator(self.construct_species_query(abstract_text))
         for name, id in ncbi_query_results.items():
             # We're only interested in species-rank taxons
             if ncbi.get_rank(id)[id[0]] == "species":
@@ -42,13 +42,13 @@ class Article_Mining:
 
         return species
 
-    def get_genera_from_pubmed_article(article, ncbi):
+    def get_genera_from_pubmed_article(self, article, ncbi):
         '''
         Parses a pubmed article for genus names
         '''
         genera = set()
-        abstract_text = get_abstract_text(article)
-        keywords = get_article_keywords(article)
+        abstract_text = self.get_abstract_text(article)
+        keywords = self.get_article_keywords(article)
         for keyword in keywords:
             abstract_text += keyword + "\n"
         regexp = r'[^a-zA-Z0-9.\-:\s]'
@@ -61,7 +61,7 @@ class Article_Mining:
         return genera
 
 
-    def construct_species_query(text):
+    def construct_species_query(self, text):
         '''
         Constructs a string for every two adjacent words in the text and returns them as a list.
         '''
