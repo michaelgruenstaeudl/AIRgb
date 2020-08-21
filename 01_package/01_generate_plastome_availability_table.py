@@ -75,15 +75,16 @@ def main(args):
 	outfn = os.path.abspath(args.outfn)
 
 	if args.blacklist:
-		tio = Table_IO.Table_IO(outfn, fp_blacklist = args.blacklist)
+		tio = Table_IO.Table_IO(outfn, fp_blacklist = args.blacklist, logger = log)
 	else:
-		tio = Table_IO(outfn)
+		tio = Table_IO(outfn, logger = log)
 	fp_duplicates = os.path.join(os.path.dirname(outfn), os.path.basename(outfn) + ".duplicates")
 	if os.path.isfile(fp_duplicates):
 		tio.read_duplicates(fp_duplicates)
+		uids_already_processed.extend(tio.duplicates.keys())
 
 	if len(tio.entry_table) > 0:
-		uids_already_processed = list(tio.entry_table.index.values)
+		uids_already_processed.extend(list(tio.entry_table.index.values))
 		log.info("Summary file '%s' already exists. Number of UIDs read: %s" % (str(outfn), str(len(uids_already_processed))))
 		if args.update_only:
 			min_date = datetime.strptime(tio.entry_table["CREATE_DATE"].max(), '%Y-%m-%d')
