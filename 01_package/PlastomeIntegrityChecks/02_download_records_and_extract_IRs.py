@@ -53,6 +53,8 @@ NOTES:
 #####################
 from Bio import SeqIO
 from fuzzywuzzy import fuzz
+from ete3 import NCBITaxa
+from pathlib import Path
 import PlastomeIntegrityChecks as pic
 import pandas as pd
 import os, argparse
@@ -77,6 +79,8 @@ import ipdb
 # FUNCTIONS #
 #############
 
+
+
 def main(args):
 
   # STEP 1. Set up logger
@@ -89,17 +93,17 @@ def main(args):
 	iro = pic.IR_Operations(log)
 	EI = pic.Entrez_Interaction(log)
   # STEP 2. Read in accession numbers to loop over
-	
-	pa = pic.Plastome_Availability(args.infn, args.outfn, args.blacklistfn)
-	pa.remove_blacklisted_entries()
-	
-	accessions = list(pa.entry_table["ACCESSION"].values)
+
+	tio = pic.Table_IO(args.infn, args.outfn, args.blacklistfn, log)
+	tio.remove_blacklisted_entries()
+
+	accessions = list(tio.entry_table["ACCESSION"].values)
 	if len(accessions) > 0:
 		if not os.path.exists(args.recordsdir):
 			os.makedirs(args.recordsdir)
 		if not os.path.exists(args.datadir):
 			os.makedirs(args.datadir)
-			
+
 	for accession in accessions:
 		acc_folder = os.path.join(args.datadir, str(accession))
 		if not os.path.exists(acc_folder):
@@ -107,7 +111,7 @@ def main(args):
 		else:
 			log.warning("Folder for accession `%s` already exists. Skipping this accession." % (str(accession)))
 			continue
-		
+
 		log.info("Saving GenBank flat file for accession `%s`." % (str(accession)))
 		try:
 			fp_entry = EI.fetch_gb_entry(accession, acc_folder)
@@ -115,7 +119,7 @@ def main(args):
 			log.warning("Error retrieving accession `%s`. Skipping this accession." % (str(accession)))
 			os.rmdir(acc_folder)
 			continue
-			
+
 		try:
 			try:
 				rec = SeqIO.read(fp_entry, "genbank")
@@ -123,7 +127,7 @@ def main(args):
 				raise Exception("Error reading record of accession `%s`: %s. Skipping this accession." %
 				(str(accession), str(err)))
 				continue
-						
+
 			rec_id = str(rec.id).split('.')[0]
 			# Note: This internal check ensures that we are actually dealing with the record that was
 			# intended to be downloaded via efetch.
@@ -133,12 +137,12 @@ def main(args):
 				continue
 			log.info("Writing sequence as FASTA for accession `%s`." % (str(accession)))
 			iro.write_sequence_to_fasta(str(rec.seq), ">" + str(accession) + "_completeSequence", os.path.join(acc_folder, str(accession) + "_completeSeq.fasta"))
-			
+
 			ira_feature = None
 			irb_feature = None
 			irb_feature = None
-			if not str(accession) in pa.ir_table.index:
-				pa.ir_table = pa.ir_table.append(pd.Series(name=str(accession)))
+			if not str(accession) in tio.ir_table.index:
+				tio.ir_table = tio.ir_table.append(pd.Series(name=str(accession)))
 			try:
 				ira_feature, irb_feature = iro.identify_inverted_repeats(rec, 1000)
 				rev_comp = False
@@ -150,15 +154,15 @@ def main(args):
 					if score_noRC < score_RC:
 						rev_comp = True
 				ir_info = iro.collect_info_from_features(ira_feature, irb_feature)
-				pa.ir_table.loc[accession] = ir_info
-				pa.append_ir_info_to_table(ir_info, accession, args.outfn)
+				tio.ir_table.loc[accession] = ir_info
+				tio.append_ir_info_to_table(ir_info, accession, args.outfn)
 			except Exception as err:
 				ir_info = iro.collect_info_from_features(ira_feature, irb_feature)
-				pa.ir_table.loc[accession] = ir_info
-				pa.append_ir_info_to_table(ir_info, accession, args.outfn)
+				tio.ir_table.loc[accession] = ir_info
+				tio.append_ir_info_to_table(ir_info, accession, args.outfn)
 				raise Exception("Error while extracting IRs for accession `%s`: %s Skipping further processing of this accession." % (str(accession), str(err)))
 				continue
-			pa.ir_table.loc[accession] = iro.collect_info_from_features(ira_feature, irb_feature)			
+			tio.ir_table.loc[accession] = iro.collect_info_from_features(ira_feature, irb_feature)
 			# TODO: Currently, nothing is done with the table object, since the file is written entry-wise. Remove full table from use?
 			iro.write_irs_to_fasta(rec, ira_feature, irb_feature, acc_folder, rev_comp)
 		except Exception as err:
@@ -168,6 +172,19 @@ def main(args):
 			tar.add(fp_entry, os.path.basename(fp_entry))
 			tar.close()
 			os.remove(fp_entry)
+
+	am = pic.Article_Mining(log)
+	articles = EI.fetch_pubmed_articles(args.mail, args.query)
+	ncbi = NCBITaxa()
+	# Update database if it is older than 1 month
+	if (time.time() - os.path.getmtime(os.path.join(Path.home(), ".etetoolkit/taxa.sqlite"))) > 2592000:
+        ncbi.update_taxonomy_database()
+	article_genera = set()
+	for article in articles:
+		article_genera.union(am.get_genera_from_pubmed_article(article, ncbi))
+	tio.read_ir_table(args.outfn)
+	tio.remove_naturally_irl_genera(article_genera)
+	tio.write_ir_table(args.outfn)
 
 ########
 # MAIN #
@@ -181,5 +198,9 @@ if __name__ == "__main__":
 	parser.add_argument("--datadir", "-d", type=str, required=False, default="./data/", help="path to data directory")
 	parser.add_argument("--verbose", "-v", action="store_true", required=False, default=False, help="Enable verbose logging.")
 	parser.add_argument("--blacklistfn", "-b", type=str, required=False, help="path to taxonomy blacklist")
+	#parser.add_argument("--query", "-q", type=str, required=False, default="inverted[TITLE] AND repeat[TITLE] AND loss[TITLE]" help="query to find pubmed articles describing inverted repeat loss")
+	#parser.add_argument("--mail", "-m", type=str, required=False, help="Mail account for entrez search")
 	args = parser.parse_args()
+	#if bool(args.query) ^ bool(args.mail):
+	#	parser.error("--query and --mail must be given together")
 	main(args)
