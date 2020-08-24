@@ -36,8 +36,8 @@ import os.path
 import argparse
 import coloredlogs, logging
 import pandas as pd
-from PlastomeIntegrityChecks import Entrez_Interaction
-from PlastomeIntegrityChecks import Table_IO
+from PIRPy import Entrez_Interaction
+from PIRPy import Table_IO
 from datetime import datetime
 
 ###############

@@ -2,9 +2,9 @@ import setuptools
 
 with open("README.md", "r") as fh:
 	long_description = fh.read()
-	
+
 setuptools.setup(
-	name="plastome-integrity-checks",
+	name="PIRPy",
 	version="0.0.1"
 	author="Tilman Mehl"
 	author_email="tilmanmehl@zedat.fu-berlin.de",

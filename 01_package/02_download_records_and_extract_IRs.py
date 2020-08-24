@@ -55,10 +55,10 @@ from Bio import SeqIO
 from fuzzywuzzy import fuzz
 from ete3 import NCBITaxa
 from pathlib import Path
-from PlastomeIntegrityChecks import Entrez_Interaction
-from PlastomeIntegrityChecks import Table_IO
-from PlastomeIntegrityChecks import Article_Mining
-from PlastomeIntegrityChecks import IR_Operations
+from PIRPy import Entrez_Interaction
+from PIRPy import Table_IO
+from PIRPy import Article_Mining
+from PIRPy import IR_Operations
 import pandas as pd
 import os, argparse
 import tarfile, coloredlogs, logging

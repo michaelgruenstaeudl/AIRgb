@@ -1,6 +1,6 @@
 import os, logging
 import pandas as pd
-from PlastomeIntegrityChecks import fetchpubmed
+from PIRPy import fetchpubmed
 
 class Table_IO:
 
