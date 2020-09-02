@@ -55,10 +55,10 @@ from Bio import SeqIO
 from fuzzywuzzy import fuzz
 from ete3 import NCBITaxa
 from pathlib import Path
-from PIRPy import Entrez_Interaction
-from PIRPy import Table_IO
-from PIRPy import Article_Mining
-from PIRPy import IR_Operations
+from AIRgb import Entrez_Interaction
+from AIRgb import Table_IO
+from AIRgb import Article_Mining
+from AIRgb import IR_Operations
 import pandas as pd
 import os, argparse
 import tarfile, coloredlogs, logging
@@ -69,14 +69,14 @@ import time
 ###############
 __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 			 'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
-__copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
+__copyright__ = 'Copyright (C) 2019-2020 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Compare IRs for a series of IR FASTA files'
-__version__ = '2020.01.27.1700'
+__version__ = '2020.08.31.1930'
 
 #############
 # DEBUGGING #
 #############
-import ipdb
+#import ipdb
 # ipdb.set_trace()
 
 #############
@@ -97,9 +97,9 @@ def main(args):
 	query = args.query
 	iro = IR_Operations.IR_Operations(log)
 	EI = Entrez_Interaction.Entrez_Interaction(log)
-  # STEP 2. Read in accession numbers to loop over
 
-	tio = Table_IO.Table_IO(args.infn, args.outfn, args.blacklistfn, logger = log)
+  # STEP 2. Read in accession numbers to loop over
+	tio = Table_IO.Table_IO(args.infn, args.outfn, args.blacklist, logger = log)
 	tio.remove_blacklisted_entries()
 
 	accessions = list(tio.entry_table["ACCESSION"].values)
@@ -109,6 +109,7 @@ def main(args):
 		if not os.path.exists(args.datadir):
 			os.makedirs(args.datadir)
 
+  # STEP 3. Loop over accession in inlist
 	for accession in accessions:
 		acc_folder = os.path.join(args.datadir, str(accession))
 		if not os.path.exists(acc_folder):
@@ -129,7 +130,7 @@ def main(args):
 			try:
 				rec = SeqIO.read(fp_entry, "genbank")
 			except Exception as err:
-				raise Exception("Error reading record of accession `%s`: %s. Skipping this accession." %
+				raise Exception("Error reading record of accession `%s`: `%s`. Skipping this accession." %
 				(str(accession), str(err)))
 				continue
 
@@ -144,7 +145,6 @@ def main(args):
 			iro.write_sequence_to_fasta(str(rec.seq), ">" + str(accession) + "_completeSequence", os.path.join(acc_folder, str(accession) + "_completeSeq.fasta"))
 
 			ira_feature = None
-			irb_feature = None
 			irb_feature = None
 			if not str(accession) in tio.ir_table.index:
 				tio.ir_table = tio.ir_table.append(pd.Series(name=str(accession)))
@@ -165,7 +165,7 @@ def main(args):
 				ir_info = iro.collect_info_from_features(ira_feature, irb_feature)
 				tio.ir_table.loc[accession] = ir_info
 				tio.append_ir_info_to_table(ir_info, accession, args.outfn)
-				raise Exception("Error while extracting IRs for accession `%s`: %s Skipping further processing of this accession." % (str(accession), str(err)))
+				raise Exception("Error while extracting IRs for accession `%s`: `%s`. Skipping further processing of this accession." % (str(accession), str(err)))
 				continue
 			tio.ir_table.loc[accession] = iro.collect_info_from_features(ira_feature, irb_feature)
 			# TODO: Currently, nothing is done with the table object, since the file is written entry-wise. Remove full table from use?
@@ -178,6 +178,7 @@ def main(args):
 			tar.close()
 			os.remove(fp_entry)
 
+  # STEP 4. Check any accession for IR loss and remove from outlist if necessary
 	am = Article_Mining.Article_Mining(log)
 	articles = EI.fetch_pubmed_articles(mail, query)
 	ncbi = NCBITaxa()
@@ -191,6 +192,7 @@ def main(args):
 	tio.remove_naturally_irl_genera(article_genera)
 	tio.write_ir_table(args.outfn)
 
+
 ########
 # MAIN #
 ########
@@ -202,7 +204,7 @@ if __name__ == "__main__":
 	parser.add_argument("--recordsdir", "-r", type=str, required=False, default="./records/", help="path to records directory")
 	parser.add_argument("--datadir", "-d", type=str, required=False, default="./data/", help="path to data directory")
 	parser.add_argument("--verbose", "-v", action="store_true", required=False, default=False, help="Enable verbose logging.")
-	parser.add_argument("--blacklistfn", "-b", type=str, required=False, help="path to taxonomy blacklist")
+	parser.add_argument("--blacklist", "-b", type=str, required=False, help="path to taxonomy blacklist")
 	parser.add_argument("--query", "-q", type=str, required=False, default="inverted[TITLE] AND repeat[TITLE] AND loss[TITLE]", help="query to find pubmed articles describing inverted repeat loss")
 	#parser.add_argument("--mail", "-m", type=str, required=False, help="Mail account for entrez search")
 	args = parser.parse_args()

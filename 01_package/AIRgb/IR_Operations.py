@@ -296,7 +296,7 @@ class IR_Operations:
 			if IRa is None:
 				if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in ira_identifiers) and \
 				  not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
-					self.log.debug("Found identifier for IRa: " % str(misc_feature.qualifiers["note"][0]))
+					self.log.debug("Found identifier for IRa: `%s`" % str(misc_feature.qualifiers["note"][0]))
 					if len(misc_feature) > 100:
 						IRa = misc_feature
 					else:
@@ -304,7 +304,7 @@ class IR_Operations:
 			if IRb is None:
 				if any(identifier in misc_feature.qualifiers["note"][0].lower() for identifier in irb_identifiers) and \
 				  not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
-					self.log.debug("Found identifier for IRb: %s" % str(misc_feature.qualifiers["note"][0]))
+					self.log.debug("Found identifier for IRb: `%s`" % str(misc_feature.qualifiers["note"][0]))
 					if len(misc_feature) > 100:
 						IRb = misc_feature
 					else:
@@ -316,7 +316,7 @@ class IR_Operations:
 				  "repeat" in misc_feature.qualifiers["note"][0].lower()) or \
 				  "IR" in misc_feature.qualifiers["note"][0]) and \
 				  not any(blocked in misc_feature.qualifiers["note"][0].lower() for blocked in blacklist):
-					self.log.debug("Found general identifier for IRs: %s" % str(misc_feature.qualifiers["note"][0]))
+					self.log.debug("Found general identifier for IRs: `%s`" % str(misc_feature.qualifiers["note"][0]))
 					if len(misc_feature) > 100:
 						if IRb is None:
 							self.log.debug("Assign feature as IRb")

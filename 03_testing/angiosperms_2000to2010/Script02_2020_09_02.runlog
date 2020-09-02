@@ -1,0 +1,243 @@
+2020-09-02 19:05:25 [INFO] Blacklist is empty. No entries removed.
+2020-09-02 19:05:25 [INFO] Saving GenBank flat file for accession `AP009123`.
+2020-09-02 19:05:28 [INFO] Writing sequence as FASTA for accession `AP009123`.
+2020-09-02 19:05:30 [INFO] Saving GenBank flat file for accession `AM712908`.
+2020-09-02 19:05:32 [INFO] Writing sequence as FASTA for accession `AM712908`.
+2020-09-02 19:05:32 [WARNING] Error while extracting IRs for accession `AM712908`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:05:32 [INFO] Saving GenBank flat file for accession `EU090187`.
+2020-09-02 19:05:34 [INFO] Writing sequence as FASTA for accession `EU090187`.
+2020-09-02 19:05:34 [WARNING] Error while extracting IRs for accession `EU090187`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:05:34 [INFO] Saving GenBank flat file for accession `NC_002762`.
+2020-09-02 19:05:37 [INFO] Writing sequence as FASTA for accession `NC_002762`.
+2020-09-02 19:05:40 [INFO] Saving GenBank flat file for accession `AY522330`.
+2020-09-02 19:05:42 [INFO] Writing sequence as FASTA for accession `AY522330`.
+2020-09-02 19:05:42 [WARNING] Error while extracting IRs for accession `AY522330`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:05:42 [INFO] Saving GenBank flat file for accession `EF380351`.
+2020-09-02 19:05:44 [INFO] Writing sequence as FASTA for accession `EF380351`.
+2020-09-02 19:05:44 [WARNING] Error while extracting IRs for accession `EF380351`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:05:44 [INFO] Saving GenBank flat file for accession `EU189132`.
+2020-09-02 19:05:47 [INFO] Writing sequence as FASTA for accession `EU189132`.
+2020-09-02 19:05:47 [WARNING] Error while extracting IRs for accession `EU189132`: `Record does not contain any features which the single-copy regions are typically marked with (i.e., feature `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:05:47 [INFO] Saving GenBank flat file for accession `EU189133`.
+2020-09-02 19:05:49 [INFO] Writing sequence as FASTA for accession `EU189133`.
+2020-09-02 19:05:49 [WARNING] Error while extracting IRs for accession `EU189133`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:05:49 [INFO] Saving GenBank flat file for accession `DQ231562`.
+2020-09-02 19:05:51 [INFO] Writing sequence as FASTA for accession `DQ231562`.
+2020-09-02 19:05:53 [INFO] Saving GenBank flat file for accession `DQ226511`.
+2020-09-02 19:05:56 [INFO] Writing sequence as FASTA for accession `DQ226511`.
+2020-09-02 19:05:56 [WARNING] Error while extracting IRs for accession `DQ226511`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:05:56 [INFO] Saving GenBank flat file for accession `EF380354`.
+2020-09-02 19:05:59 [INFO] Writing sequence as FASTA for accession `EF380354`.
+2020-09-02 19:05:59 [WARNING] Error while extracting IRs for accession `EF380354`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:05:59 [INFO] Saving GenBank flat file for accession `DQ383816`.
+2020-09-02 19:06:01 [INFO] Writing sequence as FASTA for accession `DQ383816`.
+2020-09-02 19:06:01 [WARNING] Error while extracting IRs for accession `DQ383816`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:06:01 [INFO] Saving GenBank flat file for accession `AJ627251`.
+2020-09-02 19:06:04 [INFO] Writing sequence as FASTA for accession `AJ627251`.
+2020-09-02 19:06:04 [WARNING] Error while extracting IRs for accession `AJ627251`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:06:04 [INFO] Saving GenBank flat file for accession `AY916449`.
+2020-09-02 19:06:07 [INFO] Writing sequence as FASTA for accession `AY916449`.
+2020-09-02 19:06:10 [INFO] Saving GenBank flat file for accession `DQ119058`.
+2020-09-02 19:06:12 [INFO] Writing sequence as FASTA for accession `DQ119058`.
+2020-09-02 19:06:14 [INFO] Saving GenBank flat file for accession `NC_002694`.
+2020-09-02 19:06:17 [INFO] Writing sequence as FASTA for accession `NC_002694`.
+2020-09-02 19:06:17 [WARNING] Error while extracting IRs for accession `NC_002694`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:06:17 [INFO] Saving GenBank flat file for accession `AJ970307`.
+2020-09-02 19:06:20 [INFO] Writing sequence as FASTA for accession `AJ970307`.
+2020-09-02 19:06:20 [WARNING] Error while extracting IRs for accession `AJ970307`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:06:20 [INFO] Saving GenBank flat file for accession `AY522331`.
+2020-09-02 19:06:22 [INFO] Writing sequence as FASTA for accession `AY522331`.
+2020-09-02 19:06:22 [WARNING] Error while extracting IRs for accession `AY522331`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:06:22 [INFO] Saving GenBank flat file for accession `GU228899`.
+2020-09-02 19:06:24 [INFO] Writing sequence as FASTA for accession `GU228899`.
+2020-09-02 19:06:24 [WARNING] Error while extracting IRs for accession `GU228899`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:06:25 [INFO] Saving GenBank flat file for accession `FJ695500`.
+2020-09-02 19:06:27 [INFO] Writing sequence as FASTA for accession `FJ695500`.
+2020-09-02 19:06:27 [WARNING] Error while extracting IRs for accession `FJ695500`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:06:28 [INFO] Saving GenBank flat file for accession `DQ897681`.
+2020-09-02 19:06:31 [INFO] Writing sequence as FASTA for accession `DQ897681`.
+2020-09-02 19:06:47 [INFO] Saving GenBank flat file for accession `AP006714`.
+2020-09-02 19:06:49 [INFO] Writing sequence as FASTA for accession `AP006714`.
+2020-09-02 19:06:49 [WARNING] Error while extracting IRs for accession `AP006714`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:06:49 [INFO] Saving GenBank flat file for accession `DQ345959`.
+2020-09-02 19:06:52 [INFO] Writing sequence as FASTA for accession `DQ345959`.
+2020-09-02 19:06:52 [WARNING] Error while extracting IRs for accession `DQ345959`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:06:52 [INFO] Saving GenBank flat file for accession `FJ597983`.
+2020-09-02 19:06:55 [INFO] Writing sequence as FASTA for accession `FJ597983`.
+2020-09-02 19:06:57 [INFO] Saving GenBank flat file for accession `EU196765`.
+2020-09-02 19:07:00 [INFO] Writing sequence as FASTA for accession `EU196765`.
+2020-09-02 19:07:02 [INFO] Saving GenBank flat file for accession `AJ271079`.
+2020-09-02 19:07:04 [INFO] Writing sequence as FASTA for accession `AJ271079`.
+2020-09-02 19:07:06 [INFO] Saving GenBank flat file for accession `EF380353`.
+2020-09-02 19:07:09 [INFO] Writing sequence as FASTA for accession `EF380353`.
+2020-09-02 19:07:09 [WARNING] Error while extracting IRs for accession `EF380353`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:07:09 [INFO] Saving GenBank flat file for accession `AP006728`.
+2020-09-02 19:07:13 [INFO] Writing sequence as FASTA for accession `AP006728`.
+2020-09-02 19:07:16 [INFO] Saving GenBank flat file for accession `AP008956`.
+2020-09-02 19:07:18 [INFO] Writing sequence as FASTA for accession `AP008956`.
+2020-09-02 19:07:18 [WARNING] Error while extracting IRs for accession `AP008956`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:07:18 [INFO] Saving GenBank flat file for accession `EF489041`.
+2020-09-02 19:07:21 [INFO] Writing sequence as FASTA for accession `EF489041`.
+2020-09-02 19:07:23 [INFO] Saving GenBank flat file for accession `EU273602`.
+2020-09-02 19:07:26 [INFO] Writing sequence as FASTA for accession `EU273602`.
+2020-09-02 19:07:28 [INFO] Saving GenBank flat file for accession `EU254477`.
+2020-09-02 19:07:30 [INFO] Writing sequence as FASTA for accession `EU254477`.
+2020-09-02 19:07:30 [WARNING] Error while extracting IRs for accession `EU254477`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:07:31 [INFO] Saving GenBank flat file for accession `DQ386163`.
+2020-09-02 19:07:33 [INFO] Writing sequence as FASTA for accession `DQ386163`.
+2020-09-02 19:07:35 [INFO] Saving GenBank flat file for accession `AE009947`.
+2020-09-02 19:07:38 [INFO] Writing sequence as FASTA for accession `AE009947`.
+2020-09-02 19:07:38 [WARNING] Error while extracting IRs for accession `AE009947`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:07:38 [INFO] Saving GenBank flat file for accession `EF115541`.
+2020-09-02 19:07:40 [INFO] Writing sequence as FASTA for accession `EF115541`.
+2020-09-02 19:07:40 [WARNING] Error while extracting IRs for accession `EF115541`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:07:40 [INFO] Saving GenBank flat file for accession `GQ870669`.
+2020-09-02 19:07:42 [INFO] Writing sequence as FASTA for accession `GQ870669`.
+2020-09-02 19:07:44 [INFO] Saving GenBank flat file for accession `AP007232`.
+2020-09-02 19:07:47 [INFO] Writing sequence as FASTA for accession `AP007232`.
+2020-09-02 19:07:47 [WARNING] Error while extracting IRs for accession `AP007232`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:07:47 [INFO] Saving GenBank flat file for accession `AY928077`.
+2020-09-02 19:07:48 [INFO] Writing sequence as FASTA for accession `AY928077`.
+2020-09-02 19:07:48 [WARNING] Error while extracting IRs for accession `AY928077`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:07:48 [INFO] Saving GenBank flat file for accession `GQ861354`.
+2020-09-02 19:07:51 [INFO] Writing sequence as FASTA for accession `GQ861354`.
+2020-09-02 19:07:51 [WARNING] Error while extracting IRs for accession `GQ861354`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:07:51 [INFO] Saving GenBank flat file for accession `DQ923116`.
+2020-09-02 19:07:53 [INFO] Writing sequence as FASTA for accession `DQ923116`.
+2020-09-02 19:07:55 [INFO] Saving GenBank flat file for accession `EF044213`.
+2020-09-02 19:07:57 [INFO] Writing sequence as FASTA for accession `EF044213`.
+2020-09-02 19:07:57 [WARNING] Error while extracting IRs for accession `EF044213`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:07:58 [INFO] Saving GenBank flat file for accession `EU118126`.
+2020-09-02 19:08:00 [INFO] Writing sequence as FASTA for accession `EU118126`.
+2020-09-02 19:08:00 [WARNING] Error while extracting IRs for accession `EU118126`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:08:00 [INFO] Saving GenBank flat file for accession `DQ886273`.
+2020-09-02 19:08:02 [INFO] Writing sequence as FASTA for accession `DQ886273`.
+2020-09-02 19:08:02 [WARNING] Error while extracting IRs for accession `DQ886273`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:08:02 [INFO] Saving GenBank flat file for accession `AY780259`.
+2020-09-02 19:08:05 [INFO] Writing sequence as FASTA for accession `AY780259`.
+2020-09-02 19:08:07 [INFO] Saving GenBank flat file for accession `DQ898156`.
+2020-09-02 19:08:10 [INFO] Writing sequence as FASTA for accession `DQ898156`.
+2020-09-02 19:08:10 [WARNING] Error while extracting IRs for accession `DQ898156`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:08:10 [INFO] Saving GenBank flat file for accession `AB042240`.
+2020-09-02 19:08:12 [INFO] Writing sequence as FASTA for accession `AB042240`.
+2020-09-02 19:08:12 [WARNING] Error while extracting IRs for accession `AB042240`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:08:12 [INFO] Saving GenBank flat file for accession `EF614270`.
+2020-09-02 19:08:15 [INFO] Writing sequence as FASTA for accession `EF614270`.
+2020-09-02 19:08:17 [INFO] Saving GenBank flat file for accession `EF115542`.
+2020-09-02 19:08:19 [INFO] Writing sequence as FASTA for accession `EF115542`.
+2020-09-02 19:08:19 [WARNING] Error while extracting IRs for accession `EF115542`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:08:19 [INFO] Saving GenBank flat file for accession `FJ970916`.
+2020-09-02 19:08:22 [INFO] Writing sequence as FASTA for accession `FJ970916`.
+2020-09-02 19:08:23 [INFO] Saving GenBank flat file for accession `NC_005086`.
+2020-09-02 19:08:27 [INFO] Writing sequence as FASTA for accession `NC_005086`.
+2020-09-02 19:08:27 [WARNING] Error while extracting IRs for accession `NC_005086`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:08:27 [INFO] Saving GenBank flat file for accession `DQ887677`.
+2020-09-02 19:08:29 [INFO] Writing sequence as FASTA for accession `DQ887677`.
+2020-09-02 19:08:29 [WARNING] Error while extracting IRs for accession `DQ887677`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:08:29 [INFO] Saving GenBank flat file for accession `EU262891`.
+2020-09-02 19:08:32 [INFO] Writing sequence as FASTA for accession `EU262891`.
+2020-09-02 19:08:34 [INFO] Saving GenBank flat file for accession `FJ466687`.
+2020-09-02 19:08:37 [INFO] Writing sequence as FASTA for accession `FJ466687`.
+2020-09-02 19:08:37 [WARNING] Error while extracting IRs for accession `FJ466687`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:08:37 [INFO] Saving GenBank flat file for accession `EU262890`.
+2020-09-02 19:08:39 [INFO] Writing sequence as FASTA for accession `EU262890`.
+2020-09-02 19:08:42 [INFO] Saving GenBank flat file for accession `DQ865976`.
+2020-09-02 19:08:44 [INFO] Writing sequence as FASTA for accession `DQ865976`.
+2020-09-02 19:08:44 [WARNING] Error while extracting IRs for accession `DQ865976`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:08:44 [INFO] Saving GenBank flat file for accession `EU262889`.
+2020-09-02 19:08:47 [INFO] Writing sequence as FASTA for accession `EU262889`.
+2020-09-02 19:08:49 [INFO] Saving GenBank flat file for accession `DQ923117`.
+2020-09-02 19:08:51 [INFO] Writing sequence as FASTA for accession `DQ923117`.
+2020-09-02 19:08:53 [INFO] Saving GenBank flat file for accession `EU262887`.
+2020-09-02 19:08:57 [INFO] Writing sequence as FASTA for accession `EU262887`.
+2020-09-02 19:08:59 [INFO] Saving GenBank flat file for accession `FJ970915`.
+2020-09-02 19:09:01 [INFO] Writing sequence as FASTA for accession `FJ970915`.
+2020-09-02 19:09:01 [WARNING] Error while extracting IRs for accession `FJ970915`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:01 [INFO] Saving GenBank flat file for accession `DQ899947`.
+2020-09-02 19:09:04 [INFO] Writing sequence as FASTA for accession `DQ899947`.
+2020-09-02 19:09:04 [WARNING] Error while extracting IRs for accession `DQ899947`: `End location (88151) must be greater than or equal to start location (133500)`. Skipping further processing of this accession.
+2020-09-02 19:09:04 [INFO] Saving GenBank flat file for accession `EU325680`.
+2020-09-02 19:09:07 [INFO] Writing sequence as FASTA for accession `EU325680`.
+2020-09-02 19:09:09 [INFO] Saving GenBank flat file for accession `DQ865975`.
+2020-09-02 19:09:11 [INFO] Writing sequence as FASTA for accession `DQ865975`.
+2020-09-02 19:09:11 [WARNING] Error while extracting IRs for accession `DQ865975`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:09:11 [INFO] Saving GenBank flat file for accession `DQ864733`.
+2020-09-02 19:09:14 [INFO] Writing sequence as FASTA for accession `DQ864733`.
+2020-09-02 19:09:14 [WARNING] Error while extracting IRs for accession `DQ864733`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:14 [INFO] Saving GenBank flat file for accession `EU549769`.
+2020-09-02 19:09:17 [INFO] Writing sequence as FASTA for accession `EU549769`.
+2020-09-02 19:09:17 [WARNING] Error while extracting IRs for accession `EU549769`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:17 [INFO] Saving GenBank flat file for accession `EF115543`.
+2020-09-02 19:09:19 [INFO] Writing sequence as FASTA for accession `EF115543`.
+2020-09-02 19:09:19 [WARNING] Error while extracting IRs for accession `EF115543`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:19 [INFO] Saving GenBank flat file for accession `EF380352`.
+2020-09-02 19:09:22 [INFO] Writing sequence as FASTA for accession `EF380352`.
+2020-09-02 19:09:22 [WARNING] Error while extracting IRs for accession `EF380352`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:22 [INFO] Saving GenBank flat file for accession `AP002983`.
+2020-09-02 19:09:25 [INFO] Writing sequence as FASTA for accession `AP002983`.
+2020-09-02 19:09:25 [WARNING] Error while extracting IRs for accession `AP002983`: `Record does not contain any qualifiers for feature `misc_feature` which the IRs are typically named with (i.e., qualifier `note`).`. Skipping further processing of this accession.
+2020-09-02 19:09:25 [INFO] Saving GenBank flat file for accession `AJ879453`.
+2020-09-02 19:09:27 [INFO] Writing sequence as FASTA for accession `AJ879453`.
+2020-09-02 19:09:27 [WARNING] Error while extracting IRs for accession `AJ879453`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:27 [INFO] Saving GenBank flat file for accession `EU117376`.
+2020-09-02 19:09:30 [INFO] Writing sequence as FASTA for accession `EU117376`.
+2020-09-02 19:09:30 [WARNING] Error while extracting IRs for accession `EU117376`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:09:30 [INFO] Saving GenBank flat file for accession `DQ424856`.
+2020-09-02 19:09:32 [INFO] Writing sequence as FASTA for accession `DQ424856`.
+2020-09-02 19:09:32 [WARNING] Error while extracting IRs for accession `DQ424856`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:32 [INFO] Saving GenBank flat file for accession `DQ887676`.
+2020-09-02 19:09:35 [INFO] Writing sequence as FASTA for accession `DQ887676`.
+2020-09-02 19:09:35 [WARNING] Error while extracting IRs for accession `DQ887676`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:35 [INFO] Saving GenBank flat file for accession `DQ673255`.
+2020-09-02 19:09:37 [INFO] Writing sequence as FASTA for accession `DQ673255`.
+2020-09-02 19:09:37 [WARNING] Error while extracting IRs for accession `DQ673255`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:38 [INFO] Saving GenBank flat file for accession `FJ212316`.
+2020-09-02 19:09:40 [INFO] Writing sequence as FASTA for accession `FJ212316`.
+2020-09-02 19:09:40 [WARNING] Error while extracting IRs for accession `FJ212316`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:40 [INFO] Saving GenBank flat file for accession `FJ261955`.
+2020-09-02 19:09:43 [INFO] Writing sequence as FASTA for accession `FJ261955`.
+2020-09-02 19:09:43 [WARNING] Error while extracting IRs for accession `FJ261955`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:43 [INFO] Saving GenBank flat file for accession `DQ347958`.
+2020-09-02 19:09:46 [INFO] Writing sequence as FASTA for accession `DQ347958`.
+2020-09-02 19:09:46 [WARNING] Error while extracting IRs for accession `DQ347958`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:09:46 [INFO] Saving GenBank flat file for accession `DQ400350`.
+2020-09-02 19:09:48 [INFO] Writing sequence as FASTA for accession `DQ400350`.
+2020-09-02 19:09:51 [INFO] Saving GenBank flat file for accession `DQ359689`.
+2020-09-02 19:09:54 [INFO] Writing sequence as FASTA for accession `DQ359689`.
+2020-09-02 19:10:12 [INFO] Saving GenBank flat file for accession `EU431223`.
+2020-09-02 19:10:15 [INFO] Writing sequence as FASTA for accession `EU431223`.
+2020-09-02 19:10:17 [INFO] Saving GenBank flat file for accession `DQ354691`.
+2020-09-02 19:10:19 [INFO] Writing sequence as FASTA for accession `DQ354691`.
+2020-09-02 19:10:21 [INFO] Saving GenBank flat file for accession `DQ317523`.
+2020-09-02 19:10:24 [INFO] Writing sequence as FASTA for accession `DQ317523`.
+2020-09-02 19:10:24 [WARNING] Error while extracting IRs for accession `DQ317523`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:10:24 [INFO] Saving GenBank flat file for accession `AY522329`.
+2020-09-02 19:10:27 [INFO] Writing sequence as FASTA for accession `AY522329`.
+2020-09-02 19:10:27 [WARNING] Error while extracting IRs for accession `AY522329`: `Record does not contain the information necessary to infer the position of either the IR or the single-copy regions.`. Skipping further processing of this accession.
+2020-09-02 19:10:27 [INFO] Saving GenBank flat file for accession `AY582139`.
+2020-09-02 19:10:30 [INFO] Writing sequence as FASTA for accession `AY582139`.
+2020-09-02 19:10:30 [WARNING] Error while extracting IRs for accession `AY582139`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:10:30 [INFO] Saving GenBank flat file for accession `DQ383815`.
+2020-09-02 19:10:32 [INFO] Writing sequence as FASTA for accession `DQ383815`.
+2020-09-02 19:10:32 [WARNING] Error while extracting IRs for accession `DQ383815`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+2020-09-02 19:10:32 [INFO] Saving GenBank flat file for accession `DQ347959`.
+2020-09-02 19:10:36 [INFO] Writing sequence as FASTA for accession `DQ347959`.
+2020-09-02 19:10:36 [WARNING] Error while extracting IRs for accession `DQ347959`: `Record does not contain any features which the IR are typically marked with (i.e., feature `repeat_region`, `misc_feature`).`. Skipping further processing of this accession.
+{"entrezpy.conduit": {"Inquiring": {"query_id": "-Y8n5aw-TCCBkyuJUE2w9g==", "function": "esearch"}}}
+{"entrezpy.requester.requester": {"settings": {"wait[s]": 0.3333333333333333, "timeout-min[s]": 10, "timeout-max[s]": 60, "timeout-increase[s]": 5, "max-retries": 9}}}
+{"entrezpy.esearch.esearcher": {"Parameter": {"db": "pubmed", "webenv": null, "querykey": 0, "usehistory": true, "term": "inverted[TITLE] AND repeat[TITLE] AND loss[TITLE]", "retmode": "json", "uilist": false, "retmax": 0, "retstart": 0, "sort": null, "field": null, "datetype": null, "reldate": null, "mindate": null, "maxdate": null, "expected_requsts": 1, "request_size": 0, "max_request_size": 100000}}}
+{"entrezpy.esearch.esearch_request": {"Init": {"id": null, "query-id": null, "retstart": 0, "retmax": 0}}}
+{"entrezpy.esearch.esearch_request": {"POST": {"id": 0, "query-id": "-Y8n5aw-TCCBkyuJUE2w9g==", "dump": {"retmax": 0, "retstart": 0, "retmode": "json", "usehistory": true, "WebEnv": null, "query_key": 0, "sort": null, "field": null, "datetype": null, "reldate": null, "mindate": null, "maxdate": null, "eutil": "esearch.fcgi", "db": "pubmed", "id": 0, "query_id": "-Y8n5aw-TCCBkyuJUE2w9g==", "tool": "entrezpyConduit", "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi", "email": "tilmanmehl@fu-berlin.de", "request_error": null, "size": 1, "apikey": null}}}}
+{"entrezpy.requester.requester": {"Request": {"try": 0, "req-id": 0, "req-query": "-Y8n5aw-TCCBkyuJUE2w9g==", "req-url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi", "qry-url": "email=tilmanmehl%40fu-berlin.de&tool=entrezpyConduit&db=pubmed&term=inverted%5BTITLE%5D+AND+repeat%5BTITLE%5D+AND+loss%5BTITLE%5D&retmax=0&retmode=json&usehistory=y"}}}
+{"entrezpy.esearch.esearcher": {"Query status": {"-Y8n5aw-TCCBkyuJUE2w9g==": "OK"}}}
+
+
+-Y8n5aw-TCCBkyuJUE2w9g==	0	esearch.fcgi	1	0	0.5783896446228027
+{"entrezpy.conduit": {"Inquiring": {"query_id": "Pgh6lc7KSl6MCufsCnMHSg==", "function": "efetch"}}}
+{"entrezpy.requester.requester": {"settings": {"wait[s]": 0.3333333333333333, "timeout-min[s]": 10, "timeout-max[s]": 60, "timeout-increase[s]": 5, "max-retries": 9}}}
+{"entrezpy.efetch.efetcher": {"Parameter": {"db": "pubmed", "WebEnv": "MCID_5f4fd20c4296c20b30307bba", "query_key": 1, "uids": [], "retmode": "xml", "rettype": null, "retstart": 0, "retmax": 10, "strand": null, "seqstart": null, "seqstop": null, "complexity": null, "request_size": 10000, "expected_requets": 1}}}
+{"entrezpy.requester.requester": {"Request": {"try": 0, "req-id": 0, "req-query": "Pgh6lc7KSl6MCufsCnMHSg==", "req-url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi", "qry-url": "email=tilmanmehl%40fu-berlin.de&tool=entrezpyConduit&db=pubmed&retmode=xml&WebEnv=MCID_5f4fd20c4296c20b30307bba&query_key=1&retstart=0&retmax=10"}}}
+1/1	Pgh6lc7KSl6MCufsCnMHSg==	0	0	10	0	0.7038328647613525
+
+Pgh6lc7KSl6MCufsCnMHSg==	0	0	10	0	0.7038328647613525
+{"entrezpy.efetch.efetcher": {"Query status": {"Pgh6lc7KSl6MCufsCnMHSg==": "OK"}}}

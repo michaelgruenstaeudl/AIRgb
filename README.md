@@ -1,34 +1,43 @@
-*PIRPy*: Plastid IR presence checks via Python
-==============================================
-A Python package for checking the presence of inverted repeats across plastid genomes on NCBI
+*AIRgb*: Accessing the Inverted Repeats of plastid genomes on GenBank
+=====================================================================
+A Python package for automatically accessing the inverted repeats of thousands of plastid genomes stored on NCBI GenBank
 
 ## EXAMPLE USAGE
 #### SCRIPT 01: Generating plastome availability table
 ```
 # Angiosperms
-TESTFOLDER=testing_angiosperms
+TESTFOLDER=./03_testing/angiosperms_2000to2010
 DATE=$(date '+%Y_%m_%d')
-MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] AND Magnoliophyta[ORGN])'
+MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2009/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] AND Magnoliophyta[ORGN])'
 AVAILTABLE=plastome_availability_table_${DATE}.tsv
-REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
-
-# Non-angiosperm landplants
-TESTFOLDER=testing_nonangiosperm_landplants
-DATE=$(date '+%Y_%m_%d')
-MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] NOT Magnoliophyta[ORGN])'
-AVAILTABLE=plastome_availability_table_${DATE}.tsv
-REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
-
 mkdir -p $TESTFOLDER
-
-python 01_generate_plastome_availability_table.py -q "$MYQUERY" -o $TESTFOLDER/$AVAILTABLE 1>>$TESTFOLDER/Script01_${DATE}.runlog 2>&1
+```
+```
+# Non-angiosperm landplants
+TESTFOLDER=./03_testing/nonangiosperm_landplants_2000to2010
+DATE=$(date '+%Y_%m_%d')
+MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2009/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] NOT Magnoliophyta[ORGN])'
+AVAILTABLE=plastome_availability_table_${DATE}.tsv
+mkdir -p $TESTFOLDER
+```
+```
+# Defining blacklist
+if [ ! -f ./02_blacklists/BLACKLIST__master_${DATE} ]; then
+    cat $(ls ./02_blacklists/BLACKLIST__* | grep -v "master") > ./02_blacklists/BLACKLIST__master_${DATE}
+fi
+```
+```
+python ./01_package/01_generate_plastome_availability_table.py -q "$MYQUERY" -o $TESTFOLDER/$AVAILTABLE --blacklist ./02_blacklists/BLACKLIST__master_${DATE} 1>>$TESTFOLDER/Script01_${DATE}.runlog 2>&1
 ```
 
 #### SCRIPT 02: Downloading records and extracting IR information
 ```
+REPRTDSTAT=reported_IR_stats_table_${DATE}.tsv
 mkdir -p $TESTFOLDER/records_${DATE}
 mkdir -p $TESTFOLDER/data_${DATE}
-python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TESTFOLDER/records_${DATE}/ -d $TESTFOLDER/data_${DATE}/ -o $TESTFOLDER/$REPRTDSTAT 1>>$TESTFOLDER/Script02_${DATE}.runlog 2>&1
+```
+```
+python ./01_package/02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TESTFOLDER/records_${DATE}/ -d $TESTFOLDER/data_${DATE}/ -o $TESTFOLDER/$REPRTDSTAT 1>>$TESTFOLDER/Script02_${DATE}.runlog 2>&1
 ```
 
 #### FUTURE: SCRIPTS 03 and 04
@@ -37,7 +46,7 @@ python 02_download_records_and_extract_IRs.py -i $TESTFOLDER/$AVAILTABLE -r $TES
 #python3 ../PlastomeIntegrityChecks/02_download_records_and_extract_aspects.py -l $(awk 'NR > 1 {print $2}' summaries.tsv) -o .
 
 # SCRIPT 04: Comparing the IRs to generate accurate IR information
-#python3 ../PlastomeIntegrityChecks/03_compare_existing_IRs.py -o align_info.csv -i NC_*.tar.gz
+#python3 ./05_future/03_compare_existing_IRs.py -o align_info.csv -i NC_*.tar.gz
 
 ```
 

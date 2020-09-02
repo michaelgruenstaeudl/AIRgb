@@ -35,9 +35,9 @@ NOTES:
 import os.path
 import argparse
 import coloredlogs, logging
-import pandas as pd
-from PIRPy import Entrez_Interaction
-from PIRPy import Table_IO
+#import pandas as pd
+from AIRgb import Entrez_Interaction
+from AIRgb import Table_IO
 from datetime import datetime
 
 ###############
@@ -45,15 +45,15 @@ from datetime import datetime
 ###############
 __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 			 'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
-__copyright__ = 'Copyright (C) 2019 Michael Gruenstaeudl and Tilman Mehl'
+__copyright__ = 'Copyright (C) 2019-2020 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
 		   'in NCBI GenBank'
-__version__ = '2020.03.17.1230'
+__version__ = '2020.08.31.1930'
 
 #############
 # DEBUGGING #
 #############
-import ipdb
+#import ipdb
 # ipdb.set_trace()
 
 #############
@@ -77,7 +77,7 @@ def main(args):
 	if args.blacklist:
 		tio = Table_IO.Table_IO(outfn, fp_blacklist = args.blacklist, logger = log)
 	else:
-		tio = Table_IO(outfn, logger = log)
+		tio = Table_IO.Table_IO(outfn, logger = log)
 	fp_duplicates = os.path.join(os.path.dirname(outfn), os.path.basename(outfn) + ".duplicates")
 	if os.path.isfile(fp_duplicates):
 		tio.read_duplicates(fp_duplicates)
@@ -138,7 +138,7 @@ def main(args):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="  --  ".join([__author__, __copyright__, __info__, __version__]))
 	parser.add_argument("-o", "--outfn", type=str, required=True, help="path to output file")
-	parser.add_argument("-q", "--query", type=str, required=False, default="Magnoliophyta[ORGN] AND 120000:210000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) NOT unverified[TITLE] NOT partial[TITLE] AND 2000/01/01:2020/07/31[PDAT]", help="(Optional) Entrez query that will replace the standard query")
+	parser.add_argument("-q", "--query", type=str, required=False, default="complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2018/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] AND Magnoliophyta[ORGN])", help="(Optional) Entrez query that will replace the standard query")
 	parser.add_argument("-u", "--update_only", action="store_true", required=False, default=False, help="Will only add entries with more recent creation date than the most recent existing entry.")
 	parser.add_argument("-b", "--blacklist", type=str, required=False, help="path to file of blacklisted genera that will be removed from the retrieved plastid sequences.")
 	args = parser.parse_args()

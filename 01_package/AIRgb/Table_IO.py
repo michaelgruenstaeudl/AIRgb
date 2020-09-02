@@ -1,6 +1,6 @@
 import os, logging
 import pandas as pd
-from PIRPy import fetchpubmed
+from AIRgb import fetchpubmed
 
 class Table_IO:
 

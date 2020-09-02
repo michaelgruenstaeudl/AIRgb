@@ -1,0 +1,351 @@
+2020-09-02 16:44:34 [INFO] Summary file '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv' does not exist; generating new file. Thus, no UIDs read.
+2020-09-02 16:44:35 [INFO] Number of UIDs on NCBI: 174
+2020-09-02 16:44:35 [INFO] Number of UIDs to be processed: 174
+2020-09-02 16:44:35 [INFO] Reading and parsing UID '169794052', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:35 [DEBUG] Fetching XML GenBank entry 169794052
+2020-09-02 16:44:38 [INFO] Reading and parsing UID '229577732', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:38 [DEBUG] Fetching XML GenBank entry 229577732
+2020-09-02 16:44:41 [INFO] Reading and parsing UID '119224840', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:41 [DEBUG] Fetching XML GenBank entry 119224840
+2020-09-02 16:44:43 [INFO] Reading and parsing UID '115605001', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:43 [DEBUG] Fetching XML GenBank entry 115605001
+2020-09-02 16:44:46 [INFO] Reading and parsing UID '227481098', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:46 [DEBUG] Fetching XML GenBank entry 227481098
+2020-09-02 16:44:48 [INFO] Reading and parsing UID '197294093', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:48 [DEBUG] Fetching XML GenBank entry 197294093
+2020-09-02 16:44:51 [INFO] Reading and parsing UID '157267469', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:51 [DEBUG] Fetching XML GenBank entry 157267469
+2020-09-02 16:44:53 [INFO] Reading and parsing UID '14017551', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:53 [DEBUG] Fetching XML GenBank entry 14017551
+2020-09-02 16:44:56 [INFO] Reading and parsing UID '42795537', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:56 [DEBUG] Fetching XML GenBank entry 42795537
+2020-09-02 16:44:58 [INFO] Reading and parsing UID '114804244', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:44:58 [DEBUG] Fetching XML GenBank entry 114804244
+2020-09-02 16:45:01 [INFO] Reading and parsing UID '146762264', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:01 [DEBUG] Fetching XML GenBank entry 146762264
+2020-09-02 16:45:03 [INFO] Reading and parsing UID '11497503', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:03 [DEBUG] Fetching XML GenBank entry 11497503
+2020-09-02 16:45:06 [INFO] Reading and parsing UID '158938658', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:06 [DEBUG] Fetching XML GenBank entry 158938658
+2020-09-02 16:45:08 [INFO] Reading and parsing UID '114329635', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:08 [DEBUG] Fetching XML GenBank entry 114329635
+2020-09-02 16:45:11 [INFO] Reading and parsing UID '81301540', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:11 [DEBUG] Fetching XML GenBank entry 81301540
+2020-09-02 16:45:14 [INFO] Reading and parsing UID '139387430', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:14 [DEBUG] Fetching XML GenBank entry 139387430
+2020-09-02 16:45:17 [INFO] Reading and parsing UID '167391784', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:17 [DEBUG] Fetching XML GenBank entry 167391784
+2020-09-02 16:45:20 [INFO] Reading and parsing UID '158142505', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:20 [DEBUG] Fetching XML GenBank entry 158142505
+2020-09-02 16:45:22 [INFO] Reading and parsing UID '82754608', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:22 [DEBUG] Fetching XML GenBank entry 82754608
+2020-09-02 16:45:24 [INFO] Reading and parsing UID '156618806', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:24 [DEBUG] Fetching XML GenBank entry 156618806
+2020-09-02 16:45:26 [INFO] Reading and parsing UID '183217719', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:26 [DEBUG] Fetching XML GenBank entry 183217719
+2020-09-02 16:45:29 [INFO] Reading and parsing UID '32480822', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:29 [DEBUG] Fetching XML GenBank entry 32480822
+2020-09-02 16:45:31 [INFO] Reading and parsing UID '89574460', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:31 [DEBUG] Fetching XML GenBank entry 89574460
+2020-09-02 16:45:33 [INFO] Reading and parsing UID '108802622', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:33 [DEBUG] Fetching XML GenBank entry 108802622
+2020-09-02 16:45:36 [INFO] Reading and parsing UID '147917374', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:36 [DEBUG] Fetching XML GenBank entry 147917374
+2020-09-02 16:45:39 [INFO] Reading and parsing UID '88656961', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:39 [DEBUG] Fetching XML GenBank entry 88656961
+2020-09-02 16:45:41 [INFO] Reading and parsing UID '50250306', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:41 [DEBUG] Fetching XML GenBank entry 50250306
+2020-09-02 16:45:44 [INFO] Reading and parsing UID '94502469', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:44 [DEBUG] Fetching XML GenBank entry 94502469
+2020-09-02 16:45:46 [INFO] Reading and parsing UID '118430280', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:46 [DEBUG] Fetching XML GenBank entry 118430280
+2020-09-02 16:45:49 [INFO] Reading and parsing UID '58802760', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:49 [DEBUG] Fetching XML GenBank entry 58802760
+2020-09-02 16:45:51 [INFO] Reading and parsing UID '74027081', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:51 [DEBUG] Fetching XML GenBank entry 74027081
+2020-09-02 16:45:54 [INFO] Reading and parsing UID '13518417', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:54 [DEBUG] Fetching XML GenBank entry 13518417
+2020-09-02 16:45:56 [INFO] Reading and parsing UID '67511377', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:56 [DEBUG] Fetching XML GenBank entry 67511377
+2020-09-02 16:45:59 [INFO] Reading and parsing UID '42795601', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:45:59 [DEBUG] Fetching XML GenBank entry 42795601
+2020-09-02 16:46:01 [INFO] Reading and parsing UID '363413076', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:01 [DEBUG] Fetching XML GenBank entry 363413076
+2020-09-02 16:46:04 [INFO] Reading and parsing UID '149390421', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:04 [DEBUG] Fetching XML GenBank entry 149390421
+2020-09-02 16:46:07 [INFO] Reading and parsing UID '50812505', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:07 [DEBUG] Fetching XML GenBank entry 50812505
+2020-09-02 16:46:10 [INFO] Reading and parsing UID '224979545', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:10 [DEBUG] Fetching XML GenBank entry 224979545
+2020-09-02 16:46:13 [INFO] Reading and parsing UID '50233947', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:13 [DEBUG] Fetching XML GenBank entry 50233947
+2020-09-02 16:46:16 [INFO] Reading and parsing UID '112382047', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:16 [DEBUG] Fetching XML GenBank entry 112382047
+2020-09-02 16:46:20 [INFO] Reading and parsing UID '49659489', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:20 [DEBUG] Fetching XML GenBank entry 49659489
+2020-09-02 16:46:23 [INFO] Reading and parsing UID '91983971', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:23 [DEBUG] Fetching XML GenBank entry 91983971
+2020-09-02 16:46:25 [INFO] Reading and parsing UID '85687395', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:25 [DEBUG] Fetching XML GenBank entry 85687395
+2020-09-02 16:46:28 [INFO] Reading and parsing UID '226933860', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:28 [DEBUG] Fetching XML GenBank entry 226933860
+2020-09-02 16:46:30 [INFO] Reading and parsing UID '158187113', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:30 [DEBUG] Fetching XML GenBank entry 158187113
+2020-09-02 16:46:32 [INFO] Reading and parsing UID '994077805', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:32 [DEBUG] Fetching XML GenBank entry 994077805
+2020-09-02 16:46:36 [INFO] Reading and parsing UID '110227059', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:36 [DEBUG] Fetching XML GenBank entry 110227059
+2020-09-02 16:46:38 [INFO] Reading and parsing UID '115531893', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:38 [DEBUG] Fetching XML GenBank entry 115531893
+2020-09-02 16:46:41 [INFO] Reading and parsing UID '75755638', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:41 [DEBUG] Fetching XML GenBank entry 75755638
+2020-09-02 16:46:44 [INFO] Reading and parsing UID '148668026', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:44 [DEBUG] Fetching XML GenBank entry 148668026
+2020-09-02 16:46:46 [INFO] Reading and parsing UID '49614971', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:46 [DEBUG] Fetching XML GenBank entry 49614971
+2020-09-02 16:46:49 [INFO] Reading and parsing UID '114329725', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:49 [DEBUG] Fetching XML GenBank entry 114329725
+2020-09-02 16:46:52 [INFO] Reading and parsing UID '156618891', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:52 [DEBUG] Fetching XML GenBank entry 156618891
+2020-09-02 16:46:53 [INFO] Reading and parsing UID '169142924', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:53 [DEBUG] Fetching XML GenBank entry 169142924
+2020-09-02 16:46:56 [INFO] Reading and parsing UID '114107025', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:56 [DEBUG] Fetching XML GenBank entry 114107025
+2020-09-02 16:46:58 [INFO] Reading and parsing UID '122893969', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:46:58 [DEBUG] Fetching XML GenBank entry 122893969
+2020-09-02 16:47:01 [INFO] Reading and parsing UID '139389075', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:01 [DEBUG] Fetching XML GenBank entry 139389075
+2020-09-02 16:47:04 [INFO] Reading and parsing UID '109945497', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:04 [DEBUG] Fetching XML GenBank entry 109945497
+2020-09-02 16:47:06 [INFO] Reading and parsing UID '118430366', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:06 [DEBUG] Fetching XML GenBank entry 118430366
+2020-09-02 16:47:09 [INFO] Reading and parsing UID '81176229', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:09 [DEBUG] Fetching XML GenBank entry 81176229
+2020-09-02 16:47:12 [INFO] Reading and parsing UID '133712039', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:12 [DEBUG] Fetching XML GenBank entry 133712039
+2020-09-02 16:47:14 [INFO] Reading and parsing UID '160369831', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:14 [DEBUG] Fetching XML GenBank entry 160369831
+2020-09-02 16:47:17 [INFO] Reading and parsing UID '139388073', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:17 [DEBUG] Fetching XML GenBank entry 139388073
+2020-09-02 16:47:19 [INFO] Reading and parsing UID '68164782', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:19 [DEBUG] Fetching XML GenBank entry 68164782
+2020-09-02 16:47:22 [INFO] Reading and parsing UID '91208881', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:22 [DEBUG] Fetching XML GenBank entry 91208881
+2020-09-02 16:47:24 [INFO] Reading and parsing UID '139390132', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:24 [DEBUG] Fetching XML GenBank entry 139390132
+2020-09-02 16:47:27 [INFO] Reading and parsing UID '139389622', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:27 [DEBUG] Fetching XML GenBank entry 139389622
+2020-09-02 16:47:29 [INFO] Reading and parsing UID '149390519', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:29 [DEBUG] Fetching XML GenBank entry 149390519
+2020-09-02 16:47:31 [INFO] Reading and parsing UID '166065336', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:31 [DEBUG] Fetching XML GenBank entry 166065336
+2020-09-02 16:47:34 [INFO] Reading and parsing UID '261887673', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:34 [DEBUG] Fetching XML GenBank entry 261887673
+2020-09-02 16:47:37 [INFO] Reading and parsing UID '50080438', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:37 [DEBUG] Fetching XML GenBank entry 50080438
+2020-09-02 16:47:40 [INFO] Reading and parsing UID '118201020', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:40 [DEBUG] Fetching XML GenBank entry 118201020
+2020-09-02 16:47:42 [INFO] Reading and parsing UID '78103230', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:42 [DEBUG] Fetching XML GenBank entry 78103230
+2020-09-02 16:47:45 [INFO] Reading and parsing UID '255961284', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:45 [DEBUG] Fetching XML GenBank entry 255961284
+2020-09-02 16:47:48 [INFO] Reading and parsing UID '157325509', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:48 [DEBUG] Fetching XML GenBank entry 157325509
+2020-09-02 16:47:51 [INFO] Reading and parsing UID '1253235908', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:51 [DEBUG] Fetching XML GenBank entry 1253235908
+2020-09-02 16:47:54 [INFO] Reading and parsing UID '296936650', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:54 [DEBUG] Fetching XML GenBank entry 296936650
+2020-09-02 16:47:57 [INFO] Reading and parsing UID '78675147', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:57 [DEBUG] Fetching XML GenBank entry 78675147
+2020-09-02 16:47:59 [INFO] Reading and parsing UID '85724367', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:47:59 [DEBUG] Fetching XML GenBank entry 85724367
+2020-09-02 16:48:00 [INFO] Reading and parsing UID '262400725', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:00 [DEBUG] Fetching XML GenBank entry 262400725
+2020-09-02 16:48:03 [INFO] Reading and parsing UID '114054363', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:03 [DEBUG] Fetching XML GenBank entry 114054363
+2020-09-02 16:48:05 [INFO] Reading and parsing UID '159106781', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:05 [DEBUG] Fetching XML GenBank entry 159106781
+2020-09-02 16:48:07 [INFO] Reading and parsing UID '116242143', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:07 [DEBUG] Fetching XML GenBank entry 116242143
+2020-09-02 16:48:10 [INFO] Reading and parsing UID '157056737', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:10 [DEBUG] Fetching XML GenBank entry 157056737
+2020-09-02 16:48:12 [INFO] Reading and parsing UID '169143010', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:12 [DEBUG] Fetching XML GenBank entry 169143010
+2020-09-02 16:48:15 [INFO] Reading and parsing UID '109156581', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:15 [DEBUG] Fetching XML GenBank entry 109156581
+2020-09-02 16:48:17 [INFO] Reading and parsing UID '114107112', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:17 [DEBUG] Fetching XML GenBank entry 114107112
+2020-09-02 16:48:19 [INFO] Reading and parsing UID '112030952', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:19 [DEBUG] Fetching XML GenBank entry 112030952
+2020-09-02 16:48:22 [INFO] Reading and parsing UID '60460788', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:22 [DEBUG] Fetching XML GenBank entry 60460788
+2020-09-02 16:48:25 [INFO] Reading and parsing UID '113200887', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:25 [DEBUG] Fetching XML GenBank entry 113200887
+2020-09-02 16:48:27 [INFO] Reading and parsing UID '13928184', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:27 [DEBUG] Fetching XML GenBank entry 13928184
+2020-09-02 16:48:30 [INFO] Reading and parsing UID '260677373', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:30 [DEBUG] Fetching XML GenBank entry 260677373
+2020-09-02 16:48:33 [INFO] Reading and parsing UID '253729536', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:33 [DEBUG] Fetching XML GenBank entry 253729536
+2020-09-02 16:48:35 [INFO] Reading and parsing UID '148508422', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:35 [DEBUG] Fetching XML GenBank entry 148508422
+2020-09-02 16:48:38 [INFO] Reading and parsing UID '91208967', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:38 [DEBUG] Fetching XML GenBank entry 91208967
+2020-09-02 16:48:40 [INFO] Reading and parsing UID '544163592', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:40 [DEBUG] Fetching XML GenBank entry 544163592
+2020-09-02 16:48:43 [INFO] Reading and parsing UID '50346761', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:43 [DEBUG] Fetching XML GenBank entry 50346761
+2020-09-02 16:48:45 [INFO] Reading and parsing UID '189162250', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:45 [DEBUG] Fetching XML GenBank entry 189162250
+2020-09-02 16:48:48 [INFO] Reading and parsing UID '121720592', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:48 [DEBUG] Fetching XML GenBank entry 121720592
+2020-09-02 16:48:50 [INFO] Reading and parsing UID '161622288', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:50 [DEBUG] Fetching XML GenBank entry 161622288
+2020-09-02 16:48:52 [INFO] Reading and parsing UID '255961360', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:52 [DEBUG] Fetching XML GenBank entry 255961360
+2020-09-02 16:48:55 [INFO] Reading and parsing UID '118201104', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:55 [DEBUG] Fetching XML GenBank entry 118201104
+2020-09-02 16:48:58 [INFO] Reading and parsing UID '255099160', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:48:58 [DEBUG] Fetching XML GenBank entry 255099160
+2020-09-02 16:49:01 [INFO] Reading and parsing UID '159106843', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:01 [DEBUG] Fetching XML GenBank entry 159106843
+2020-09-02 16:49:03 [INFO] Reading and parsing UID '34500893', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:03 [DEBUG] Fetching XML GenBank entry 34500893
+2020-09-02 16:49:06 [INFO] Reading and parsing UID '119368478', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:06 [DEBUG] Fetching XML GenBank entry 119368478
+2020-09-02 16:49:08 [INFO] Reading and parsing UID '112253730', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:08 [DEBUG] Fetching XML GenBank entry 112253730
+2020-09-02 16:49:11 [INFO] Reading and parsing UID '974032166', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:11 [DEBUG] Fetching XML GenBank entry 974032166
+2020-09-02 16:49:13 [INFO] Reading and parsing UID '255926567', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:13 [DEBUG] Fetching XML GenBank entry 255926567
+2020-09-02 16:49:15 [INFO] Reading and parsing UID '974032169', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:15 [DEBUG] Fetching XML GenBank entry 974032169
+2020-09-02 16:49:18 [INFO] Reading and parsing UID '91214122', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:18 [DEBUG] Fetching XML GenBank entry 91214122
+2020-09-02 16:49:20 [INFO] Reading and parsing UID '115498283', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:20 [DEBUG] Fetching XML GenBank entry 115498283
+2020-09-02 16:49:23 [INFO] Reading and parsing UID '974032173', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:23 [DEBUG] Fetching XML GenBank entry 974032173
+2020-09-02 16:49:25 [INFO] Reading and parsing UID '114054449', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:25 [DEBUG] Fetching XML GenBank entry 114054449
+2020-09-02 16:49:27 [INFO] Reading and parsing UID '974032177', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:27 [DEBUG] Fetching XML GenBank entry 974032177
+2020-09-02 16:49:29 [INFO] Reading and parsing UID '159161139', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:29 [DEBUG] Fetching XML GenBank entry 159161139
+2020-09-02 16:49:32 [INFO] Reading and parsing UID '281190713', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:32 [DEBUG] Fetching XML GenBank entry 281190713
+2020-09-02 16:49:33 [INFO] Reading and parsing UID '139389244', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:33 [DEBUG] Fetching XML GenBank entry 139389244
+2020-09-02 16:49:36 [INFO] Reading and parsing UID '28261696', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:36 [DEBUG] Fetching XML GenBank entry 28261696
+2020-09-02 16:49:39 [INFO] Reading and parsing UID '246367046', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:39 [DEBUG] Fetching XML GenBank entry 246367046
+2020-09-02 16:49:41 [INFO] Reading and parsing UID '113200973', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:41 [DEBUG] Fetching XML GenBank entry 113200973
+2020-09-02 16:49:43 [INFO] Reading and parsing UID '193075536', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:43 [DEBUG] Fetching XML GenBank entry 193075536
+2020-09-02 16:49:45 [INFO] Reading and parsing UID '50198865', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:45 [DEBUG] Fetching XML GenBank entry 50198865
+2020-09-02 16:49:48 [INFO] Reading and parsing UID '115432784', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:48 [DEBUG] Fetching XML GenBank entry 115432784
+2020-09-02 16:49:51 [INFO] Reading and parsing UID '139389780', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:51 [DEBUG] Fetching XML GenBank entry 139389780
+2020-09-02 16:49:53 [INFO] Reading and parsing UID '113952601', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:53 [DEBUG] Fetching XML GenBank entry 113952601
+2020-09-02 16:49:56 [INFO] Reading and parsing UID '179366234', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:56 [DEBUG] Fetching XML GenBank entry 179366234
+2020-09-02 16:49:58 [INFO] Reading and parsing UID '114329947', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:49:58 [DEBUG] Fetching XML GenBank entry 114329947
+2020-09-02 16:50:00 [INFO] Reading and parsing UID '139387231', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:00 [DEBUG] Fetching XML GenBank entry 139387231
+2020-09-02 16:50:03 [INFO] Reading and parsing UID '219673952', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:03 [DEBUG] Fetching XML GenBank entry 219673952
+2020-09-02 16:50:05 [INFO] Reading and parsing UID '118201189', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:05 [DEBUG] Fetching XML GenBank entry 118201189
+2020-09-02 16:50:08 [INFO] Reading and parsing UID '146744167', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:08 [DEBUG] Fetching XML GenBank entry 146744167
+2020-09-02 16:50:10 [INFO] Reading and parsing UID '161784171', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:10 [DEBUG] Fetching XML GenBank entry 161784171
+2020-09-02 16:50:13 [INFO] Reading and parsing UID '13358958', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:13 [DEBUG] Fetching XML GenBank entry 13358958
+2020-09-02 16:50:15 [INFO] Reading and parsing UID '52220789', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:15 [DEBUG] Fetching XML GenBank entry 52220789
+2020-09-02 16:50:18 [INFO] Reading and parsing UID '139390328', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:18 [DEBUG] Fetching XML GenBank entry 139390328
+2020-09-02 16:50:20 [INFO] Reading and parsing UID '74381688', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:20 [DEBUG] Fetching XML GenBank entry 74381688
+2020-09-02 16:50:22 [INFO] Reading and parsing UID '134093177', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:22 [DEBUG] Fetching XML GenBank entry 134093177
+2020-09-02 16:50:25 [INFO] Reading and parsing UID '1002620281', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:25 [DEBUG] Fetching XML GenBank entry 1002620281
+2020-09-02 16:50:28 [INFO] Reading and parsing UID '157695864', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:28 [DEBUG] Fetching XML GenBank entry 157695864
+2020-09-02 16:50:31 [INFO] Reading and parsing UID '91701629', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:31 [DEBUG] Fetching XML GenBank entry 91701629
+2020-09-02 16:50:33 [INFO] Reading and parsing UID '1002620285', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:33 [DEBUG] Fetching XML GenBank entry 1002620285
+2020-09-02 16:50:35 [INFO] Reading and parsing UID '116617087', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:35 [DEBUG] Fetching XML GenBank entry 116617087
+2020-09-02 16:50:38 [INFO] Reading and parsing UID '112032641', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:38 [DEBUG] Fetching XML GenBank entry 112032641
+2020-09-02 16:50:41 [INFO] Reading and parsing UID '115391881', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:41 [DEBUG] Fetching XML GenBank entry 115391881
+2020-09-02 16:50:43 [INFO] Reading and parsing UID '110456202', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:43 [DEBUG] Fetching XML GenBank entry 110456202
+2020-09-02 16:50:45 [INFO] Reading and parsing UID '294620556', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:45 [DEBUG] Fetching XML GenBank entry 294620556
+2020-09-02 16:50:48 [INFO] Reading and parsing UID '159161233', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:48 [DEBUG] Fetching XML GenBank entry 159161233
+2020-09-02 16:50:51 [INFO] Reading and parsing UID '294768541', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:51 [DEBUG] Fetching XML GenBank entry 294768541
+2020-09-02 16:50:54 [INFO] Reading and parsing UID '209361311', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:54 [DEBUG] Fetching XML GenBank entry 209361311
+2020-09-02 16:50:57 [INFO] Reading and parsing UID '84371874', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:50:57 [DEBUG] Fetching XML GenBank entry 84371874
+2020-09-02 16:51:00 [INFO] Reading and parsing UID '149390247', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:00 [DEBUG] Fetching XML GenBank entry 149390247
+2020-09-02 16:51:02 [INFO] Reading and parsing UID '225544104', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:02 [DEBUG] Fetching XML GenBank entry 225544104
+2020-09-02 16:51:06 [INFO] Reading and parsing UID '88696749', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:06 [DEBUG] Fetching XML GenBank entry 88696749
+2020-09-02 16:51:08 [INFO] Reading and parsing UID '85540783', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:08 [DEBUG] Fetching XML GenBank entry 85540783
+2020-09-02 16:51:11 [INFO] Reading and parsing UID '166344111', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:11 [DEBUG] Fetching XML GenBank entry 166344111
+2020-09-02 16:51:14 [INFO] Reading and parsing UID '115604913', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:14 [DEBUG] Fetching XML GenBank entry 115604913
+2020-09-02 16:51:16 [INFO] Reading and parsing UID '118614470', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:16 [DEBUG] Fetching XML GenBank entry 118614470
+2020-09-02 16:51:19 [INFO] Reading and parsing UID '84682183', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:19 [DEBUG] Fetching XML GenBank entry 84682183
+2020-09-02 16:51:21 [INFO] Reading and parsing UID '83595723', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:21 [DEBUG] Fetching XML GenBank entry 83595723
+2020-09-02 16:51:23 [INFO] Reading and parsing UID '170784721', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:23 [DEBUG] Fetching XML GenBank entry 170784721
+2020-09-02 16:51:26 [INFO] Reading and parsing UID '42795473', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:26 [DEBUG] Fetching XML GenBank entry 42795473
+2020-09-02 16:51:29 [INFO] Reading and parsing UID '139389397', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:29 [DEBUG] Fetching XML GenBank entry 139389397
+2020-09-02 16:51:31 [INFO] Reading and parsing UID '139388889', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:31 [DEBUG] Fetching XML GenBank entry 139388889
+2020-09-02 16:51:34 [INFO] Reading and parsing UID '51235292', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:34 [DEBUG] Fetching XML GenBank entry 51235292
+2020-09-02 16:51:36 [INFO] Reading and parsing UID '17149410', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:36 [DEBUG] Fetching XML GenBank entry 17149410
+2020-09-02 16:51:37 [INFO] Reading and parsing UID '194033128', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:37 [DEBUG] Fetching XML GenBank entry 194033128
+2020-09-02 16:51:40 [INFO] Reading and parsing UID '88656873', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:40 [DEBUG] Fetching XML GenBank entry 88656873
+2020-09-02 16:51:42 [INFO] Reading and parsing UID '139389930', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:42 [DEBUG] Fetching XML GenBank entry 139389930
+2020-09-02 16:51:45 [INFO] Reading and parsing UID '78102509', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:45 [DEBUG] Fetching XML GenBank entry 78102509
+2020-09-02 16:51:50 [INFO] Reading and parsing UID '197089781', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:50 [DEBUG] Fetching XML GenBank entry 197089781
+2020-09-02 16:51:52 [INFO] Reading and parsing UID '193788921', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:52 [DEBUG] Fetching XML GenBank entry 193788921
+2020-09-02 16:51:54 [INFO] Reading and parsing UID '84371962', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:54 [DEBUG] Fetching XML GenBank entry 84371962
+2020-09-02 16:51:57 [INFO] Reading and parsing UID '149390334', writing to '/home/michael_science/git/michaelgruenstaeudl_AIRPy/03_testing/angiosperms_till_2011/plastome_availability_table_2020_09_02.tsv'.
+2020-09-02 16:51:57 [DEBUG] Fetching XML GenBank entry 149390334
