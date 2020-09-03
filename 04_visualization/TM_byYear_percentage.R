@@ -1,7 +1,24 @@
+#!/usr/bin/R
+#author = "Tilman Mehl"
+#copyright = "Copyright (C) 2019-2020 Tilman Mehl, Michael Gruenstaeudl"
+#contributors = c("Tilman Mehl", "Michael Gruenstaeudl")
+#email = "m.gruenstaeudl@fu-berlin.de"
+#version = "2020.09.03.1230"
+
+########################################################################
+
 library(ggplot2)
 library(tcltk) # For dialog boxes
+library(tools) # For function 'file_path_sans_ext'
+library(dplyr) # For function '%>%'
 library(sqldf)
-library(dplyr)
+
+########################################################################
+
+# GETTING SCRIPT NAME
+args = commandArgs(TRUE)
+this_script = sub(".*=", "", commandArgs()[4])
+script_name = file_path_sans_ext(basename(this_script))
 
 ########################################################################
 

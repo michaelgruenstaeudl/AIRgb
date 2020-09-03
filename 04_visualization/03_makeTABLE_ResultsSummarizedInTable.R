@@ -1,9 +1,9 @@
 #!/usr/bin/R
 #author = "Michael Gruenstaeudl, PhD"
-#copyright = "Copyright (C) 2019 Michael Gruenstaeudl"
+#copyright = "Copyright (C) 2019-2020 Michael Gruenstaeudl"
 #contributors = c("Michael Gruenstaeudl")
 #email = "m.gruenstaeudl@fu-berlin.de"
-#version = "2019.11.21.1200"
+#version = "2020.09.03.1230"
 
 ########################################################################
 
@@ -22,28 +22,29 @@ script_name = file_path_sans_ext(basename(this_script))
 ########################################################################
 
 #GLOBAL VARIABLES
-start_year = 2010
+start_year = 2000
 
 ########################################################################
 
 ## Load Plastome Availability Table (.csv-format)
-inFn1 = tk_choose.files(caption = "Select the plastome availability table (.tsv-format)")
-inData1 = read.csv(inFn1, sep = "\t")
+AvailTableFn = tk_choose.files(caption = "Select the plastome availability table (.tsv-format)")
+AvailTableData = read.csv(AvailTableFn, sep = "\t")
 
 ## Load Plastome Availability Table (.csv-format)
-inFn2 = tk_choose.files(caption = "Select the reported IR stats table (.tsv-format)")
-#out_fn = paste(file_path_sans_ext(inFn2), "_", sep='')
-out_fn = dirname(inFn2)
-inData2 = read.csv(inFn2, sep = "\t")
+IRTableFn = tk_choose.files(caption = "Select the reported IR stats table (.tsv-format)")
+#out_fn = paste(file_path_sans_ext(IRTableFn), "_", sep='')
+out_fn = dirname(IRTableFn)
+IRTableData = read.csv(IRTableFn, sep = "\t")
+
+## Combine the data tables such that only accessions which exist in BOTH tables are maintained
+# Note: Does "merge" delete rows in which ACCESSION is only in one of the two infiles? I believe yes.
+combinedDF = merge(AvailTableData, IRTableData, by="ACCESSION")
 
 ########################################################################
-
-## Combine the input files
-combinedDF = merge(inData1, inData2, by="ACCESSION")
 
 ## Ensure that numeric values are recognized as numeric (i.e., transform from factor to numeric via character)
 ## See: https://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-integer-numeric-without-loss-of-information
-combinedDF = transform(combinedDF, 
+combinedDF = transform(combinedDF,
 IRa_REPORTED_START = as.integer(as.character(IRa_REPORTED_START)),
 IRb_REPORTED_START = as.integer(as.character(IRb_REPORTED_START)),
 IRa_REPORTED_END = as.integer(as.character(IRa_REPORTED_END)),
@@ -66,7 +67,7 @@ allPlastomes_DF = allPlastomes_DF %>% mutate(CUM_N_RECS=cumsum(N_NEW_RECS))
 
 ########################################################################
 
-## SUMMARIZING FREQUENCY OF PLASTID GENOMES WITH REPORTED IR PER YEAR
+## SUMMARIZING FREQUENCY OF PLASTID GENOMES *WITH* REPORTED IR PER YEAR
 ## Seperate rows by criterion
 plastomesWithIR = combinedDF[which(combinedDF[,"IRa_REPORTED"]=="yes"),]
 ## Convert to date
@@ -80,7 +81,7 @@ plastomesWithIR_DF = plastomesWithIR_DF %>% mutate(CUM_N_RECS_WITHIR=cumsum(N_NE
 
 ########################################################################
 
-## SUMMARIZING FREQUENCY OF PLASTID GENOMES WITHOUT REPORTED IR PER YEAR
+## SUMMARIZING FREQUENCY OF PLASTID GENOMES *WITHOUT* REPORTED IR PER YEAR
 ## Seperate rows by criterion
 plastomesWithoutIR = combinedDF[which(combinedDF[,"IRa_REPORTED"]=="no"),]
 ## Convert to date

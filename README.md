@@ -6,17 +6,17 @@ A Python package for automatically accessing the inverted repeats of thousands o
 #### SCRIPT 01: Generating plastome availability table
 ```
 # Angiosperms
-TESTFOLDER=./03_testing/angiosperms_2000to2010
+TESTFOLDER=./03_testing/angiosperms_Start2000toEnd2019
 DATE=$(date '+%Y_%m_%d')
-MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2009/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] AND Magnoliophyta[ORGN])'
+MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] AND Magnoliophyta[ORGN])'
 AVAILTABLE=plastome_availability_table_${DATE}.tsv
 mkdir -p $TESTFOLDER
 ```
 ```
 # Non-angiosperm landplants
-TESTFOLDER=./03_testing/nonangiosperm_landplants_2000to2010
+TESTFOLDER=./03_testing/nonangiosperm_landplants_Start2000toEnd2019
 DATE=$(date '+%Y_%m_%d')
-MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2009/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] NOT Magnoliophyta[ORGN])'
+MYQUERY='complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE]) AND 2000/01/01:2019/12/31[PDAT] AND 0000050000:00000250000[SLEN] NOT unverified[TITLE] NOT partial[TITLE] AND (Embryophyta[ORGN] NOT Magnoliophyta[ORGN])'
 AVAILTABLE=plastome_availability_table_${DATE}.tsv
 mkdir -p $TESTFOLDER
 ```
