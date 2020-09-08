@@ -68,18 +68,12 @@ blastn -subject ${INF%.gb*}.fas -query ${INF%.gb*}.fas -outfmt 7 -strand 'both' 
 ```
 
 <!--
-## FULL USAGE
+## FOO BAR BAZ
 ```
-#python3 ../PlastomeIntegrityChecks/01_generate_plastome_availability_table.py -o summaries.csv -q "Magnoliophyta[ORGN] AND 00000180000[SLEN] : 00000200000[SLEN] AND complete genome[TITLE] AND (chloroplast[TITLE] OR plastid[TITLE])"
+Foo bar baz
 ```
 -->
 
-## VISUALIZATIONS, GRAPHS & STATISTICAL TESTS
-#### TO DO
-* Please plot the growth in plastid genomes (as done via visulations script 01), but not with the number of plastid genomes on the y-axis but with the number of unique genera plotted. (This will illustrate if the current growth in plastid genome number is reflective of a better taxonomic survey or of higher sampling in genera and families.)
-
-* Please conduct statistical test to see if the absence of reported IRs (i.e., "no" in column "IRa_REPORTED") higher for an unpublished status (i.e., "Unpublished" in column "TITLE") and a published status (i.e., any other value in column "TITLE")?
-
-* Please conduct statistical test to see if the absence of reported IRs (i.e., "no" in column "IRa_REPORTED") higher for records with a version number of 1 as compared to higher version numbers (see column "VERSION")?
-
-* Please plot the distribution by how many nucleotides the individual records have misidentified the IR length. (It would be interesting to see if the mis-estimation is normally distributed or if there is a skew in the distribution.)
+## TO DO
+#### Visualizations
+* Please generate visualization code that plots the growth in plastid genomes (as done via visulations script 01), but not with the number of plastid genomes on the y-axis but with the number of unique genera plotted. (This will illustrate if the current growth in plastid genome number is reflective of a better taxonomic survey or of higher sampling in genera and families.)
