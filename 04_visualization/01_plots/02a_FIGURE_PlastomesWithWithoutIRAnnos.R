@@ -3,7 +3,7 @@
 #copyright = "Copyright (C) 2019-2020 Michael Gruenstaeudl"
 #contributors = c("Michael Gruenstaeudl")
 #email = "m.gruenstaeudl@fu-berlin.de"
-#version = "2020.09.03.1230"
+#version = "2020.09.08.1930"
 
 ########################################################################
 
@@ -11,6 +11,7 @@ library(ggplot2)
 library(tcltk) # For dialog boxes
 library(tools) # For function 'file_path_sans_ext'
 library(dplyr) # For function '%>%'
+library(forcats)
 
 ########################################################################
 
@@ -56,51 +57,52 @@ IRb_REPORTED_LENGTH = as.integer(as.character(IRb_REPORTED_LENGTH))
 
 ########################################################################
 
-## Getting only rows that have reported both IRa and IRb
-relevantDF = combinedDF[which(combinedDF[,"IRa_REPORTED"]=="yes" & combinedDF[,"IRb_REPORTED"]=="yes"),]
-
 ## Seperate rows by criterion
-notEqualDF = relevantDF[!(relevantDF[,"IRa_REPORTED_LENGTH"]==relevantDF[,"IRb_REPORTED_LENGTH"]),]
-
-########################################################################
-
-## PLOTTING CUMULATIVE NUMBER OF PLASTOMES WITH UNEQUAL IRs AS BARCHART ##
+posMatch = combinedDF[which(combinedDF[,"IRa_REPORTED"]=="yes"),]
+negMatch = combinedDF[which(combinedDF[,"IRa_REPORTED"]=="no"),]
 
 ## Convert the column "CREATE_DATE" into a frequency table
 # Convert to date
-notEqualDatesData = as.Date(notEqualDF$CREATE_DATE, format="%Y-%m-%d")
+posDatesData = as.Date(posMatch$CREATE_DATE, format="%Y-%m-%d")
+negDatesData = as.Date(negMatch$CREATE_DATE, format="%Y-%m-%d")
 # Tabulate
-notEqualTab = table(cut(notEqualDatesData, 'month'))
+posTab = table(cut(posDatesData, 'month'))
+negTab = table(cut(negDatesData, 'month'))
 # Format as data.frame
-notEqualPlotData = data.frame(DATE=as.Date(names(notEqualTab)), FREQ_RECORDS=as.vector(notEqualTab))
-## Add a column that displays the growing cumulative sum
-notEqualPlotData = notEqualPlotData %>% mutate(CUMFREQ=cumsum(FREQ_RECORDS))
+posPlotData = data.frame(DATE=as.Date(names(posTab)), FREQ_RECORDS=as.vector(posTab), CRITERION="positive")
+negPlotData = data.frame(DATE=as.Date(names(negTab)), FREQ_RECORDS=as.vector(negTab), CRITERION="negative")
+## Concatenate plot data parts
+plotData = rbind(posPlotData, negPlotData)
+## Resort plot data
+plotData = plotData[order(plotData$DATE),]
+## Add a column that displays the growing cumulative sum for each criterion
+plotData = plotData %>% group_by(CRITERION) %>% mutate(CUMFREQ=cumsum(FREQ_RECORDS))
 
-####################################
+########################################################################
 
-base_plot = ggplot(data=notEqualPlotData, aes(x=DATE, y=CUMFREQ), width=1) +
-    geom_bar(stat="identity", position="identity", fill="grey50", alpha=0.5) #+
-    #geom_line(color="grey", alpha=0.5)
+base_plot = ggplot(data=plotData, aes(x=DATE, y=CUMFREQ, fill=forcats::fct_rev(CRITERION)), width=1) +  #forcats::fct_rev inverts the order
+    geom_bar(stat="identity", position="stack", alpha=0.5) # stacked barcharts
+    #geom_bar(stat="identity", position="dodge", alpha=0.5) # side-by-side barcharts
 
-myPlot = base_plot +
-    xlab("\nYear") +
-    ylab("Cumulative Number of Records\n") +
-    ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year,\nwhose reported IR annotations have\nunequal lengths",
+myPlot = base_plot + 
+    xlab("\nYear") + 
+    ylab("Cumulative Number of Records\n") + 
+    ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year,\nseparated by presence of IR annotation",
         subtitle="Note: Only data after 2009 is displayed."
-    ) +
+    ) + 
     scale_x_date(
         limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-01-01")),
         date_breaks="1 year",
         minor_breaks=NULL,
         expand=expansion(0),
         date_labels="%Y"
-    ) +
-    #scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
-    #scale_colour_grey(aesthetics = "fill") +
-    #scale_fill_brewer(palette="Dark2", name="Criterion positive/negative") +
-    scale_fill_manual(values=c("grey0", "grey50"), name="Plastid genome\navailable", labels=c("Yes", "No")) +
-    #theme_bw() +
-    theme_minimal() +
+    ) + 
+    scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
+    #scale_colour_grey(aesthetics = "fill") + 
+    #scale_fill_brewer(palette="Dark2", name="Criterion positive/negative") + 
+    scale_fill_manual(values=c("grey50", "grey0"), name="IR annotation\npresent", labels=c("Yes", "No")) + 
+    #theme_bw() + 
+    theme_minimal() + 
     theme(plot.title = element_text(size=20),
           plot.subtitle = element_text(size=16, face="italic"),
           axis.text=element_text(size=14),
@@ -108,7 +110,26 @@ myPlot = base_plot +
           plot.margin=unit(c(0.5,1.0,0.1,0.1),"cm"),  # Note: margin(t=0, r=0, b=0, l=0, unit="pt")
           legend.key.width=unit(1,"cm"))
 
-####################################
+################################
+
+#    myPlot_transformed = ggplot(data=inData, aes(x=factor(year), y=accessions, fill=voucher)) +
+#        geom_bar(stat="identity", position="dodge", alpha=0.5) + ##side-by-side barcharts
+#        #geom_bar(stat="identity", position="identity", alpha=0.25) + ##overlaid barcharts
+#        #geom_bar(stat="identity", alpha=0.5) + ##stacked barcharts
+#        theme_bw() +
+#        scale_fill_brewer(palette="Dark2", name="Specimen voucher") + 
+#        scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
+#                      labels = trans_format("log10", math_format(10^.x))) +
+#        xlab("\nYear") + 
+#        ylab("Number of accessions\n") +
+#        labs(#tag="Log-transformed y-axis",
+#             title="Accession numbers of new submissions of \ngenomic DNA to ENA per submission year",
+#             subtitle="Log-transformed y-axis") #+
+#        #ggtitle("Accession numbers of new submissions of genomic DNA to ENA per submission year") +
+#        #ggsubtitle("Only submissions to the plant database have been counted.\nNote: Y-axis has been square-root transformed for better visibility")
+#    myPlot_transformed = myPlot_transformed + annotation_logticks(base=10, sides="l")
+
+########################################################################
 
 assign(script_name, myPlot)
 saveRDS(eval(as.name(script_name)), file=paste(out_fn, '/', script_name, ".Rds", sep=''))

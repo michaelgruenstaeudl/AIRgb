@@ -3,7 +3,7 @@
 #copyright = "Copyright (C) 2019-2020 Michael Gruenstaeudl"
 #contributors = c("Michael Gruenstaeudl")
 #email = "m.gruenstaeudl@fu-berlin.de"
-#version = "2020.09.03.1230"
+#version = "2020.09.08.1930"
 
 ########################################################################
 
