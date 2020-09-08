@@ -11,6 +11,7 @@ library(ggplot2)
 library(tcltk) # For dialog boxes
 library(tools) # For function 'file_path_sans_ext'
 library(dplyr) # For function '%>%'
+library(sqldf)
 
 ########################################################################
 
@@ -18,6 +19,12 @@ library(dplyr) # For function '%>%'
 args = commandArgs(TRUE)
 this_script = sub(".*=", "", commandArgs()[4])
 script_name = file_path_sans_ext(basename(this_script))
+
+########################################################################
+
+#GLOBAL VARIABLES
+#start_year = 2000
+start_year = 2010
 
 ########################################################################
 
@@ -90,17 +97,18 @@ plotData = plotData %>% mutate_at(vars(PERCENTAGE), list(~ round(., 3)))
 
 base_plot = ggplot(data=plotData, aes(x=RELEASE_YEAR, y=PERCENTAGE), width=1) +
             geom_col(aes(fill=IS_CONGRUENT), alpha=0.5) +
-            geom_text(aes(label=paste("n=", TOTAL, sep="")), vjust=1.09)
+            geom_text(data=plotData[which(plotData$IS_CONGRUENT==FALSE),], aes(label=paste("n=", TOTAL, sep="")), y=Inf, size=4.5, vjust=4) + 
+            geom_text(data=plotData[which(plotData$IS_CONGRUENT==TRUE),], aes(label=paste("n=", TOTAL, sep="")), y=-Inf, size=4.5, vjust=-3)
 
 myPlot =  base_plot +
         xlab("\nRelease Year") +
         ylab("Percentage of Records\n") +
-        ggtitle("Percentage of complete plastid genomes by release year that contain annotations for, and have equality in length between, both IRs",
-            subtitle="Note: Foo bar baz"
+        ggtitle("Percentage of complete plastid\ngenomes on NCBI GenBank by release year\nthat contain annotations for, and\nhave equality in length between, both IRs",
+            subtitle="Note: Only data after 2009 is displayed."
         ) +
-        #scale_x_discrete(labels=c("Unpubl.", "Publ.")) +
+        scale_x_discrete(limits=factor(seq(start_year, 2019, 1)), labels=seq(start_year, 2019, 1)) +
         #scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
-        scale_fill_manual(values=c("grey50", "grey0"),
+        scale_fill_manual(values=c("grey0", "grey50"),
                           name="Presence of annotations for,\nand equality in length between,\nboth IRs",
                           labels=c("No", "Yes")) +
         theme_minimal() +

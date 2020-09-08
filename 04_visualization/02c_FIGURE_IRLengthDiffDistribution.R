@@ -80,7 +80,7 @@ myPlot = base_plot +
     xlab("\nLength Difference (in bp)") + 
     ylab("Cumulative Number of Occurrences\n") + 
     ggtitle("Distribution of the differences in length\nbetween the IRa and the IRb",
-            subtitle="Note: x-axis is set to logarithmic scale"
+            subtitle="Note: only data after 2010 is displayed;\nx-axis is set to logarithmic scale"
     ) + 
     scale_x_log10(
         #limits=c(1,200000),
@@ -89,7 +89,7 @@ myPlot = base_plot +
         expand=expansion(0),
         labels=c(1,2,3,4,5,10,100,1000,10000,100000)
     ) +
-    #scale_fill_manual(values=c("grey50", "grey0"), name="Plastid genome\navailable", labels=c("Yes", "No")) +
+    #scale_fill_manual(values=c("grey0", "grey50"), name="Plastid genome\navailable", labels=c("Yes", "No")) +
     #theme_bw() + 
     theme_minimal() + 
     theme(plot.title = element_text(size=20),

@@ -83,19 +83,23 @@ plotData = plotData %>% mutate_at(vars(PERCENTAGE), list(~ round(., 3)))
 
 ## PLOTTING OPERATIONS ##
 
+# Only data up to and including sequence version 3 is given
+plotData = plotData[which(plotData$SEQVERSION<=3),]
+
 base_plot = ggplot(data=plotData, aes(x=SEQVERSION, y=PERCENTAGE), width=1) +
             geom_col(aes(fill=IS_CONGRUENT), alpha=0.5) +
-            geom_text(aes(label=paste("n=", TOTAL, sep="")), vjust=1.09)
+            geom_text(data=plotData[which(plotData$IS_CONGRUENT==FALSE),], aes(label=paste("n=", TOTAL, sep="")), y=Inf, size=4.5, vjust=4) + 
+            geom_text(data=plotData[which(plotData$IS_CONGRUENT==TRUE),], aes(label=paste("n=", TOTAL, sep="")), y=-Inf, size=4.5, vjust=-3)
 
 myPlot =  base_plot +
         xlab("\nSequence Version") +
         ylab("Percentage of Records\n") +
-        ggtitle("Percentage of complete plastid genomes by sequence version that contain annotations for, and have equality in length between, both IRs",
-            subtitle="Note: Foo bar baz"
+        ggtitle("Percentage of complete plastid\ngenomes on NCBI GenBank by sequence version\nthat contain annotations for, and\nhave equality in length between, both IRs",
+            subtitle="Note: Only data up to and including sequence version 3 is given."
         ) +
-        #scale_x_discrete(labels=c("Unpubl.", "Publ.")) +
+        #scale_x_discrete(limits=c(1,2,3), labels=c(1,2,3)) +
         #scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
-        scale_fill_manual(values=c("grey50", "grey0"),
+        scale_fill_manual(values=c("grey0", "grey50"),
                           name="Presence of annotations for,\nand equality in length between,\nboth IRs",
                           labels=c("No", "Yes")) +
         theme_minimal() +

@@ -86,8 +86,8 @@ base_plot = ggplot(data=plotData, aes(x=DATE, y=CUMFREQ, fill=CRITERION), width=
 myPlot = base_plot + 
     xlab("\nYear") + 
     ylab("Cumulative Number of Records\n") + 
-    ggtitle("Cumulative Number of complete plastid genome sequences on NCBI GenBank\nper year, separated by presence of IR annotation",
-            subtitle="Note: Foo bar baz"
+    ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year,\nseparated by presence of IR annotation",
+        subtitle="Note: Only data after 2009 is displayed."
     ) + 
     scale_x_date(
         limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-01-01")),
@@ -99,7 +99,7 @@ myPlot = base_plot +
     scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
     #scale_colour_grey(aesthetics = "fill") + 
     #scale_fill_brewer(palette="Dark2", name="Criterion positive/negative") + 
-    scale_fill_manual(values=c("grey50", "grey0"), name="IR annotation\npresent", labels=c("Yes", "No")) + 
+    scale_fill_manual(values=c("grey0", "grey50"), name="IR annotation\npresent", labels=c("Yes", "No")) + 
     #theme_bw() + 
     theme_minimal() + 
     theme(plot.title = element_text(size=20),
