@@ -63,8 +63,14 @@ Self-blasting of the plastid genome sequence in order to infer the IR length
 ```
 INF=chloroplastGenome.gb
 python gb2fas.py $INF
+
 blastn -subject ${INF%.gb*}.fas -query ${INF%.gb*}.fas -outfmt 7 -strand 'both' |\
  awk '{ if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}' >  ${INF%.gb*}_IRs.txt
+
+for i in *.txt; do 
+ sed -n '2p' $i |\
+ awk '{print "IRb_start: "$2"; IRb_end: "$3"; IRa_start: "$5"; IRa_end: "$4}' > ${i%.txt*}_summary.txt; 
+done
 ```
 
 <!--
