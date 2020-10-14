@@ -92,7 +92,10 @@ class Entrez_Interaction:
             for comment in comments.split(";"):
                 keyw1 = "PROVISIONAL REFSEQ: This record has not yet been subject to final NCBI review"
                 keyw2 = "The reference sequence is identical to"
-                if keyw1 in comment or keyw2 in comment:
+                keyw3 = "REVIEWED REFSEQ: This record has been curated by NCBI staff."
+                keyw4 = "The reference sequence was derived from"
+                keywords = [keyw1, keyw2, keyw3, keyw4]
+                if any(keyw in comment for keyw in keywords): 
                     duplseq = comment.split(" ")[-1][:-1]
                     note = "The REFSEQ accession '%s' is identical to accession '%s'." % (accession, duplseq)
         fields["NOTE"] = note
