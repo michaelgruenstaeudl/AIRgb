@@ -201,4 +201,4 @@ class Table_IO:
 		Remove entries from entry table that match duplicate accession numbers
 		'''
 		for d_key in self.duplicates.keys():
-			self.entry_table.drop(self.entry_table.loc[self.entry_table["ACCESSION"] == self.duplicates[d_key][0]].index, inplace = True)
+			self.entry_table.drop(self.entry_table.loc[self.entry_table["ACCESSION"] == self.duplicates[d_key][1]].index, inplace = True)

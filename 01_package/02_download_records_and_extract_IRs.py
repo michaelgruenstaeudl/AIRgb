@@ -93,7 +93,7 @@ def main(args):
 		coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='DEBUG', logger=log)
 	else:
 		coloredlogs.install(fmt='%(asctime)s [%(levelname)s] %(message)s', level='INFO', logger=log)
-	mail = "tilmanmehl@fu-berlin.de" #args.mail
+	mail = args.mail
 	query = args.query
 	iro = IR_Operations.IR_Operations(log)
 	EI = Entrez_Interaction.Entrez_Interaction(log)
@@ -206,7 +206,7 @@ if __name__ == "__main__":
 	parser.add_argument("--verbose", "-v", action="store_true", required=False, default=False, help="Enable verbose logging.")
 	parser.add_argument("--blacklist", "-b", type=str, required=False, help="path to taxonomy blacklist")
 	parser.add_argument("--query", "-q", type=str, required=False, default="inverted[TITLE] AND repeat[TITLE] AND loss[TITLE]", help="query to find pubmed articles describing inverted repeat loss")
-	#parser.add_argument("--mail", "-m", type=str, required=False, help="Mail account for entrez search")
+	parser.add_argument("--mail", "-m", type=str, required=True, help="Mail account for PubMed entrez search. Any valid mail address will work.")
 	args = parser.parse_args()
 	#if bool(args.query) ^ bool(args.mail):
 	#	parser.error("--query and --mail must be given together")
