@@ -87,20 +87,20 @@ base_plot = ggplot(data=plotData, aes(x=DATE, y=CUMFREQ, fill=forcats::fct_rev(C
 myPlot = base_plot + 
     xlab("\nYear") + 
     ylab("Cumulative Number of Records\n") + 
-    ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year,\nseparated by presence of IR annotation",
-        subtitle="Note: Only data after 2009 is displayed."
-    ) + 
+    #ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year,\nseparated by presence of IR annotation",
+    #    subtitle="Note: Only data after 2009 is displayed."
+    #) + 
     scale_x_date(
-        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-01-01")),
+        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-10-01")),
         date_breaks="1 year",
         minor_breaks=NULL,
         expand=expansion(0),
         date_labels="%Y"
     ) + 
-    scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
+    scale_y_continuous(breaks=seq(0, 8000, 1000), minor_breaks=seq(500, 7500, 1000)) +
     #scale_colour_grey(aesthetics = "fill") + 
     #scale_fill_brewer(palette="Dark2", name="Criterion positive/negative") + 
-    scale_fill_manual(values=c("grey50", "grey0"), name="IR annotation\npresent", labels=c("Yes", "No")) + 
+    scale_fill_manual(values=c("grey50", "grey0"), name="IR annotation present", labels=c("Yes", "No")) + 
     #theme_bw() + 
     theme_minimal() + 
     theme(plot.title = element_text(size=20),
@@ -108,8 +108,13 @@ myPlot = base_plot +
           axis.text=element_text(size=14),
           axis.title=element_text(size=16, face="bold"),
           plot.margin=unit(c(0.5,1.0,0.1,0.1),"cm"),  # Note: margin(t=0, r=0, b=0, l=0, unit="pt")
-          legend.key.width=unit(1,"cm"))
+          legend.key.width=unit(1,"cm"),
+          legend.position = "bottom")
 
+
+
+ggsave(file = "02a_FIGURE_PlastomesWithWithoutIRAnnos.svg", plot=myPlot)
+ggsave(file = "02a_FIGURE_PlastomesWithWithoutIRAnnos.png", plot=myPlot)
 ################################
 
 #    myPlot_transformed = ggplot(data=inData, aes(x=factor(year), y=accessions, fill=voucher)) +

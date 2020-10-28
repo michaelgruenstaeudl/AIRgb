@@ -55,17 +55,17 @@ base_plot = ggplot(data=plotData, aes(x=DATE, y=CUMFREQ), width=1) +
 myPlot = base_plot +
     xlab("\nYear") +
     ylab("Cumulative Number of Records\n") +
-    ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year",
-            subtitle="Note: Only data after 2009 is displayed."
-    ) +
+    #ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year",
+    #        subtitle="Note: Only data after 2009 is displayed."
+    #) +
     scale_x_date(
-        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-01-01")),
+        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-10-01")),
         date_breaks="1 year",
         minor_breaks=NULL,
         expand=expansion(0),
         date_labels="%Y"
     ) +
-    scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
+    scale_y_continuous(breaks=seq(0, 8000, 1000), minor_breaks=seq(500, 7500, 1000)) +
     #scale_colour_grey(aesthetics = "fill") +
     #scale_fill_brewer(palette="Dark2", name="Criterion positive/negative") +
     scale_fill_manual(values=c("grey0", "grey50"), name="Plastid genome\navailable", labels=c("Yes", "No")) +
@@ -76,7 +76,11 @@ myPlot = base_plot +
           axis.text=element_text(size=14),
           axis.title=element_text(size=16, face="bold"),
           plot.margin=unit(c(0.5,1.0,0.1,0.1),"cm"),  # Note: margin(t=0, r=0, b=0, l=0, unit="pt")
-          legend.key.width=unit(1,"cm"))
+          legend.key.width=unit(1,"cm"),
+          legend.position="bottom")
+
+ggsave(file = "01_FIGURE_PlastomeNumbersPerYear.svg", plot=myPlot)
+ggsave(file = "01_FIGURE_PlastomeNumbersPerYear.png", plot=myPlot)
 
 ########################################################################
 

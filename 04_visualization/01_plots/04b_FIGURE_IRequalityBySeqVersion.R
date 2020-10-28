@@ -22,6 +22,21 @@ script_name = file_path_sans_ext(basename(this_script))
 
 ########################################################################
 
+#SMALL HELPER FUNCTION
+equalityCheck <- function(lenA, lenB, tolerance){
+        if(missing(tolerance)){
+                ifelse((lenA == lenB), TRUE, FALSE)
+        }else{
+                if ((tolerance <= 0) |  (tolerance > 1)){
+                        stop("Argument tolerance expects value between 0 and 1")
+                }else{
+                        ifelse((lenA == lenB) | ((lenA < lenB) & ((lenA + lenA * tolerance) >= lenB)) | ((lenA > lenB) & ((lenB + lenB * tolerance) >= lenA)), TRUE, FALSE)
+                }
+        }
+}
+
+########################################################################
+
 ## Load Plastome Availability Table (.csv-format)
 AvailTableFn = tk_choose.files(caption = "Select the plastome availability table (.tsv-format)")
 AvailTableData = read.csv(AvailTableFn, sep = "\t")
@@ -57,7 +72,7 @@ IRb_REPORTED_LENGTH = as.integer(as.character(IRb_REPORTED_LENGTH))
 DataOnSeqVersion = data.frame(combinedDF$ACCESSION)
 DataOnSeqVersion$IS_CONGRUENT <- combinedDF$IRa_REPORTED == "yes" &
                                  combinedDF$IRb_REPORTED == "yes" &
-                                (combinedDF$IRa_REPORTED_LENGTH == combinedDF$IRb_REPORTED_LENGTH)
+                                 equalityCheck(combinedDF$IRa_REPORTED_LENGTH, combinedDF$IRb_REPORTED_LENGTH)
 DataOnSeqVersion$SEQVERSION <- as.numeric(combinedDF$VERSION)
 colnames(DataOnSeqVersion) <- c("ACCESSION","IS_CONGRUENT", "SEQVERSION")
 DataOnSeqVersion$count <- 1
@@ -85,22 +100,23 @@ plotData = plotData %>% mutate_at(vars(PERCENTAGE), list(~ round(., 3)))
 
 # Only data up to and including sequence version 3 is given
 plotData = plotData[which(plotData$SEQVERSION<=3),]
+plotData$SEQVERSION <- as.factor(plotData$SEQVERSION)
 
 base_plot = ggplot(data=plotData, aes(x=SEQVERSION, y=PERCENTAGE), width=1) +
-            geom_col(aes(fill=IS_CONGRUENT), alpha=0.5) +
+            geom_col(aes(fill=IS_CONGRUENT), alpha=0.5, width=0.5) +
             geom_text(data=plotData[which(plotData$IS_CONGRUENT==FALSE),], aes(label=paste("n=", TOTAL, sep="")), y=Inf, size=4.5, vjust=4) + 
             geom_text(data=plotData[which(plotData$IS_CONGRUENT==TRUE),], aes(label=paste("n=", TOTAL, sep="")), y=-Inf, size=4.5, vjust=-3)
 
 myPlot =  base_plot +
         xlab("\nSequence Version") +
         ylab("Percentage of Records\n") +
-        ggtitle("Percentage of complete plastid\ngenomes on NCBI GenBank by sequence version\nthat contain annotations for, and\nhave equality in length between, both IRs",
-            subtitle="Note: Only data up to and including sequence version 3 is given."
-        ) +
+        #ggtitle("Percentage of complete plastid\ngenomes on NCBI GenBank by sequence version\nthat contain annotations for, and\nhave equality in length between, both IRs",
+        #    subtitle="Note: Only data up to and including sequence version 3 is given."
+        #) +
         #scale_x_discrete(limits=c(1,2,3), labels=c(1,2,3)) +
         #scale_y_continuous(breaks=seq(0, 6000, 1000), minor_breaks=seq(500, 5500, 1000)) +
         scale_fill_manual(values=c("grey0", "grey50"),
-                          name="Presence of annotations for,\nand equality in length between,\nboth IRs",
+                          name="Presence of annotations for, and equality \nin length between, both IRs",
                           labels=c("No", "Yes")) +
         theme_minimal() +
         theme(plot.title = element_text(size=20),
@@ -108,8 +124,11 @@ myPlot =  base_plot +
               axis.text=element_text(size=14),
               axis.title=element_text(size=16, face="bold"),
               plot.margin=unit(c(0.5,1.0,0.1,0.1),"cm"),  # Note: margin(t=0, r=0, b=0, l=0, unit="pt")
-              legend.key.width=unit(1,"cm"))
+              legend.key.width=unit(1,"cm"),
+              legend.position = "bottom")
 
+ggsave(file = "04b_FIGURE_IRequalityBySeqVersion.svg", plot=myPlot)
+ggsave(file = "04b_FIGURE_IRequalityBySeqVersion.png", plot=myPlot)
 ########################################################################
 
 assign(script_name, myPlot)

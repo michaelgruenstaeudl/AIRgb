@@ -85,9 +85,9 @@ base_plot = ggplot(data=notEqualPlotData, aes(x=DATE, y=CUMFREQ), width=1) +
 myPlot = base_plot +
     xlab("\nYear") +
     ylab("Cumulative Number of Records\n") +
-    ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year,\nwhose reported IR annotations have\nunequal lengths",
-        subtitle="Note: Only data after 2009 is displayed."
-    ) +
+    #ggtitle("Cumulative number of complete plastid\ngenomes on NCBI GenBank per year,\nwhose reported IR annotations have\nunequal lengths",
+    #    subtitle="Note: Only data after 2009 is displayed."
+    #) +
     scale_x_date(
         limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-01-01")),
         date_breaks="1 year",
@@ -106,8 +106,12 @@ myPlot = base_plot +
           axis.text=element_text(size=14),
           axis.title=element_text(size=16, face="bold"),
           plot.margin=unit(c(0.5,1.0,0.1,0.1),"cm"),  # Note: margin(t=0, r=0, b=0, l=0, unit="pt")
-          legend.key.width=unit(1,"cm"))
+          legend.key.width=unit(1,"cm"),
+          legend.position = "bottom")
 
+
+ggsave(file = "02b_FIGURE_PlastomesWithUnequalReportedIRLengths.svg", plot=myPlot)
+ggsave(file = "02b_FIGURE_PlastomesWithUnequalReportedIRLengths.png", plot=myPlot)
 ####################################
 
 assign(script_name, myPlot)
