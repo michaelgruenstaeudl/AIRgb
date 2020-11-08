@@ -1,6 +1,6 @@
-*AIRgb*: Accessing the Inverted Repeats of plastid genomes on GenBank
-=====================================================================
-A Python package for automatically accessing the inverted repeats of thousands of plastid genomes stored on NCBI GenBank
+*AIRPG*: Accessing the Inverted Repeats of archived Plastid Genomes
+===================================================================
+A Python package for automatically accessing the inverted repeats of thousands of plastid genomes stored on NCBI Nucleotide
 
 ## EXAMPLE USAGE
 #### SCRIPT 01: Generating plastome availability table
@@ -61,16 +61,21 @@ python generate_blacklist.py -f BLACKLIST__IR_loss__genera.txt
 ##### Identifying IR length
 Self-blasting of the plastid genome sequence in order to infer the IR length
 ```
+#!/bin/bash
+
 INF=chloroplastGenome.gb
-python gb2fas.py $INF
+seqmagick convert $INF ${INF%.gb*}.fas
 
 blastn -subject ${INF%.gb*}.fas -query ${INF%.gb*}.fas -outfmt 7 -strand 'both' |\
- awk '{ if ($4 > 10000 && $4 < 50000) print $4, $7, $8, $9, $10}' >  ${INF%.gb*}_IRs.txt
+ awk '{ if ($4 > 10000 && $4 < 60000) print $4, $7, $8, $9, $10}' >  ${INF%.gb*}_IRs.txt
 
-for i in *.txt; do 
- sed -n '2p' $i |\
- awk '{print "IRb_start: "$2"; IRb_end: "$3"; IRa_start: "$5"; IRa_end: "$4}' > ${i%.txt*}_summary.txt; 
-done
+sed -n '2p' ${INF%.gb*}_IRs.txt |\
+ awk '{print "    repeat_region   "$2".."$3"\n                     /note=\x22inverted repeat B, IRb\n                     /rpt_type=inverted\x22"}' > ${i%.txt*}_annofeatures.txt
+
+sed -n '2p' ${INF%.gb*}_IRs.txt |\
+ awk '{print "    repeat_region   "$5".."$4"\n                     /note=\x22inverted repeat A, IRa\n                     /rpt_type=inverted\x22"}' >> ${i%.txt*}_annofeatures.txt
+
+#EOF
 ```
 
 <!--

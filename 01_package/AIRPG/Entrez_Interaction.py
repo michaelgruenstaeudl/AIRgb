@@ -1,6 +1,6 @@
 import os, subprocess, logging
 import xml.etree.ElementTree as ET
-from AIRgb import fetchpubmed
+from AIRPG import fetchpubmed
 import entrezpy.conduit
 from ete3 import NCBITaxa
 from datetime import date

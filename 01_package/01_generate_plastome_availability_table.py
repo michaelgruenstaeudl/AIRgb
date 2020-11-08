@@ -36,8 +36,8 @@ import os.path
 import argparse
 import coloredlogs, logging
 #import pandas as pd
-from AIRgb import Entrez_Interaction
-from AIRgb import Table_IO
+from AIRPG import Entrez_Interaction
+from AIRPG import Table_IO
 from datetime import datetime
 
 ###############
@@ -47,7 +47,7 @@ __author__ = 'Michael Gruenstaeudl <m.gruenstaeudl@fu-berlin.de>, '\
 			 'Tilman Mehl <tilmanmehl@zedat.fu-berlin.de>'
 __copyright__ = 'Copyright (C) 2019-2020 Michael Gruenstaeudl and Tilman Mehl'
 __info__ = 'Collect summary information on all plastid sequences stored ' \
-		   'in NCBI GenBank'
+		   'in NCBI Nucleotide'
 __version__ = '2020.08.31.1930'
 
 #############
