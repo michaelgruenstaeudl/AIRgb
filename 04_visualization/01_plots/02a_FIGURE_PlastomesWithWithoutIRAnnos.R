@@ -91,7 +91,7 @@ myPlot = base_plot +
     #    subtitle="Note: Only data after 2009 is displayed."
     #) + 
     scale_x_date(
-        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-10-01")),
+        limits=c(as.Date(paste(start_year, "-01-01", sep='')), as.Date("2020-10-31")),
         date_breaks="1 year",
         minor_breaks=NULL,
         expand=expansion(0),
@@ -104,17 +104,18 @@ myPlot = base_plot +
     #theme_bw() + 
     theme_minimal() + 
     theme(plot.title = element_text(size=20),
-          plot.subtitle = element_text(size=16, face="italic"),
-          axis.text=element_text(size=14),
-          axis.title=element_text(size=16, face="bold"),
+          plot.subtitle = element_text(size=20, face="italic"),
+          axis.text=element_text(size=16),
+          axis.text.x = element_text(size=16, angle=45),
+          axis.title=element_text(size=18, face="bold"),
           plot.margin=unit(c(0.5,1.0,0.1,0.1),"cm"),  # Note: margin(t=0, r=0, b=0, l=0, unit="pt")
           legend.key.width=unit(1,"cm"),
-          legend.position = "bottom")
+          legend.position = "bottom",
+          legend.text = element_text(size=14),
+          legend.title = element_text(size=14))
 
 
-
-ggsave(file = "02a_FIGURE_PlastomesWithWithoutIRAnnos.svg", plot=myPlot)
-ggsave(file = "02a_FIGURE_PlastomesWithWithoutIRAnnos.png", plot=myPlot)
+ggsave(file = "02a_FIGURE_PlastomesWithWithoutIRAnnos.pdf", plot=myPlot)
 ################################
 
 #    myPlot_transformed = ggplot(data=inData, aes(x=factor(year), y=accessions, fill=voucher)) +
